@@ -12,6 +12,7 @@ For further reference, please consider the following sections:
 * [Spring Boot DevTools](https://docs.spring.io/spring-boot/docs/2.7.8/reference/htmlsingle/#using.devtools)
 * [Validation](https://docs.spring.io/spring-boot/docs/2.7.8/reference/htmlsingle/#io.validation)
 * [Java Mail Sender](https://docs.spring.io/spring-boot/docs/2.7.8/reference/htmlsingle/#io.email)
+* [Spring Data JDBC](https://docs.spring.io/spring-boot/docs/2.7.8/reference/htmlsingle/#data.sql.jdbc)
 
 ### Guides
 The following guides illustrate how to use some features concretely:
@@ -22,6 +23,7 @@ The following guides illustrate how to use some features concretely:
 * [MyBatis Quick Start](https://github.com/mybatis/spring-boot-starter/wiki/Quick-Start)
 * [Handling Form Submission](https://spring.io/guides/gs/handling-form-submission/)
 * [Validation](https://spring.io/guides/gs/validating-form-input/)
+* [Using Spring Data JDBC](https://github.com/spring-projects/spring-data-examples/tree/master/jdbc/basics)
 
 ### Additional Links
 These additional references should also help you:
