@@ -1,4 +1,4 @@
-package com.soms.soms;
+package project.soms;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
