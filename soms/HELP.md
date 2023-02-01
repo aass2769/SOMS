@@ -6,21 +6,22 @@ For further reference, please consider the following sections:
 * [Official Gradle documentation](https://docs.gradle.org)
 * [Spring Boot Gradle Plugin Reference Guide](https://docs.spring.io/spring-boot/docs/2.7.8/gradle-plugin/reference/html/)
 * [Create an OCI image](https://docs.spring.io/spring-boot/docs/2.7.8/gradle-plugin/reference/html/#build-image)
-* [MyBatis Framework](https://mybatis.org/spring-boot-starter/mybatis-spring-boot-autoconfigure/)
 * [Spring Web](https://docs.spring.io/spring-boot/docs/2.7.8/reference/htmlsingle/#web)
+* [MyBatis Framework](https://mybatis.org/spring-boot-starter/mybatis-spring-boot-autoconfigure/)
+* [Thymeleaf](https://docs.spring.io/spring-boot/docs/2.7.8/reference/htmlsingle/#web.servlet.spring-mvc.template-engines)
 * [Spring Boot DevTools](https://docs.spring.io/spring-boot/docs/2.7.8/reference/htmlsingle/#using.devtools)
 * [Validation](https://docs.spring.io/spring-boot/docs/2.7.8/reference/htmlsingle/#io.validation)
-* [Thymeleaf](https://docs.spring.io/spring-boot/docs/2.7.8/reference/htmlsingle/#web.servlet.spring-mvc.template-engines)
+* [Java Mail Sender](https://docs.spring.io/spring-boot/docs/2.7.8/reference/htmlsingle/#io.email)
 
 ### Guides
 The following guides illustrate how to use some features concretely:
 
-* [MyBatis Quick Start](https://github.com/mybatis/spring-boot-starter/wiki/Quick-Start)
 * [Building a RESTful Web Service](https://spring.io/guides/gs/rest-service/)
 * [Serving Web Content with Spring MVC](https://spring.io/guides/gs/serving-web-content/)
 * [Building REST services with Spring](https://spring.io/guides/tutorials/rest/)
-* [Validation](https://spring.io/guides/gs/validating-form-input/)
+* [MyBatis Quick Start](https://github.com/mybatis/spring-boot-starter/wiki/Quick-Start)
 * [Handling Form Submission](https://spring.io/guides/gs/handling-form-submission/)
+* [Validation](https://spring.io/guides/gs/validating-form-input/)
 
 ### Additional Links
 These additional references should also help you:
