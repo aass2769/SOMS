@@ -17,4 +17,9 @@ public class FrontController {
   public String test2() {
     return "컨트롤러 테스트";
   }
+
+  @GetMapping("test3")
+  public String test3() {
+    return "sample/test/layoutTest";
+  }
 }
