@@ -134,17 +134,6 @@
 </body>
 </html>
 <script>
-    $('.Item-Title').click(function(){
-        let val = $(this).attr('value');
-        let cas = $('.Item-Menu[value='+ val + ']');    
-            if(cas.is(':visible')){
-                cas.hide('fast');
-            }else{
-                cas.show('fast');
-            }
-    })
-</script>
-<script>
     const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
     const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
 </script>
