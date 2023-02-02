@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<!-- 메인 레이아웃을 완성한 페이지 입니다. 여기서 title과 article 이라는 이름의 파라미터가 들어간다고 이해해주시면 됩니다.
+title은 페이지의 브라우저에 보이는 타이틀이고, article은 화면에 보여지는 본문입니다. -->
 <html th:fragment="layout (title, article)" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
@@ -18,109 +20,37 @@
         <!-- 사이드 바입니다  -->
         <nav class = "Side">
             <!-- 사이드바의 아이콘 구역입니다 -->
-            <ul class = "Icons">
-                <!-- 위에있는 아이콘 구역입니다 -->
-                <div class = "Icon_Up">
-                    <li class = "Icon">
-                       <a href="#"><i class="fa-solid fa-file-word fa-xl" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="결제상신"></i></a> 
-                    </li>
-                    <li class = "Icon">
-                       <a href="#"><i class="fa-solid fa-user fa-xl" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="마이페이지"></i></a> 
-                    </li>
-                    <li class = "Icon">
-                        <a href="#"><i class="fa-solid fa-comment fa-xl" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="채팅"></i></a>
-                    </li>
-                    <li class = "Icon">
-                        <a href="#"><i class="fa-solid fa-chalkboard-user fa-xl" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="게시판"></i></a>
-                    </li>
-                    <li class = "Icon">
-                      <a href="#"><i class="fa-solid fa-envelope fa-xl" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="이메일"></i></a>  
-                    </li>
-                </div>
-                <!-- 아래에 있는 아이콘 구역입니다 -->
-                <div class = "Icon_Down">
-                    <li class = "Icon">
-                       <a href="#"><i class="fa-solid fa-right-from-bracket fa-xl" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="로그아웃"></i></a> 
-                    </li>
-                </div>
-            </ul>
-
-            <div th:replace="~{sample/layout/category :: categorys}"></div>
-
-<!--            <ul class = "Categorys">-->
-
-<!--                &lt;!&ndash; 카테고리 제목입니다 &ndash;&gt;-->
-<!--                <div class = Category-Title>-->
-<!--                    <i class="fa-solid fa-bars"></i>-->
-<!--                    &nbsp;&nbsp;-->
-<!--                    <p>제목</p>-->
+            <div th:replace="~{navIcon/icon :: icons}"></div>
+<!--            <ul class = "Icons">-->
+<!--                &lt;!&ndash; 위에있는 아이콘 구역입니다 &ndash;&gt;-->
+<!--                <div class = "Icon_Up">-->
+<!--                    <li class = "Icon">-->
+<!--                       <a href="#"><i class="fa-solid fa-file-word fa-xl" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="결제상신"></i></a> -->
+<!--                    </li>-->
+<!--                    <li class = "Icon">-->
+<!--                       <a href="#"><i class="fa-solid fa-user fa-xl" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="마이페이지"></i></a> -->
+<!--                    </li>-->
+<!--                    <li class = "Icon">-->
+<!--                        <a href="#"><i class="fa-solid fa-comment fa-xl" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="채팅"></i></a>-->
+<!--                    </li>-->
+<!--                    <li class = "Icon">-->
+<!--                        <a href="#"><i class="fa-solid fa-chalkboard-user fa-xl" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="게시판"></i></a>-->
+<!--                    </li>-->
+<!--                    <li class = "Icon">-->
+<!--                      <a href="#"><i class="fa-solid fa-envelope fa-xl" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="이메일"></i></a>  -->
+<!--                    </li>-->
 <!--                </div>-->
-<!--                <div class = "Category-Btn">-->
-<!--                    <button>튼튼</button>-->
-<!--                </div>-->
-
-<!--                &lt;!&ndash; 카테고리 드롭다운입니다 &ndash;&gt;-->
-<!--                &lt;!&ndash; Item-Title의 value와 Item-Menu의 value를 동일하게 만들어주세요 &ndash;&gt;-->
-<!--                &lt;!&ndash; 다른태그와 겹치는것도 안됩니다! &ndash;&gt;-->
-<!--                <div class = "Category">-->
-<!--                    <div class = "Item">-->
-<!--                       <a class="Item-Title" value = "1"><p>드롭다운</p></a>-->
-<!--                        <div class = "Item-Menu" value = "1">-->
-<!--                            <a href="#">가</a>-->
-<!--                            <a href="#">나다라</a>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-
-<!--                &lt;!&ndash; 다이렉트 A태그입니다 &ndash;&gt;-->
-<!--                <div class = Category-A>-->
-<!--                    <a href="#">가나다라마바사</a>-->
-<!--                </div>-->
-
-<!--                <div class = Category-A>-->
-<!--                    <a href="#">가나다라마바사</a>-->
-<!--                </div>-->
-<!--                <div class = Category-A>-->
-<!--                    <a href="#">가나다라마바사</a>-->
-<!--                </div>-->
-
-<!--                <div class = Category-A>-->
-<!--                    <a href="#">가나다라마바사</a>-->
-<!--                </div>-->
-
-<!--                <div class = "Category">-->
-<!--                    <div class = "Item">-->
-<!--                       <a class="Item-Title" value = "2"><p>드롭다운</p></a>-->
-<!--                        <div class = "Item-Menu" value = "2">-->
-<!--                            <a href="#">가</a>-->
-<!--                            <a href="#">나다라</a>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-
-<!--                <div class = "Category">-->
-<!--                    <div class = "Item">-->
-<!--                       <a class="Item-Title" value = "3"><p>드롭다운</p></a>-->
-<!--                        <div class = "Item-Menu" value = "3">-->
-<!--                            <a href="#">가</a>-->
-<!--                            <a href="#">나다라</a>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-
-<!--                <div class = Category-A>-->
-<!--                    <a href="#">가나다라마바사</a>-->
-<!--                </div>-->
-<!--                <div class = Category-A>-->
-<!--                    <a href="#">가나다라마바사</a>-->
-<!--                </div>-->
-<!--                <div class = Category-A>-->
-<!--                    <a href="#">가나다라마바사</a>-->
+<!--                &lt;!&ndash; 아래에 있는 아이콘 구역입니다 &ndash;&gt;-->
+<!--                <div class = "Icon_Down">-->
+<!--                    <li class = "Icon">-->
+<!--                       <a href="#"><i class="fa-solid fa-right-from-bracket fa-xl" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="로그아웃"></i></a> -->
+<!--                    </li>-->
 <!--                </div>-->
 <!--            </ul>-->
 
+            <!-- sample/layout/category.html 에서 선언한 categorys를 여기서 호출하여 아래의 위치에 대치합니다. <div>태그도 사라지고 categorys가 선언된 <ul>태그가 위치하게 됩니다. -->
+            <div th:replace="~{sample/layout/category :: categorys}"></div>
 
-            
         </nav>
         <!-- 사이드바 크기의 더미입니다 신경쓰지 않으셔도 됩니다 -->
         <div class = "Side_Dummy">

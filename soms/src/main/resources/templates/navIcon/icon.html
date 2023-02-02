@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+
+<!-- 아래에 선언한 icons를 main레이아웃에서 인클루드하여 레이아웃이 완성됩니다. 해당 파일은 모든페이지가 똑같이 구현되야 하기에 따로 구분한 것입니다. -->
+<ul class = "Icons" th:fragment="icons">
+  <!-- 위에있는 아이콘 구역입니다 -->
+  <div class = "Icon_Up">
+    <li class = "Icon">
+      <a href="#"><i class="fa-solid fa-file-word fa-xl" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="결제상신"></i></a>
+    </li>
+    <li class = "Icon">
+      <a href="#"><i class="fa-solid fa-user fa-xl" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="마이페이지"></i></a>
+    </li>
+    <li class = "Icon">
+      <a href="#"><i class="fa-solid fa-comment fa-xl" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="채팅"></i></a>
+    </li>
+    <li class = "Icon">
+      <a href="#"><i class="fa-solid fa-chalkboard-user fa-xl" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="게시판"></i></a>
+    </li>
+    <li class = "Icon">
+      <a href="#"><i class="fa-solid fa-envelope fa-xl" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="이메일"></i></a>
+    </li>
+  </div>
+  <!-- 아래에 있는 아이콘 구역입니다 -->
+  <div class = "Icon_Down">
+    <li class = "Icon">
+      <a href="#"><i class="fa-solid fa-right-from-bracket fa-xl" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="로그아웃"></i></a>
+    </li>
+  </div>
+</ul>
+
+</body>
+</html>

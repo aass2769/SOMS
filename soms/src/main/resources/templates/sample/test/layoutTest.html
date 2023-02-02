@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<!-- 매인 레이아웃 파일은 인클루드 받아 해당 파라미터 위치에 들어가야 하는 태그 명을 넣어 페이지를 완성합니다.
+페이지의 title과 본문이 작성된 section태그를 레이아웃 파라미터에 넣어 페이지를 완성합니다. -->
 <html th:replace="~{sample/layout/mainLayout :: layout(~{::title}, ~{::section})}" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
