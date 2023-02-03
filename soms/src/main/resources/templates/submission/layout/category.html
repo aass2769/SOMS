@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+
+<!-- 아래에 선언한 categorys를 main레이아웃에서 인클루드하여 레이아웃이 완성됩니다. 개별로 작성해야할 코드의 구분을 위하여 html파일을 구분하였습니다. -->
+  <ul class = "Categorys" th:fragment="categorys">
+    <!-- 카테고리 제목입니다 -->
+    <div class="Category-Title">
+      <i class="fa-solid fa-bars"></i>
+      <p class="ps-2">결재 상신</p>
+    </div>
+
+    <!-- 카테고리 드롭다운입니다 -->
+    <!-- Item-Title의 value와 Item-Menu의 value를 동일하게 만들어주세요 -->
+    <!-- 다른태그와 겹치는것도 안됩니다! -->
+    <div class = "Category">
+      <div class = "Item">
+        <a class="Item-Title" value = "1"><p>결재 작성</p></a>
+        <div class = "Item-Menu" value = "1">
+          <a href="#">지출결의서</a>
+          <a href="#">연장근로신청서</a>
+          <a href="#">연차신청서</a>
+          <a href="#">출장신청서</a>
+          <a href="#">시말서</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 다이렉트 A태그입니다 -->
+    <div class = Category-A>
+      <a href="#">결재 중</a>
+    </div>
+
+    <div class = Category-A>
+      <a href="#">결재 완료</a>
+    </div>
+
+    <div class = Category-A>
+      <a href="#">결재 반려</a>
+    </div>
+
+
+   <!-- 드롭다운 기능 스크립트 입니다 -->
+	<script>
+	    $('.Item-Title').click(function(){		
+	        let val = $(this).attr('value');
+	        let cas = $('.Item-Menu[value='+ val + ']');    
+	            if(cas.is(':visible')){
+	                cas.hide('fast');
+	            }else{
+	                cas.show('fast');
+	            }
+	    })
+	</script>
+  </ul>
+
+</body>
+</html>

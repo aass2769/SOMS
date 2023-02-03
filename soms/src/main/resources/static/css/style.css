@@ -6,12 +6,12 @@ h1, h2, h3, a, th{
     font-family: 'Noto Sans KR', sans-serif;
 }
 
-p, span, li, td{
+p, span, li, td, textarea{
     font-family: 'IBMPlexSansKR-Regular';
 }
 
-.Icons, .Categorys{ 
-    padding: 0; 
+.Icons, .Categorys{
+    padding: 0;
     margin: 0;
 }
 
@@ -151,7 +151,31 @@ p, span, li, td{
     justify-content: center;
 }
 
-.Category-Btn button{
+.Modal-Btn{
+    display: flex;
+    justify-content: center;
+}
+
+.In-Modal-Btn {
+    display: flex;
+    justify-content: end;
+}
+
+.In-Modal-Btn .Close {
+    background-color: #E86E1C;
+    border: 0.2rem solid #E86E1C;
+    border-radius: 0.38rem;
+
+    font-size: 0.7rem;
+    height: 1.5rem;
+    color: white;
+    font-family: 'Noto Sans KR', sans-serif;
+    margin-top: 0.3rem;
+    margin-bottom: 0.3rem;
+
+}
+
+.Category-Btn button, .In-Modal-Btn .Submit, .Modal-Btn button{
     background-color: #EA471B;
     border: 0.2rem solid #EA471B;
     border-radius: 0.38rem;
@@ -159,7 +183,7 @@ p, span, li, td{
     font-size: 0.7rem;
     height: 1.5rem;
     color: white;
-    font-family: 'KOTRA_BOLD-Bold';
+    font-family: 'Noto Sans KR', sans-serif;
     margin-top: 0.3rem;
     margin-bottom: 0.3rem;
 }

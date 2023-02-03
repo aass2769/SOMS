@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html th:replace="~{submission/layout/mainLayout :: layout(~{::title}, ~{::section})}" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+
+<section class="Article">
+  <div style="width:90%; margin-left: 5%">
+
+    <div class="position-fixed bg-white" style="width:78.8%">
+      <!-- 페이지 본문의 제목 -->
+      <div>
+        <h1 class="pt-4 px-4 text-start">결재 작성</h1>
+      </div>
+      <!-- 본문의 제목과 내용을 구분하는 선 -->
+      <hr style="border: solid 1px #EA471B; opacity: 1; margin:0;">
+    </div>
+    <!-- 본문의 내용 위치를 잡기위해 만든 상담 공백 -->
+    <div style="height:5rem;"></div>
+
+
+    <div class="text-center">
+      <h2 class="font-monospace my-5">지출결의서</h2>
+
+      <!-- 지출결의서 폼 -->
+      <div style="display:flex; height:8rem;" class="align-middle border">
+
+        <!-- 기안자 정보 항목 -->
+        <div style="width:10%;">
+          <div style="height:25%" class="border"></div>
+          <div style="height:25%; font-size: 1rem;" class="border"><p class="my-1">부서</p></div>
+          <div style="height:25%; font-size: 1rem;" class="border"><p class="my-1">직급</p></div>
+          <div style="height:25%; font-size: 1rem;" class="border"><p class="my-1">이름</p></div>
+        </div>
+
+        <!-- 기안자 정보 -->
+        <div style="width:30%">
+          <div style="width:100%; height:25%; font-size: 0.7rem;" class="border"><p class="my-2">yyyy-mm-dd tt:mm:ss 20220701001</p></div>
+          <div style="width:100%; height:25%; font-size: 1rem;" class="border"><p class="my-1">경영지원</p></div>
+          <div style="width:100%; height:25%; font-size: 1rem;" class="border"><p class="my-1">대리</p></div>
+          <div style="width:100%; height:25%; font-size: 1rem;" class="border"><p class="my-1">김희용</p></div>
+        </div>
+
+        <!-- 결재 라인 -->
+        <div style="width:5%" class="border">
+          <p class="my-5" style="font-size: 1rem;">결재</p>
+        </div>
+        <div style="width:55%; display:flex;" class="border-start">
+          <div th:each="i : ${#numbers.sequence(1,8)}" style="width:12.5%; font-size: 3px;">
+            <select name="status" class="text-center border border-start-0 rounded-0 w-100 m-0" style="height:20%; font-size: 0.62rem;">
+              <option value="approval">결재</option>
+              <option value="check">검토</option>
+            </select>
+            <div style="height:60%;" class="border border-start-0"></div>
+            <div style="height:20%;" class="border border-start-0"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 지출구분과 지출일자를 선택하는 영역 -->
+      <div style="height:4rem; justify-content: space-around; align-items: center;" class="border border-2 border-top-0 d-flex">
+        <div class="d-flex align-middle justify-content-center">
+          <p class="m-0" style="font-size: 0.9rem; width:5rem;">지출 구분 : </p>
+          <select name="section" class="border-0 border-bottom" style="font-size: 0.7rem;">
+            <option value="credit">법인카드</option>
+            <option value="cash">개인현금</option>
+          </select>
+        </div>
+        <div class="d-flex align-middle justify-content-center">
+
+          <p class="m-0" style="font-size: 0.9rem; width:5rem;">지출 일자 : </p>
+          <input type="date" name="date" class="border-0 border-bottom" style="font-size: 0.7rem; outline:none;">
+
+        </div>
+      </div>
+
+      <!-- 내용을 입력하는 텍스트 상자 영역 -->
+      <div style="height:20rem; display:flex; justify-content: center; align-items: center;" class="border border-2 border-top-0">
+        <textarea class="w-100 h-100 border-0 p-3" style="outline: none; resize: none; font-size: 0.9rem;"></textarea>
+      </div>
+
+      <div style="height:4rem; display:flex; justify-content: center; align-items: center;" class="border border-2 border-top-0">
+
+        <!-- 지출 합계를 입력하는 영역 -->
+        <div class="d-flex w-75 justify-content-center align-middle">
+          <p class="m-0 ms-3" style="font-size: 0.9rem; width:5rem;">합계 : </p>
+          <input type="text" name="endTime" class="ms-1 border-0 border-bottom text-center" style="font-size: 0.7rem; outline:none; width:7rem;">
+          <p class="m-0" style="font-size: 0.9rem;">원</p>
+        </div>
+
+        <!-- 신청서 상신 및 취소 버튼 -->
+        <div class="h-100 w-25 d-flex">
+          <button class="btn btn-outline-dark border w-50 h-100 rounded-0 text-light" style="background-color: #E86E1C">
+            취소
+          </button>
+          <button class="btn btn-outline-dark border w-50 h-100 rounded-0 text-light" style="background-color: #EA471B">
+            상신
+          </button>
+        </div>
+      </div>
+      <div style="height:4rem;"></div>
+
+
+    </div>
+  </div>
+
+
+
+
+</section>
+
+</body>
+</html>
