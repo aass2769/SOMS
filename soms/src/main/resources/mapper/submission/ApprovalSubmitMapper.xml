@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="project.soms.submission.repository.mapper.ApprovalSubmitMapper">
+
+    <insert id="expenseSubmit" useGeneratedKeys="true" keyProperty="expenseNo" keyColumn="expense_no">
+        insert into expense (expense_section, expense_date, expense_cost, expense_content)
+        values (#{expenseSection}, #{expenseDate}, #{expenseCost}, #{expenseContent})
+    </insert>
+
+    <insert id="overtimeSubmit" useGeneratedKeys="true" keyProperty="overtimeNo" keyColumn="overtime_no">
+        insert into overtime (overtime_section, overtime_start_date, overtime_start_time,
+                              overtime_end_date, overtime_end_time, overtime_content)
+        values (#{overtimeSection}, #{overtimeStartDate}, #{overtimeStartTime}, #{overtimeEndDate},
+                #{overtimeEndTime}, #{overtimeContent})
+    </insert>
+
+    <insert id="annualLeaveSubmit" useGeneratedKeys="true" keyProperty="annualLeaveNo" keyColumn="annual_leave_no">
+        insert into annual_leave (annual_leave_section, annual_leave_start, annual_leave_end,
+                                  annual_leave_time, annual_leave_content)
+        values (#{annualLeaveSection}, #{annualLeaveStart}, #{annualLeaveEnd}, #{annualLeaveTime}, #{annualLeaveContent})
+    </insert>
+
+    <insert id="businessTripSubmit" useGeneratedKeys="true" keyProperty="businessTripNo" keyColumn="business_trip_no">
+        insert into business_trip (business_trip_section, business_trip_start, business_trip_end,
+                                   business_trip_time, business_trip_destination, business_trip_content)
+        values (#{businessTripSection}, #{businessTripStart}, #{businessTripEnd}, #{businessTripTime},
+                #{businessTripDestination}, #{businessTripContent})
+    </insert>
+
+    <insert id="incidentSubmit" useGeneratedKeys="true" keyProperty="incidentNo" keyColumn="incident_no">
+        insert into incident (incident_section, incident_content)
+        values (#{incidentSection}, #{incidentContent})
+    </insert>
+
+    <insert id="submissionSubmit" useGeneratedKeys="true" keyProperty="submissionNo"  keyColumn="submission_no">
+        insert into submission (submission_pri, submission_datetime, submission_pjt, submission_section,
+                                submission_status, submission_coment, submission_open, submission_showable,
+                                proposer_employee_no, approver_employee_no,
+                                expense_no, overtime_no, annual_leave_no, business_trip_no, incident_no)
+        values (#{submissionPri}, #{submissionDatetime}, #{submissionPjt}, #{submissionSection}, #{submissionStatus}, null,
+                #{submissionOpen}, #{submissionShowable}, #{proposerEmployeeNo}, #{approverEmployeeNo},
+                <if test="expenseNo != null and expenseNo != 0">#{expenseNo}, null, null, null, null</if>
+                <if test="overtimeNo != null and overtimeNo != 0">null, #{overtimeNo}, null, null, null</if>
+                <if test="annualLeaveNo != null and annualLeaveNo != 0">null, null, #{annualLeaveNo}, null, null</if>
+                <if test="businessTripNo != null and businessTripNo != 0">null, null, null, #{businessTripNo}, null</if>
+                <if test="incidentNo != null and incidentNo != 0">null, null, null, null, #{incidentNo}</if>
+                )
+    </insert>
+
+
+
+</mapper>

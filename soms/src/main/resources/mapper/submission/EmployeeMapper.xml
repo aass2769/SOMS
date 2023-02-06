@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="project.soms.submission.repository.mapper.EmployeeMapper">
+
+    <!--기안자의 값을 가져오는 쿼리문 -->
+    <select id="proposer" resultType="project.soms.submission.dto.ProposerDto">
+        select a.employee_no, a.employee_name, a.employee_team, a.manage_no, b.manage
+        from employee as a join manage as b on a.manage_no = b.manage_no
+        <where>
+            a.employee_no = #{employeeNo}
+        </where>
+    </select>
+
+    <!-- 지출결의서 결재자 자동 완성을 위한 쿼리문 -->
+    <select id="expenseApprover" resultType="project.soms.submission.dto.ApproverDto">
+        select e.employee_no, e.employee_name, e.manage_no, m.manage
+        from employee as e join manage as m on e.manage_no = m.manage_no
+        <where>
+            <if test="proposerDto.manageNo == 12">
+                e.employee_no = (select employee_admin from employee
+                where employee_no = #{proposerDto.employeeNo})
+            </if>
+            <if test="proposerDto.manageNo lte 11">
+                e.employee_no =
+                (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = #{proposerDto.employeeNo}))
+                or e.employee_no =
+                (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = #{proposerDto.employeeNo}))))
+                or e.employee_no =
+                (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = #{proposerDto.employeeNo}))))))
+                or e.employee_no =
+                (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = #{proposerDto.employeeNo}))))))))
+                or e.employee_no =
+                (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = #{proposerDto.employeeNo}))))))))))
+            </if>
+        </where>
+        order by e.manage_no asc
+    </select>
+
+    <!-- 연장근로신청서 결재자 자동 완성을 위한 쿼리문 -->
+    <select id="overtimeApprover" resultType="project.soms.submission.dto.ApproverDto">
+        select e.employee_no, e.employee_name, e.manage_no, m.manage
+        from employee as e join manage as m on e.manage_no = m.manage_no
+        <where>
+            <if test="proposerDto.manageNo == 12">
+                e.employee_no = (select employee_admin from employee
+                where employee_no = #{proposerDto.employeeNo})
+            </if>
+            <if test="proposerDto.manageNo lte 11">
+                e.employee_no =
+                (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = #{proposerDto.employeeNo}))
+                or e.employee_no =
+                (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = #{proposerDto.employeeNo}))))
+            </if>
+        </where>
+        order by e.manage_no asc
+    </select>
+
+    <!-- 연차신청서 결재자 자동완성을 위한 쿼리문 -->
+    <select id="annualLeaveApprover" resultType="project.soms.submission.dto.ApproverDto">
+        select e.employee_no, e.employee_name, e.manage_no, m.manage
+        from employee as e join manage as m on e.manage_no = m.manage_no
+        <where>
+            <if test="proposerDto.manageNo == 12">
+                e.employee_no = (select employee_admin from employee
+                where employee_no = #{proposerDto.employeeNo})
+            </if>
+            <if test="proposerDto.manageNo lte 11">
+                e.employee_no =
+                (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = #{proposerDto.employeeNo}))
+                or e.employee_no =
+                (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = #{proposerDto.employeeNo}))))
+            </if>
+        </where>
+        order by e.manage_no asc
+    </select>
+
+    <!-- 출장신청서 결재자 자동 완성을 위한 쿼리문 -->
+    <select id="businessTripApprover" resultType="project.soms.submission.dto.ApproverDto">
+        select e.employee_no, e.employee_name, e.manage_no, m.manage
+        from employee as e join manage as m on e.manage_no = m.manage_no
+        <where>
+            <if test="proposerDto.manageNo == 12">
+                e.employee_no = (select employee_admin from employee
+                where employee_no = #{proposerDto.employeeNo})
+            </if>
+            <if test="proposerDto.manageNo lte 11">
+                e.employee_no =
+                (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = #{proposerDto.employeeNo}))
+                or e.employee_no =
+                (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = #{proposerDto.employeeNo}))))
+                or e.employee_no =
+                (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = #{proposerDto.employeeNo}))))))
+                or e.employee_no =
+                (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = #{proposerDto.employeeNo}))))))))
+            </if>
+        </where>
+        order by e.manage_no asc
+    </select>
+
+    <!-- 시말서 양식 결재자 자동 완성 위한 쿼리문 -->
+    <select id="incidentApprover" resultType="project.soms.submission.dto.ApproverDto">
+        select e.employee_no, e.employee_name, e.manage_no, m.manage
+        from employee as e join manage as m on e.manage_no = m.manage_no
+        <where>
+            <if test="proposerDto.manageNo == 12">
+                e.employee_no = (select employee_admin from employee
+                where employee_no = #{proposerDto.employeeNo})
+            </if>
+            <if test="proposerDto.manageNo lte 11">
+                e.employee_no =
+                (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = #{proposerDto.employeeNo}))
+                or e.employee_no =
+                (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = #{proposerDto.employeeNo}))))
+                or e.employee_no =
+                (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = #{proposerDto.employeeNo}))))))
+                or e.employee_no =
+                (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = #{proposerDto.employeeNo}))))))))
+                or e.employee_no =
+                (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = (select employee_admin from employee
+                where employee_no = #{proposerDto.employeeNo}))))))))))
+            </if>
+        </where>
+        order by e.manage_no asc
+    </select>
+
+</mapper>
