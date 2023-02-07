@@ -17,4 +17,7 @@ public class ExpenseDto {
     this.expenseCost = expenseCost;
     this.expenseContent = expenseContent;
   }
+
+  public ExpenseDto() {
+  }
 }

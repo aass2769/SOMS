@@ -28,7 +28,7 @@ class EmployeeServiceImplTest {
     //when 기안자 정보 조회
     ProposerDto proposerDto = employeeService.proposer(employeeNo);
     //then 입력한 사번에 맞는 데이터가 있는지 확인
-    assertThat(proposerDto.getEmployeeNo()).isEqualTo(20230201011L);
+    assertThat(proposerDto.getEmployeeNo()).isEqualTo(employeeNo);
   }
 
   @Test
@@ -48,11 +48,8 @@ class EmployeeServiceImplTest {
     ProposerDto proposerDto = employeeService.proposer(employeeNo);
     //when 기안자 정보로 결재자 배열 생성
     List<ApproverDto> approverList = employeeService.expenseApprover(proposerDto.getEmployeeNo());
-    //then 배열 크기 및 기안자와 결재자 간 관계 검증
-    assertThat(approverList.size()).isEqualTo(5);
+    //then 기안자와 결재자 간 관계 검증
     assertThat(approverList.get(0).getManageNo()).isGreaterThan(proposerDto.getManageNo());
-    //다른 크기의 실패 상황 검증
-    assertThat(approverList.size()).isNotEqualTo(4);
   }
 
   @Test

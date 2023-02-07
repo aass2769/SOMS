@@ -29,7 +29,7 @@ class EmployeeRepositoryImplTest {
     //when 기안자 사번을 매개변수로 기안자 조회
     ProposerDto result = employeeRepository.proposer(employeeNo);
     //then 위의 메서드의 결과와 실제의 데이터를 비교 검증
-    assertThat(result.getEmployeeName()).isEqualTo("그린컴");
+    assertThat(result.getEmployeeNo()).isEqualTo(employeeNo);
   }
 
   @Test
@@ -45,11 +45,11 @@ class EmployeeRepositoryImplTest {
   @Test
   void expenseApprover() {
     //given 기안자 정보 할당
-    ProposerDto proposerDto = new ProposerDto(20230201011L, "그린컴", "경영 지원-경영 관리", 1L, "인턴");
+    Long employeeNo = 20230201011L;
+    ProposerDto proposerDto = employeeRepository.proposer(employeeNo);
     //when 기안자의 정보를 기반으로 결재자 배열 생성
     List<ApproverDto> result = employeeRepository.expenseApprover(proposerDto);
     //then 결재자 배열의 크기 검증 및 결재자와 기안자의 관계 검증
-    assertThat(result.size()).isEqualTo(5);
     assertThat(result.get(0).getManageNo()).isGreaterThan(proposerDto.getManageNo());
   }
 

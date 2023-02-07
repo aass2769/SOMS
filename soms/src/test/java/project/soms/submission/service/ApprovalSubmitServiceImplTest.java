@@ -14,6 +14,7 @@ import project.soms.submission.dto.SubmissionDto;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @Slf4j
@@ -22,10 +23,12 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class ApprovalSubmitServiceImplTest {
 
   private final ApprovalSubmitService approvalSubmitService;
+  private final EmployeeService employeeService;
 
   @Autowired
-  public ApprovalSubmitServiceImplTest(ApprovalSubmitService approvalSubmitService) {
+  public ApprovalSubmitServiceImplTest(ApprovalSubmitService approvalSubmitService, EmployeeService employeeService) {
     this.approvalSubmitService = approvalSubmitService;
+    this.employeeService = employeeService;
   }
 
   @BeforeEach
@@ -43,15 +46,16 @@ class ApprovalSubmitServiceImplTest {
     //given 지출결의서와 결재서식에 값 할당
     ExpenseDto expenseDto = new ExpenseDto("법인카드", "20230201", 10000, "출장중 숙박비 결재 건");
     SubmissionDto submissionDto = new SubmissionDto("1234", "2023-02-01 11:11:11", "대기", "유지보수", "미열람");
-    Long enployeeNo = 20230201011L;
-    List<ApproverDto> approverDto = new ArrayList<>();
-    approverDto.add(new ApproverDto(20230201009L));
-    approverDto.add(new ApproverDto(20230201007L));
+    Long employeeNo = 20230201011L;
+    List<Long> approverDto = new ArrayList<>();
+    List<ApproverDto> approverList = employeeService.expenseApprover(employeeNo);
     List<String> submissionSection = new ArrayList<>();
-    submissionSection.add("검토");
-    submissionSection.add("결재");
+    for (int i = 0; i < approverList.size(); i++) {
+      approverDto.add(approverList.get(i).getEmployeeNo());
+      submissionSection.add("결재");
+    }
     //when 지출결의서, 결재서식 값 저장
-    approvalSubmitService.expenseSubmit(submissionDto, expenseDto, enployeeNo, approverDto, submissionSection);
+    approvalSubmitService.expenseSubmit(submissionDto, expenseDto, employeeNo, approverDto, submissionSection);
     //then 입력한 값과 저장한 값이 일치하는지 검증
     assertThat(submissionDto.getExpenseNo()).isEqualTo(expenseDto.getExpenseNo());
   }
@@ -61,16 +65,16 @@ class ApprovalSubmitServiceImplTest {
     //given 지출결의서와 결재서식에 값 할당 결재라인 실패값 할당
     ExpenseDto expenseDto = new ExpenseDto("법인카드", "20230201", 10000, "출장중 숙박비 결재 건");
     SubmissionDto submissionDto = new SubmissionDto("1234", "2023-02-01 11:11:11", "대기", "유지보수", "미열람");
-    Long enployeeNo = 20230201009L;
-    List<ApproverDto> approverDto = new ArrayList<>();
-    approverDto.add(new ApproverDto(20230201011L));
-    approverDto.add(new ApproverDto(20230201007L));
+    Long employeeNo = 20230201011L;
+    List<Long> approverDto = new ArrayList<>();
+    approverDto.add(employeeNo);
     List<String> submissionSection = new ArrayList<>();
-    submissionSection.add("검토");
-    submissionSection.add("결재");
+    for (int i = 0; i < approverDto.size(); i++) {
+      submissionSection.add("결재");
+    }
     //when 지출결의서, 결재서식 값 저장 then insert 싶해 겁증
     assertThatThrownBy(() ->
-        approvalSubmitService.expenseSubmit(submissionDto, expenseDto, enployeeNo, approverDto, submissionSection))
+        approvalSubmitService.expenseSubmit(submissionDto, expenseDto, employeeNo, approverDto, submissionSection))
         .isInstanceOf(IllegalArgumentException.class);
   }
 
