@@ -1,0 +1,86 @@
+html{font-size: 20px;}
+
+html,body{
+	width: 100%;
+	height: 100%;
+	padding: 0;
+	margin: 0;
+}
+
+
+.somsLogo{
+	width: 18rem;
+}
+
+.loginAll{
+	
+	width: 100%;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	
+}
+
+.formLine{
+	
+	
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	
+	margin-bottom: 10rem;
+}
+
+.loginForm{
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	margin-top: 1rem;
+}
+
+.loginContents{
+	padding: 1rem 0.7rem;
+	border: 0.05rem solid #EA471B;
+	border-radius: 0.45rem;
+	display: flex;
+	flex-direction:column;
+	justify-content: center;
+	align-items: center;
+	background-color: #EA471B;
+}
+
+.id, .pw{
+	border: 0.05rem solid #EA471B;
+	width: 15rem;
+	height: 1.5rem;
+	padding: 0.6rem 0.8rem 0 0.8rem;
+	outline: none;
+	font-size: 0.8rem;
+	margin-bottom: 0.2rem;
+	border-radius: 0.45rem;
+	color: #EA471B;
+}
+
+.id::placeholder, .pw::placeholder{
+	color: #EA471B;
+}
+
+.loginBtn{
+	border: 0.05rem solid  #EA471B;
+	border-radius: 0.45rem;
+	width: 16.7rem;
+	height: 2.2rem;
+	background-color: white;
+	margin-top: 0.3rem;
+	color: #EA471B;
+	font-size: 1rem;
+	font-weight: bold;
+}
+
+.loginBtn:active{
+	background-color: #f4f4f4;	
+}

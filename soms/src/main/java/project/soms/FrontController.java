@@ -22,4 +22,9 @@ public class FrontController {
   public String test3() {
     return "sample/test/layoutTest";
   }
+  
+  @GetMapping("logincontroller")
+  public String loginController(){
+	  return "login/login";
+  }
 }
