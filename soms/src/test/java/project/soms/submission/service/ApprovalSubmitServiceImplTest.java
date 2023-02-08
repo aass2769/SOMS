@@ -47,11 +47,9 @@ class ApprovalSubmitServiceImplTest {
     ExpenseDto expenseDto = new ExpenseDto("법인카드", "20230201", 10000, "출장중 숙박비 결재 건");
     SubmissionDto submissionDto = new SubmissionDto("1234", "2023-02-01 11:11:11", "대기", "유지보수", "미열람");
     Long employeeNo = 20230201011L;
-    List<Long> approverDto = new ArrayList<>();
-    List<ApproverDto> approverList = employeeService.expenseApprover(employeeNo);
+    List<ApproverDto> approverDto = employeeService.expenseApprover(employeeNo);
     List<String> submissionSection = new ArrayList<>();
-    for (int i = 0; i < approverList.size(); i++) {
-      approverDto.add(approverList.get(i).getEmployeeNo());
+    for (ApproverDto i : approverDto) {
       submissionSection.add("결재");
     }
     //when 지출결의서, 결재서식 값 저장
@@ -66,8 +64,8 @@ class ApprovalSubmitServiceImplTest {
     ExpenseDto expenseDto = new ExpenseDto("법인카드", "20230201", 10000, "출장중 숙박비 결재 건");
     SubmissionDto submissionDto = new SubmissionDto("1234", "2023-02-01 11:11:11", "대기", "유지보수", "미열람");
     Long employeeNo = 20230201011L;
-    List<Long> approverDto = new ArrayList<>();
-    approverDto.add(employeeNo);
+    List<ApproverDto> approverDto = new ArrayList<>();
+    approverDto.add(new ApproverDto(employeeNo));
     List<String> submissionSection = new ArrayList<>();
     for (int i = 0; i < approverDto.size(); i++) {
       submissionSection.add("결재");
