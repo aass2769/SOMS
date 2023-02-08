@@ -1,0 +1,68 @@
+
+#common_title {
+    color: #D8542E;
+    background-color: white;
+    border: #D8542E 1px solid;
+}
+
+.common_form {
+    display: flex;
+    margin-bottom: 30px;
+
+}
+
+#common_button {
+    border: 0px;
+    border-radius: 0px;
+    color: #D8542E;
+    background-color: white;
+}
+
+#employee_team_p {
+    margin-bottom: 0px;
+    border-bottom: 1px solid #D8542E;
+}
+
+.attendance_check {
+    border: 1px solid green;
+    width: 10px;
+    height: 10px;
+    background-color: green;
+    border-radius: 50px;
+
+}
+#common_employee_container{
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
+.select_employeeTeam {
+    border: 1px solid #4B4B4B;
+    color: #4B4B4B;
+}
+
+.select_manage {
+    border: 1px solid #4B4B4B;
+    color: #4B4B4B;
+}
+
+.text_employee_name {
+    border: 1px solid #4B4B4B;
+    color: #4B4B4B;
+    width: 150px;
+}
+
+.submit_employee {
+    background-color: white;
+    color: #D8542E;
+    border: 1px solid #D8542E;
+}
+
+.common_manage_name{
+    border: 0px;
+    background-color: white;
+}
+
+.td_common_manage_name{
+    width: 216.5px;
+}
