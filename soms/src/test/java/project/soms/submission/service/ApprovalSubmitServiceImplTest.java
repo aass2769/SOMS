@@ -44,16 +44,15 @@ class ApprovalSubmitServiceImplTest {
   @Test
   void expenseSubmit() {
     //given 지출결의서와 결재서식에 값 할당
-    ExpenseDto expenseDto = new ExpenseDto("법인카드", "20230201", 10000, "출장중 숙박비 결재 건");
-    SubmissionDto submissionDto = new SubmissionDto("1234", "2023-02-01 11:11:11", "대기", "유지보수", "미열람");
+    ExpenseDto expenseDto = new ExpenseDto("법인카드", "유지보수", "20230201", 10000, "출장중 숙박비 결재 건");
+    SubmissionDto submissionDto = new SubmissionDto("1234", "2023-02-01 11:11:11", "대기", "미열람");
     Long employeeNo = 20230201011L;
     List<ApproverDto> approverDto = employeeService.expenseApprover(employeeNo);
-    List<String> submissionSection = new ArrayList<>();
     for (ApproverDto i : approverDto) {
-      submissionSection.add("결재");
+      i.setSubmissionSection("결재");
     }
     //when 지출결의서, 결재서식 값 저장
-    approvalSubmitService.expenseSubmit(submissionDto, expenseDto, employeeNo, approverDto, submissionSection);
+    approvalSubmitService.expenseSubmit(submissionDto, expenseDto, employeeNo, approverDto);
     //then 입력한 값과 저장한 값이 일치하는지 검증
     assertThat(submissionDto.getExpenseNo()).isEqualTo(expenseDto.getExpenseNo());
   }
@@ -61,18 +60,14 @@ class ApprovalSubmitServiceImplTest {
   @Test
   void expenseSubmitApproverFail() {
     //given 지출결의서와 결재서식에 값 할당 결재라인 실패값 할당
-    ExpenseDto expenseDto = new ExpenseDto("법인카드", "20230201", 10000, "출장중 숙박비 결재 건");
-    SubmissionDto submissionDto = new SubmissionDto("1234", "2023-02-01 11:11:11", "대기", "유지보수", "미열람");
+    ExpenseDto expenseDto = new ExpenseDto("법인카드", "유지보수","20230201", 10000, "출장중 숙박비 결재 건");
+    SubmissionDto submissionDto = new SubmissionDto("1234", "2023-02-01 11:11:11", "대기", "미열람");
     Long employeeNo = 20230201011L;
     List<ApproverDto> approverDto = new ArrayList<>();
-    approverDto.add(new ApproverDto(employeeNo));
-    List<String> submissionSection = new ArrayList<>();
-    for (int i = 0; i < approverDto.size(); i++) {
-      submissionSection.add("결재");
-    }
+    approverDto.add(new ApproverDto(employeeNo,"이름","결재"));
     //when 지출결의서, 결재서식 값 저장 then insert 싶해 겁증
     assertThatThrownBy(() ->
-        approvalSubmitService.expenseSubmit(submissionDto, expenseDto, employeeNo, approverDto, submissionSection))
+        approvalSubmitService.expenseSubmit(submissionDto, expenseDto, employeeNo, approverDto))
         .isInstanceOf(IllegalArgumentException.class);
   }
 

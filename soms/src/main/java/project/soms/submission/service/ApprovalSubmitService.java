@@ -6,19 +6,14 @@ import java.util.List;
 
 public interface ApprovalSubmitService {
 
-  void expenseSubmit(SubmissionDto submissionDto, ExpenseDto expenseDto, Long proposerEmployeeNo,
-                     List<Long> approverDto, List<String> submissionSection);
+  void expenseSubmit(SubmissionDto submissionDto, ExpenseDto expenseDto, Long proposerEmployeeNo, List<ApproverDto> approverDto);
 
-  void overtimeSubmit(SubmissionDto submissionDto, OvertimeDto overtimeDto, Long proposerEmployeeNo,
-                      List<Long> approverDto, List<String> submissionSection);
+  void overtimeSubmit(SubmissionDto submissionDto, OvertimeDto overtimeDto, Long proposerEmployeeNo, List<ApproverDto> approverDto);
 
-  void annualLeaveSubmit(SubmissionDto submissionDto, AnnualLeaveDto annualLeaveDto, Long proposerEmployeeNo,
-                         List<Long> approverDto, List<String> submissionSection);
+  void annualLeaveSubmit(SubmissionDto submissionDto, AnnualLeaveDto annualLeaveDto, Long proposerEmployeeNo, List<ApproverDto> approverDto);
 
-  void businessTripSubmit(SubmissionDto submissionDto, BusinessTripDto businessTripDto, Long proposerEmployeeNo,
-                          List<Long> approverDto, List<String> submissionSection);
+  void businessTripSubmit(SubmissionDto submissionDto, BusinessTripDto businessTripDto, Long proposerEmployeeNo, List<ApproverDto> approverDto);
 
-  void incidentSubmit(SubmissionDto submissionDto, IncidentDto incidentDto, Long proposerEmployeeNo,
-                      List<Long> approverDto, List<String> submissionSection);
+  void incidentSubmit(SubmissionDto submissionDto, IncidentDto incidentDto, Long proposerEmployeeNo, List<ApproverDto> approverDto);
 
 }

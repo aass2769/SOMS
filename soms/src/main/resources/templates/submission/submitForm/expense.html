@@ -23,116 +23,154 @@
 
     <div class="text-center">
       <h2 class="font-monospace my-5">지출결의서</h2>
-      <form method="post" th:action th:object="${expenseInsertForm}">
-        <!-- 지출결의서 폼 -->
-      <div style="display:flex; height:8rem;" class="align-middle border">
+      <!-- 폼 태그 설정 - action은 경로의 이름이 같아서 기입 생략 , 폼 안에 필드값 설정을 위해 오브젝트를 하나 선언 (결재 서식을 내용을 담는 폼) -->
+      <form method="post" id="expenseForm" th:action th:object="${expenseInsertForm}">
 
-        <!-- 기안자 정보 항목 -->
-        <div style="width:10%;">
-          <div style="height:25%" class="border"></div>
-          <div style="height:25%; font-size: 1rem;" class="border"><p class="my-1">부서</p></div>
-          <div style="height:25%; font-size: 1rem;" class="border"><p class="my-1">직급</p></div>
-          <div style="height:25%; font-size: 1rem;" class="border"><p class="my-1">이름</p></div>
+        <!-- 결재자 누락 검증 -->
+        <div th:if="${#fields.hasGlobalErrors()}" class="text-end text-black-50 mb-1" style="font-size: 0.7rem;">
+          [결재자를 추가하세요]
         </div>
+        <div style="display:flex; height:8rem;" class="align-middle border">
 
-        <!-- 기안자 정보 -->
-        <div style="width:30%">
-          <div style="width:100%; height:25%; font-size: 0.7rem;" class="border">
-            <p class="my-2" id="" th:text="|${datetime} ${employee.getEmployeeNo()}|"></p>
+          <!-- 기안자 정보 항목 -->
+          <div style="width:10%;">
+            <div style="height:25%; font-size: 1rem;" class="border"><p class="my-1">서식 번호</p></div>
+            <div style="height:25%; font-size: 1rem;" class="border"><p class="my-1">부서</p></div>
+            <div style="height:25%; font-size: 1rem;" class="border"><p class="my-1">직급</p></div>
+            <div style="height:25%; font-size: 1rem;" class="border"><p class="my-1">이름</p></div>
           </div>
-          <div style="width:100%; height:25%; font-size: 1rem;" class="border"><p class="my-1" th:text="${employee.getEmployeeTeam()}">경영지원</p></div>
-          <div style="width:100%; height:25%; font-size: 1rem;" class="border"><p class="my-1" th:text="${employee.getManage()}">대리</p></div>
-          <div style="width:100%; height:25%; font-size: 1rem;" class="border"><p class="my-1" th:text="${employee.getEmployeeName()}">김희용</p></div>
-          <input type="hidden" name="submissionPri" th:value="|${datetime} ${employee.getEmployeeNo()}|">
-          <input type="hidden" name="employeeNo" th:value="${employee.getEmployeeNo()}">
-          <input type="hidden" name="submissionDatetime" th:value="${datetime}">
+
+          <!-- 기안자 정보 - 자동 추가 -->
+          <div style="width:30%">
+            <div style="width:100%; height:25%; font-size: 0.7rem;" class="border">
+              <p class="my-2" id="" th:text="|${#dates.format(date, 'yyyy-MM-dd hh:mm:ss')} ${employee.getEmployeeNo()}|">서식 번호</p>
+            </div>
+            <div style="width:100%; height:25%; font-size: 1rem;" class="border"><p class="my-1" th:text="${employee.getEmployeeTeam()}">기안자 팀이름</p></div>
+            <div style="width:100%; height:25%; font-size: 1rem;" class="border"><p class="my-1" th:text="${employee.getManage()}">기안자 직급</p></div>
+            <div style="width:100%; height:25%; font-size: 1rem;" class="border"><p class="my-1" th:text="${employee.getEmployeeName()}">기안자 이름</p></div>
+            <input type="hidden" name="submissionPri" th:value="|${#dates.format(date, 'yyyy-MM-dd hh:mm:ss')} ${employee.getEmployeeNo()}|">
+            <input type="hidden" name="employeeNo" th:value="${employee.getEmployeeNo()}">
+            <input type="hidden" name="submissionDatetime" th:value="${#dates.format(date, 'yyyy-MM-dd hh:mm:ss')}">
+          </div>
+
+          <!-- 결재 라인 - 결재 구분(결재 / 검토) 선택 및 결재자 추가 및 변경 -->
+          <div style="width:5%" class="border">
+            <p class="my-5" style="font-size: 1rem;">결재</p>
+          </div>
+          <div style="width:55%; display:flex;" th:class="${#fields.hasGlobalErrors() ? 'border border-danger' : 'border-start'}">
+            <!-- 결재라인 자동 추가 배열 -->
+            <div th:each="approver : ${approverDto}" style="width:12.5%; font-size: 3px;">
+              <select th:name="|submissionSection${approverStat.index}|" class="text-center border border-start-0 rounded-0 w-100 m-0" style="height:20%; font-size: 0.62rem;">
+                <option value="결재">결재</option>
+                <option value="검토" th:selected="${approver.submissionSection.toString().equals('검토')}">검토</option>
+              </select>
+              <input type="text" th:name="|approverName${approverStat.index}|" th:value="${approver.employeeName}" style="height:60%; font-size: 0.8rem;"
+                     class="border border-start-0 w-100 text-center" th:id="|approver${approverStat.index}|" readonly>
+              <input type="hidden" th:name="|approver${approverStat.index}|" th:value="${approver.employeeNo}">
+              <button style="height:20%; font-size: 0.7rem;" class="w-100 border border-start-0 bg-transparent">변경</button>
+            </div>
+            <!-- 남은 결재라인 -->
+            <div th:each="i : ${#numbers.sequence((approverDto.size()), 7)}" style="width:12.5%; font-size: 3px;">
+              <select th:name="|submissionSection${i}|" class="text-center border border-start-0 rounded-0 w-100 m-0" style="height:20%; font-size: 0.62rem;">
+                <option value="결재">결재</option>
+                <option value="검토">검토</option>
+              </select>
+              <input type="text" value="" style="height:60%;" th:id="|approver${i}|"
+                     class="border border-start-0 w-100 text-center" readonly>
+              <input type="hidden" th:name="|approver${i}|" value="">
+              <button style="height:20%; font-size: 0.7rem;" class="w-100 border border-start-0 bg-transparent">추가</button>
+            </div>
+          </div>
         </div>
 
-        <!-- 결재 라인 -->
-        <div style="width:5%" class="border">
-          <p class="my-5" style="font-size: 1rem;">결재</p>
-        </div>
-        <div style="width:55%; display:flex;" class="border-start">
-          <div th:each="approver : ${approvers}" style="width:12.5%; font-size: 3px;">
-            <select th:name="|submissionSection${approverStat.index}|" class="text-center border border-start-0 rounded-0 w-100 m-0" style="height:20%; font-size: 0.62rem;">
-              <option value="결재">결재</option>
-              <option value="검토">검토</option>
+          <!-- 지출구분과 지출일자를 선택하는 영역 -->
+        <div style="height:4rem; justify-content: space-around; align-items: center;" class="border border-2 border-top-1 border-bottom-1 d-flex "
+        th:classappend="${#fields.hasErrors('expenseDate') ? 'border-danger' : ''}">
+          <div class="d-flex align-middle justify-content-center">
+            <p class="m-0" style="font-size: 0.9rem; width:5rem;">지출 구분 : </p>
+            <select name="expenseSection" class="border-0 border-bottom" style="font-size: 0.7rem;">
+              <option value="법인카드">법인카드</option>
+              <option value="개인현금">개인현금</option>
             </select>
-            <input type="text" th:value="${approver.employeeName}" style="height:60%;"
-                   class="border border-start-0 w-100 text-center" readonly>
-            <input type="hidden" th:name="|approver${approverStat.index}|" th:value="${approver.employeeNo}">
-            <button style="height:20%; font-size: 0.7rem;" class="w-100 border border-start-0 bg-transparent">변경</button>
           </div>
-          <div th:each="i : ${#numbers.sequence((approvers.size()), 7)}" style="width:12.5%; font-size: 3px;">
-            <select th:name="|submissionSection${i}|" class="text-center border border-start-0 rounded-0 w-100 m-0" style="height:20%; font-size: 0.62rem;">
-              <option value="결재">결재</option>
-              <option value="검토">검토</option>
-            </select>
-            <input type="text" value="" style="height:60%;"
-                   class="border border-start-0 w-100 text-center" readonly>
-            <input type="hidden" th:name="|approver${i}|" value="">
-            <button style="height:20%; font-size: 0.7rem;" class="w-100 border border-start-0 bg-transparent">추가</button>
+          <!-- 지출 일자를 선택하는 date 폼 - 오류 발생시 오류 메세지 응답 . null 검증 -->
+          <div class="d-flex align-middle justify-content-center">
+            <p class="m-0" style="font-size: 0.9rem; width:5rem;">지출 일자 : </p>
+            <input type="date" id="expenseDate" name="expenseDate"
+                   th:field="*{expenseDate}" th:errorclass="border-danger" th:max="${#dates.format(date, 'yyyy-MM-dd')}" class="border-0 border-bottom" style="font-size: 0.7rem; outline:none;">
+            <div class="ms-3 text-black-50" style="font-size: 0.7rem;"
+                 th:text="${#fields.hasErrors('expenseDate') ? #fields.errors('expenseDate') : ''}"></div>
           </div>
         </div>
-      </div>
 
-        <!-- 지출구분과 지출일자를 선택하는 영역 -->
-      <div style="height:4rem; justify-content: space-around; align-items: center;" class="border border-2 border-top-0 d-flex">
-        <div class="d-flex align-middle justify-content-center">
-          <p class="m-0" style="font-size: 0.9rem; width:5rem;">지출 구분 : </p>
-          <select name="expenseSection" class="border-0 border-bottom" style="font-size: 0.7rem;">
-            <option value="법인카드">법인카드</option>
-            <option value="개인현금">개인현금</option>
-          </select>
+        <!-- 지출 내용을 입력하는 텍스트 상자 - 오류 발생시 오류 메세지 응답 . null 검증 -->
+        <div style="height:20rem; display:flex; justify-content: center; align-items: center;" class="border border-2"
+             th:classappend="${#fields.hasErrors('expenseContent') ? 'border-danger' : ''}">
+          <textarea class="w-100 h-100 border-0 p-3" id="expenseContent" name="expenseContent"
+                    th:field="*{expenseContent}" th:placeholder="${#fields.hasErrors('expenseContent') ? #fields.errors('expenseContent') : ''}"
+                    style="outline: none; resize: none; font-size: 0.7rem;"></textarea>
         </div>
-        <div class="d-flex align-middle justify-content-center">
-          <p class="m-0" style="font-size: 0.9rem; width:5rem;">지출 일자 : </p>
-          <input type="date" id="expenseDate" name="expenseDate" th:field="*{expenseDate}" th:max="${date}" class="border-0 border-bottom" style="font-size: 0.7rem; outline:none;">
-          <div  th:error="*{expenseDate}">
-            <p class="m-0 text-danger" style="font-size: 0.9rem; width:5rem;">날짜 기입은 필수입니다.</p>
+
+        <div style="height:4rem; display:flex; justify-content: center; align-items: center;" class="border border-2 border-top-1"
+        th:classappend="${#fields.hasErrors('expensePjt') || #fields.hasErrors('expenseCost') ? 'border-danger' : ''}">
+
+          <!-- 지출 합계를 입력하는 영역 -->
+          <div class="d-flex w-75 justify-content-center align-middle">
+            <p class="m-0 ms-3" style="font-size: 0.9rem; width:5rem;">프로젝트명 : </p>
+            <div>
+              <!-- pjt입력 폼 - 오류 발생시 오류 메세지 응답 . null 검증 -->
+              <input type="text" id="expensePjt" name="expensePjt" th:field="*{expensePjt}" class="ms-1 border-0 border-bottom text-center"
+                     th:errorclass="border-danger"  th:placeholder="${#fields.hasErrors('expensePjt') ? #fields.errors('expensePjt') : ''}"
+                     style="font-size: 0.7rem; outline:none; width:7rem;">
+            </div>
+            <!-- 금랙 입력 폼 - 오류 발생시 오류 메세지 응답 . 숫자 검증, null 검증  -->
+            <p class="m-0 ms-3" style="font-size: 0.9rem; width:5rem;">합계 : </p>
+            <input type="text" name="expenseCost" th:errorclass="border-danger" th:field="*{expenseCost}"
+                   class="ms-1 border-0 border-bottom text-center" style="font-size: 0.7rem; outline:none; width:7rem;" id="expenseCost"
+                   th:placeholder="${#fields.hasErrors('expenseCost') ? #fields.errors('expenseCost') : ''}">
+            <p class="m-0" style="font-size: 0.9rem;" th:classappend="${#fields.hasErrors('expenseCost') ? 'text-danger' : ''}">원</p>
+          </div>
+
+          <!-- 신청서 상신 및 취소 버튼 -->
+          <div class="h-100 w-25 d-flex">
+            <!-- 취소 버튼 클릭 시 결재 내역-결재중으로 이동 -->
+            <button class="btn btn-outline-dark border w-50 h-100 rounded-0 text-light"
+                    th:onclick="|location.href='@{/submission/form/underApproval}'|" style="background-color: #E86E1C">
+              취소
+            </button>
+            <!-- 상신 버튼 클릭 시 controller에 @PostMapping submission/form/expense 로 요청 -->
+            <button type="submit" id="submit" class="btn btn-outline-dark border w-50 h-100 rounded-0 text-light" style="background-color: #EA471B">
+              상신
+            </button>
           </div>
         </div>
-      </div>
-
-      <!-- 내용을 입력하는 텍스트 상자 영역 -->
-      <div style="height:20rem; display:flex; justify-content: center; align-items: center;" class="border border-2 border-top-0">
-        <textarea class="w-100 h-100 border-0 p-3" th:field="${}" id="expenseContent" name="expenseContent" style="outline: none; resize: none; font-size: 0.9rem;"></textarea>
-      </div>
-
-      <div style="height:4rem; display:flex; justify-content: center; align-items: center;" class="border border-2 border-top-0">
-
-        <!-- 지출 합계를 입력하는 영역 -->
-        <div class="d-flex w-75 justify-content-center align-middle">
-          <p class="m-0 ms-3" style="font-size: 0.9rem; width:5rem;">프로젝트명 : </p>
-          <div  th:object="submissionInsertForm">
-            <input type="text" th:field="*{submissionPjt}" name="submissionPjt" class="ms-1 border-0 border-bottom text-center" style="font-size: 0.7rem; outline:none; width:7rem;">
-          </div>
-          <p class="m-0 ms-3" style="font-size: 0.9rem; width:5rem;">합계 : </p>
-          <input type="text" name="expenseCost" th:field="*{expenseCost}" class="ms-1 border-0 border-bottom text-center" style="font-size: 0.7rem; outline:none; width:7rem;">
-          <p class="m-0" style="font-size: 0.9rem;">원</p>
-        </div>
-
-        <!-- 신청서 상신 및 취소 버튼 -->
-        <div class="h-100 w-25 d-flex">
-          <button class="btn btn-outline-dark border w-50 h-100 rounded-0 text-light" style="background-color: #E86E1C">
-            취소
-          </button>
-          <button type="submit" class="btn btn-outline-dark border w-50 h-100 rounded-0 text-light" style="background-color: #EA471B">
-            상신
-          </button>
-        </div>
-      </div>
       </form>
       <div style="height:4rem;"></div>
     </div>
   </div>
-<script>
-
-</script>
-
-
-
-
+  <!--<script>
+      function submit(){
+          let approver = [];
+          for (let i = 0; i < 8; i++) {
+              approver[i] = $('#approver' + i).val();
+          }
+          let expenseDate = $('#expenseDate').val();
+          let expenseContent = $('#expenseContent').val();
+          let expensePjt = $('#expensePjt').val();
+          let expenseCost = $('#expenseCost').val();
+          let expenseAmount;
+          console.log(expenseDate);
+          console.log(expenseContent);
+          console.log(expensePjt);
+          console.log(expenseCost);
+          if(expenseDate == "" && expenseContent == "" && expensePjt == "" && expenseCost == ""){
+              alert("내용이 다 기입되지 않았거나 잘못된 값이 있습니다.");
+              return true;
+          }else{
+              return true;
+          }
+      }
+  </script>-->
 
 </section>
 

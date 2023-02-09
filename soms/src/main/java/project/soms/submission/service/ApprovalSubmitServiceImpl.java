@@ -21,7 +21,7 @@ public class ApprovalSubmitServiceImpl implements ApprovalSubmitService{
   //지출 결의서 상신 메서드
   @Override
   public void expenseSubmit(SubmissionDto submissionDto, ExpenseDto expenseDto, Long proposerEmployeeNo,
-                            List<Long> approverDto, List<String> submissionSection) {
+                            List<ApproverDto> approverDto) {
 
     //받아온 지출결의서의 값을 데이터에 추가
     approvalSubmitRepository.expenseSubmit(expenseDto);
@@ -37,12 +37,12 @@ public class ApprovalSubmitServiceImpl implements ApprovalSubmitService{
     ProposerDto proposerDto = employeeService.proposer(proposerEmployeeNo);
 
     //위의 정보를 입력하여 결재 서식 insert
-    insertSubmission(submissionDto, approverDto, submissionSection, proposerDto);
+    insertSubmission(submissionDto, approverDto, proposerDto);
   }
 
   @Override
   public void overtimeSubmit(SubmissionDto submissionDto, OvertimeDto overtimeDto, Long proposerEmployeeNo,
-                             List<Long> approverDto, List<String> submissionSection) {
+                             List<ApproverDto> approverDto) {
     approvalSubmitRepository.overtimeSubmit(overtimeDto);
 
     submissionDto.setOvertimeNo(overtimeDto.getOvertimeNo());
@@ -50,12 +50,12 @@ public class ApprovalSubmitServiceImpl implements ApprovalSubmitService{
     submissionDto.setSubmissionShowable("가능");
     ProposerDto proposerDto = employeeService.proposer(proposerEmployeeNo);
 
-    insertSubmission(submissionDto, approverDto, submissionSection, proposerDto);
+    insertSubmission(submissionDto, approverDto, proposerDto);
   }
 
   @Override
   public void annualLeaveSubmit(SubmissionDto submissionDto, AnnualLeaveDto annualLeaveDto, Long proposerEmployeeNo,
-                                List<Long> approverDto, List<String> submissionSection) {
+                                List<ApproverDto> approverDto) {
     approvalSubmitRepository.annualLeaveSubmit(annualLeaveDto);
 
     submissionDto.setAnnualLeaveNo(annualLeaveDto.getAnnualLeaveNo());
@@ -63,12 +63,12 @@ public class ApprovalSubmitServiceImpl implements ApprovalSubmitService{
     submissionDto.setSubmissionShowable("가능");
     ProposerDto proposerDto = employeeService.proposer(proposerEmployeeNo);
 
-    insertSubmission(submissionDto, approverDto, submissionSection, proposerDto);
+    insertSubmission(submissionDto, approverDto, proposerDto);
   }
 
   @Override
   public void businessTripSubmit(SubmissionDto submissionDto, BusinessTripDto businessTripDto, Long proposerEmployeeNo,
-                                 List<Long> approverDto, List<String> submissionSection) {
+                                 List<ApproverDto> approverDto) {
     approvalSubmitRepository.businessTripSubmit(businessTripDto);
 
     submissionDto.setBusinessTripNo(businessTripDto.getBusinessTripNo());
@@ -76,12 +76,12 @@ public class ApprovalSubmitServiceImpl implements ApprovalSubmitService{
     submissionDto.setSubmissionShowable("가능");
     ProposerDto proposerDto = employeeService.proposer(proposerEmployeeNo);
 
-    insertSubmission(submissionDto, approverDto, submissionSection, proposerDto);
+    insertSubmission(submissionDto, approverDto, proposerDto);
   }
 
   @Override
   public void incidentSubmit(SubmissionDto submissionDto, IncidentDto incidentDto, Long proposerEmployeeNo,
-                             List<Long> approverDto, List<String> submissionSection) {
+                             List<ApproverDto> approverDto) {
     approvalSubmitRepository.incidentSubmit(incidentDto);
 
     submissionDto.setIncidentNo(incidentDto.getIncidentNo());
@@ -89,25 +89,22 @@ public class ApprovalSubmitServiceImpl implements ApprovalSubmitService{
     submissionDto.setSubmissionShowable("가능");
     ProposerDto proposerDto = employeeService.proposer(proposerEmployeeNo);
 
-    insertSubmission(submissionDto, approverDto, submissionSection, proposerDto);
+    insertSubmission(submissionDto, approverDto, proposerDto);
   }
 
   //결재 서식 insert 메서드
-  private void insertSubmission(SubmissionDto submissionDto, List<Long> approverDto, List<String> submissionSection, ProposerDto proposerDto) {
+  private void insertSubmission(SubmissionDto submissionDto, List<ApproverDto> approverDto, ProposerDto proposerDto) {
 
     //결재자의 수 만큼 insert 반복
-    for (int i = 0; i < approverDto.size(); i++) {
+    for (ApproverDto i : approverDto) {
 
-      //기안자와 결재자의 관계를 증명하기 위해 결재자 정보 조회
-      Long approverManageNo = employeeService.proposer(approverDto.get(i)).getManageNo();
-      Long approverEmoloyeeNo = employeeService.proposer(approverDto.get(i)).getEmployeeNo();
-
+      ProposerDto approver = employeeService.proposer(i.getEmployeeNo());
       //결재자의 직급이 기안자 상위에 있도록 검증
-      if (proposerDto.getEmployeeNo() != approverEmoloyeeNo && proposerDto.getManageNo() <= approverManageNo) {
+      if (proposerDto.getEmployeeNo() != approver.getEmployeeNo() && proposerDto.getManageNo() <= approver.getManageNo()) {
 
         //서식 구분(검토, 결재, 등등...), 결재자 사번 입력
-        Long approverNo = approverDto.get(i);
-        submissionDto.setSubmissionSection(submissionSection.get(i));
+        Long approverNo = i.getEmployeeNo();
+        submissionDto.setSubmissionSection(i.getSubmissionSection());
         submissionDto.setApproverEmployeeNo(approverNo);
 
         //결재 서식 insert

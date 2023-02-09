@@ -11,6 +11,8 @@ public class ExpenseInsertForm {
   @NotEmpty
   private String expenseSection;
   @NotEmpty
+  private String expensePjt;
+  @NotEmpty
   private String expenseDate;
   @NotNull
   private Integer expenseCost;

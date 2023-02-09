@@ -22,7 +22,12 @@ public class EmployeeServiceImpl implements EmployeeService{
   @Override
   public List<ApproverDto> expenseApprover(Long employeeNo) {
     ProposerDto proposerDto = employeeRepository.proposer(employeeNo);
-    return employeeRepository.expenseApprover(proposerDto);
+
+    List<ApproverDto> approverDto = employeeRepository.expenseApprover(proposerDto);
+    for (ApproverDto i : approverDto) {
+      i.setSubmissionSection("결재");
+    }
+    return approverDto;
   }
 
   @Override
