@@ -8,8 +8,11 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Document</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"  crossorigin="anonymous"></script>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+		crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -20,8 +23,9 @@
 		<input type="text" value="" id="newInput" placeholder="직급 이름">
 
 
-		<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel"
-			style="width: 500px;">
+
+		<div class="offcanvas offcanvas-end" th:classappend="${commonSelect} ? 'show' : '' " tabindex="-1"
+			id="offcanvasRight" aria-labelledby="offcanvasRightLabel" style="width: 560px;">
 			<div class="offcanvas-header">
 				<h4 class="offcanvas-title" id="offcanvasRightLabel" style="color: #D8542E; font-weight: bold;">사원 조회
 				</h4>
@@ -29,129 +33,318 @@
 			</div>
 			<div class="offcanvas-body">
 				<div class="common_form">
-					<form method="post" action="">
+					<form method="get" th:action="@{/common/submit}">
 						<select name="employeeTeam" class="select_employeeTeam">
 							<option disabled selected>부서선택</option>
-							<option value="apple">경영관리</option>
-							<option value="apple">재무회계</option>
-							<option value="apple">정보보안</option>
-							<option value="apple">구매</option>
-							<option value="apple">개발1팀</option>
-							<option value="apple">개발2팀</option>
-							<option value="apple">연구팀</option>
-							<option value="apple">홍보마케팅</option>
-							<option value="apple">해외사업</option>
+							<option value="임원">임원</option>
+							<option value="경영 지원-경영 관리">경영 지원-경영 관리</option>
+							<option value="경영 지원-재무 회계">경영 지원-재무 회계</option>
+							<option value="경영 지원-정보 보안">경영 지원-정보 보안</option>
+							<option value="경영 지원-구매">경영 지원-구매</option>
+							<option value="개발 연구-개발 1팀">개발 연구-개발 1팀</option>
+							<option value="개발 연구-개발 2팀">개발 연구-개발 2팀</option>
+							<option value="개발-연구 연구팀">개발-연구 연구팀</option>
+							<option value="영업-홍보 마케팅">영업-홍보 마케팅</option>
+							<option value="영업-해외 사업">영업-해외 사업</option>
 						</select>
-						<select name="manage" class="select_manage">
+						<select name="manage" class="selectManage">
 							<option disabled selected>직급</option>
-							<option value="apple">인턴</option>
-							<option value="apple">사원</option>
-							<option value="apple">주임</option>
-							<option value="apple">대리</option>
-							<option value="apple">과장</option>
-							<option value="apple">차장</option>
-							<option value="apple">부장</option>
-							<option value="apple">이사</option>
-							<option value="apple">상무</option>
-							<option value="apple">전무</option>
-							<option value="apple">관리자</option>
-							<option value="apple">부사장</option>
-							<option value="apple">사장</option>
+							<option value="인턴">인턴</option>
+							<option value="사원">사원</option>
+							<option value="주임">주임</option>
+							<option value="대리">대리</option>
+							<option value="과장">과장</option>
+							<option value="차장">차장</option>
+							<option value="부장">부장</option>
+							<option value="이사">이사</option>
+							<option value="상무">상무</option>
+							<option value="전무">전무</option>
+							<option value="관리자">관리자</option>
+							<option value="부사장">부사장</option>
+							<option value="사장">사장</option>
 						</select>
-						<input type="text" name="employee_name" class="text_employee_name">
+						<input type="text" name="employeeName" class="text_employee_name">
 						<button type="submit" class="submit_employee">검색</button>
 					</form>
 				</div>
+
+				<th:block th:each="select : ${commonSelect}">
+					<div class="select_list">
+					<span th:text="|${select.employeeTeam} / |">
+						<button></button>
+					</span>
+					<span th:text=${select.manage}>
+						<button></button>
+					</span>
+					<span th:text=${select.employeeName}>
+						<button></button>
+					</span>
+					</div>
+				</th:block>
+
+
+
+
 				<div>
+					<!--임원-->
 					<div>
 						<p id="employee_team_p">
 							<button class="btn btn-primary" id="common_button" type="button" data-bs-toggle="collapse"
-								data-bs-target="#common_employee_container" aria-expanded="false"
-								aria-controls="common_employee_container">
-								경영관리
+								data-bs-target="#common_employee_container0" aria-expanded="false"
+								aria-controls="common_employee_container0">
+								임원
 							</button>
 						</p>
-						<div class="collapse" id="common_employee_container">
-							<table>
-								<tr th:each="team : ${team0}">
-									<td>
-										<div class="attendance_check">
-											<p></p>
-										</div>
-									</td>
-									<td class="td_common_manage_name" th:text="${team.manage} + ${team.employeeName}">
-										<input class="common_manage_name" type="button" value="인턴 희용">
-									</td>
-								</tr>
-							</table>
+						<div class="collapse" id="common_employee_container0">
+							<div class="row">
+								<div id="common_employee_item" class="col-6" th:each="team : ${teamExecutive}">
+									<div class="attendance_check">
+										<p></p>
+									</div>
+									<span class="td_common_manage_name">
+										<input class="common_manage_name"
+											th:value="${team.manage} + ' | ' + ${team.employeeName}" type="button"
+											value="">
+									</span>
+								</div>
+							</div>
 						</div>
 					</div>
+
+					<!--경영 지원 - 경영 관리-->
+					<div>
+						<p id="employee_team_p">
+							<button class="btn btn-primary" id="common_button" type="button" data-bs-toggle="collapse"
+								data-bs-target="#common_employee_container1" aria-expanded="false"
+								aria-controls="common_employee_container1">
+								경영 지원 - 경영 관리
+							</button>
+						</p>
+						<div class="collapse" id="common_employee_container1">
+							<div class="row">
+								<div id="common_employee_item" class="col-6" th:each="team : ${team0}">
+									<div class="attendance_check">
+										<p></p>
+									</div>
+									<span class="td_common_manage_name">
+										<input class="common_manage_name"
+											th:value="${team.manage} + ' | ' + ${team.employeeName}" type="button"
+											value="">
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!--경영 지원 - 재무 회계-->
 					<div>
 						<p id="employee_team_p">
 							<button class="btn btn-primary" id="common_button" type="button" data-bs-toggle="collapse"
 								data-bs-target="#common_employee_container2" aria-expanded="false"
 								aria-controls="common_employee_container2">
-								경영관리
+								경영 지원 - 재무 회계
 							</button>
 						</p>
 						<div class="collapse" id="common_employee_container2">
-							<table>
-								<tr>
-									<td>
-										<div class="attendance_check">
-											<p></p>
-										</div>
-									</td>
-									<td class="td_common_manage_name">
-										<input class="common_manage_name" type="button" value="인턴 희용">
-									</td>
-									<td>
-										<div class="attendance_check">
-											<p></p>
-										</div>
-									</td>
-									<td class="td_common_manage_name">
-										<input class="common_manage_name" type="button" value="과장 희용">
-									</td>
-								</tr>
-								<tr>
-									<div>
-										<td>
-											<div class="attendance_check">
-												<p></p>
-											</div>
-										</td>
-										<td class="td_common_manage_name">
-											<input class="common_manage_name" type="button" value="인턴 희용">
-										</td>
+							<div class="row">
+								<div id="common_employee_item" class="col-6" th:each="team : ${team1}">
+									<div class="attendance_check">
+										<p></p>
 									</div>
-									<div>
-										<td>
-											<div class="attendance_check">
-												<p></p>
-											</div>
-										</td>
-										<td class="td_common_manage_name">
-											<input class="common_manage_name" type="button" value="인턴 희용">
-										</td>
-									</div>
-								</tr>
-							</table>
+									<span class="td_common_manage_name">
+										<input class="common_manage_name"
+											th:value="${team.manage} + ' | ' + ${team.employeeName}" type="button"
+											value="">
+									</span>
+								</div>
+							</div>
 						</div>
 					</div>
 
+					<!--경영 지원 - 정보 보안-->
+					<div>
+						<p id="employee_team_p">
+							<button class="btn btn-primary" id="common_button" type="button" data-bs-toggle="collapse"
+								data-bs-target="#common_employee_container3" aria-expanded="false"
+								aria-controls="common_employee_container3">
+								경영 지원 - 정보 보안
+							</button>
+						</p>
+						<div class="collapse" id="common_employee_container3">
+							<div class="row">
+								<div id="common_employee_item" class="col-6" th:each="team : ${team2}">
+									<div class="attendance_check">
+										<p></p>
+									</div>
+									<span class="td_common_manage_name">
+										<input class="common_manage_name"
+											th:value="${team.manage} + ' | ' + ${team.employeeName}" type="button"
+											value="">
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!--경영 지원 - 구매-->
+					<div>
+						<p id="employee_team_p">
+							<button class="btn btn-primary" id="common_button" type="button" data-bs-toggle="collapse"
+								data-bs-target="#common_employee_container4" aria-expanded="false"
+								aria-controls="common_employee_container4">
+								경영 지원 - 구매
+							</button>
+						</p>
+						<div class="collapse" id="common_employee_container4">
+							<div class="row">
+								<div id="common_employee_item" class="col-6" th:each="team : ${team3}">
+									<div class="attendance_check">
+										<p></p>
+									</div>
+									<span class="td_common_manage_name">
+										<input class="common_manage_name"
+											th:value="${team.manage} + ' | ' + ${team.employeeName}" type="button"
+											value="">
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!--개발 연구 - 개발 1팀-->
+					<div>
+						<p id="employee_team_p">
+							<button class="btn btn-primary" id="common_button" type="button" data-bs-toggle="collapse"
+								data-bs-target="#common_employee_container5" aria-expanded="false"
+								aria-controls="common_employee_container5">
+								개발 연구 - 개발 1팀
+							</button>
+						</p>
+						<div class="collapse" id="common_employee_container5">
+							<div class="row">
+								<div id="common_employee_item" class="col-6" th:each="team : ${team4}">
+									<div class="attendance_check">
+										<p></p>
+									</div>
+									<span class="td_common_manage_name">
+										<input class="common_manage_name"
+											th:value="${team.manage} + ' | ' + ${team.employeeName}" type="button"
+											value="">
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!--개발 연구 - 개발 2팀-->
+					<div>
+						<p id="employee_team_p">
+							<button class="btn btn-primary" id="common_button" type="button" data-bs-toggle="collapse"
+								data-bs-target="#common_employee_container6" aria-expanded="false"
+								aria-controls="common_employee_container6">
+								개발 연구 - 개발 2팀
+							</button>
+						</p>
+						<div class="collapse" id="common_employee_container6">
+							<div class="row">
+								<div id="common_employee_item" class="col-6" th:each="team : ${team5}">
+									<div class="attendance_check">
+										<p></p>
+									</div>
+									<span class="td_common_manage_name">
+										<input class="common_manage_name"
+											th:value="${team.manage} + ' | ' + ${team.employeeName}" type="button"
+											value="">
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!--개발 연구 - 연구팀-->
+					<div>
+						<p id="employee_team_p">
+							<button class="btn btn-primary" id="common_button" type="button" data-bs-toggle="collapse"
+								data-bs-target="#common_employee_container7" aria-expanded="false"
+								aria-controls="common_employee_container7">
+								개발 연구 - 연구팀
+							</button>
+						</p>
+						<div class="collapse" id="common_employee_container7">
+							<div class="row">
+								<div id="common_employee_item" class="col-6" th:each="team : ${team6}">
+									<div class="attendance_check">
+										<p></p>
+									</div>
+									<span class="td_common_manage_name">
+										<input class="common_manage_name"
+											th:value="${team.manage} + ' | ' + ${team.employeeName}" type="button"
+											value="">
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!--영업 - 홍보마케팅-->
+					<div>
+						<p id="employee_team_p">
+							<button class="btn btn-primary" id="common_button" type="button" data-bs-toggle="collapse"
+								data-bs-target="#common_employee_container8" aria-expanded="false"
+								aria-controls="common_employee_container8">
+								영업 - 홍보마케팅
+							</button>
+						</p>
+						<div class="collapse" id="common_employee_container8">
+							<div class="row">
+								<div id="common_employee_item" class="col-6" th:each="team : ${team7}">
+									<div class="attendance_check">
+										<p></p>
+									</div>
+									<span class="td_common_manage_name">
+										<input class="common_manage_name"
+											th:value="${team.manage} + ' | ' + ${team.employeeName}" type="button"
+											value="">
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!--영업 - 해외 사업-->
+					<div>
+						<p id="employee_team_p">
+							<button class="btn btn-primary" id="common_button" type="button" data-bs-toggle="collapse"
+								data-bs-target="#common_employee_container9" aria-expanded="false"
+								aria-controls="common_employee_container9">
+								영업 - 해외 사업
+							</button>
+						</p>
+						<div class="collapse" id="common_employee_container9">
+							<div class="row">
+								<div id="common_employee_item" class="col-6" th:each="team : ${team8}">
+									<div class="attendance_check">
+										<p></p>
+									</div>
+									<span class="td_common_manage_name">
+										<input class="common_manage_name"
+											th:value="${team.manage} + ' | ' + ${team.employeeName}" type="button"
+											value="">
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
-		</div>
-		
-<script>
-	$(function () {
-		$(".common_manage_name").on("click", function () {
-			var newInput = $(this).val();
-			$("#newInput").val(newInput);
-		});
-	});
-</script>
+			<script>
+				$(function () {
+					$(".common_manage_name").on("click", function () {
+						var newInput = $(this).val();
+						$("#newInput").val(newInput);
+					});
+				});
+			</script>
 	</section>
 </body>
 

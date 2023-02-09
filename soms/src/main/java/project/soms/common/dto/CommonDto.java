@@ -9,6 +9,9 @@ public class CommonDto {
 	private String manage;
 	private String employeeName;	
 	
+	public CommonDto() {}
+	
+	
 	public CommonDto(String employeeTeam, String manage, String employeeName) {
 		this.employeeTeam = employeeTeam;
 		this.manage = manage;

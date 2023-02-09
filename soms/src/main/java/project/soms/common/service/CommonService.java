@@ -9,4 +9,7 @@ public interface CommonService {
 	List<CommonDto> commonList(String team);
 	
 	List<CommonDto> executiveList(String[] team);
+	
+	List<CommonDto> commonSelect(String employeeTeam, String manage, String employeeName);
+	
 }

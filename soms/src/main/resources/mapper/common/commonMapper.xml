@@ -10,4 +10,11 @@
 		ON A.manage_no = B.manage_no
     </select>
 
+	<select id="commonSelect" resultType="project.soms.common.dto.CommonDto">
+		select A.employee_name, B.manage, A.employee_team
+		from employee as A
+		LEFT JOIN manage as B
+		ON A.manage_no = B.manage_no
+		WHERE A.employee_name like concat('%',#{employeeName},'%') and B.manage like concat('%',#{manage},'%') and A.employee_team like concat('%',#{employeeTeam},'%');		
+	</select>
 </mapper>

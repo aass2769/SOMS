@@ -7,5 +7,7 @@ import project.soms.common.dto.CommonDto;
 public interface CommonRepository {
 	
 	List<CommonDto> commonList();
+	
+	List<CommonDto> commonSelect(String employeeTeam, String manage, String employeeName);
 
 }

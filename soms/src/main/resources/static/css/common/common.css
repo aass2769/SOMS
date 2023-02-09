@@ -29,9 +29,15 @@
     height: 10px;
     background-color: green;
     border-radius: 50px;
+    margin-top: 10px;
+    margin-right: 10px;
 
 }
-#common_employee_container{
+#common_employee_container0 , #common_employee_container1
+, #common_employee_container2, #common_employee_container3
+, #common_employee_container4, #common_employee_container5
+, #common_employee_container6, #common_employee_container7
+, #common_employee_container8, #common_employee_container9{
     margin-top: 10px;
     margin-left: 10px;
 }
@@ -65,4 +71,15 @@
 
 .td_common_manage_name{
     width: 216.5px;
+}
+#common_employee_item{
+	display: flex;
+	padding-bottom: 5px;
+	padding-left: 20px;
+	padding-right: 20px;
+}
+
+.select_list{
+	border: 1px solid;
+	width: 300px;
 }

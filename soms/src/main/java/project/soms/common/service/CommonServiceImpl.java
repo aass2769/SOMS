@@ -1,5 +1,6 @@
 package project.soms.common.service;
 
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -7,6 +8,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import project.soms.common.dto.CommonDto;
 import project.soms.common.repository.CommonRepository;
 
@@ -42,5 +44,13 @@ public class CommonServiceImpl implements CommonService{
 		}
 		return teamEmployeeList;
 	}
+
+	@Override
+	public List<CommonDto> commonSelect(String employeeTeam, String manage, String employeeName) {
+		
+		List<CommonDto> commonSelect = commonRepository.commonSelect(employeeTeam, manage, employeeName);
+		return commonSelect;
+	}
+
 
 }
