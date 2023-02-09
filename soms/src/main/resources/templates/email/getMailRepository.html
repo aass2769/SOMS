@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ko" th:replace="~{sample/layout/mainLayout :: layout(~{::title}, ~{::article})}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>메일</title>
+</head>
+<body>
+    <article class="Article">
+		<div>
+			<!--Title 부분-->
+			<div style="width:90%; margin-left: 5%">
+
+			  <div class="position-fixed bg-white" style="width:75%">
+			    <!-- 페이지 본문의 제목 -->
+			    <div>
+			      <h1 class="pt-4 px-4 text-start ">받은 메일 보관함</h1>
+			    </div>
+			    <!-- 본문의 제목과 내용을 구분하는 선 -->
+			    <hr style="border: solid 2px #EA471B; opacity: 1; margin:0;">
+			  </div>
+			  <!-- 본문의 내용 위치를 잡기위해 만든 상담 공백 -->
+			  <div style="height:5rem;"></div>
+			</div>
+			<!--네비바 부분-->
+			<div class="GetMail">
+				<div class="GetMail_Nav">
+					<ul>
+						<li class="lis1"><input type="checkbox" id="MailCheck"/></li>
+						<li class="lis2"><label for="rate1">⭐</label></li>
+						<li class="lis3">읽음</li>
+						<li class="lis4">삭제</li>
+						<li style="color:#f4f4f4;">|</li>
+						<li class="lis5">답장</li>
+						<li class="lis6">전체답장</li>
+						<li class="lis7">전달</li>
+						<li style="color:#f4f4f4;">|</li>
+						<li class="lis8">필터▼</li>
+						<li class="lis9">4/35(읽음)</li>
+					</ul>
+				</div>
+				<!--테이블 부분-->
+				<div class="GetMail_Container">	
+					<table>
+						<tr>
+							<td class="table1">
+								<input type="checkbox" id="MailCheck"/>
+							</td>
+							<td class="table2">
+								<label for="rate1">⭐</label>
+							</td>
+							<td class="table3">
+								읽음
+							</td>
+							<td class="table4">
+								연태양
+							</td>
+							<td class="table5">
+								<p>겅듀 등장~! 겅듀 간닷~!mmmmmmmmmmmmmmmmmmmmmmmmmmm</p>
+							</td>
+							<td class="table6">
+								2023-02-01
+							</td>			
+						</tr>		
+						<tr>
+							<td class="table1">
+								<input type="checkbox" id="MailCheck"/>
+							</td>
+							<td class="table2">
+								<label for="rate1">⭐</label>
+							</td>
+							<td class="table3">
+								읽음
+							</td>
+							<td class="table4">
+								정우민
+							</td>
+							<td class="table5">
+								뿌우 카와이한 우민쨩 등~장!
+							</td>
+							<td class="table6">
+								2023-02-01
+							</td>					
+						</tr>
+						<tr>
+							<td class="table1">
+								<input type="checkbox" id="MailCheck"/>
+							</td>
+							<td class="table2">
+								<label for="rate1">⭐</label>
+							</td>
+							<td class="table3">
+								읽음
+							</td>
+							<td class="table4">
+								박호민
+							</td>
+							<td class="table5">
+								안녕하세요!
+							</td>
+							<td class="table6">
+								2023-02-01
+							</td>					
+						</tr>		
+						<tr>
+							<td class="table1">
+								<input type="checkbox" id="MailCheck"/>
+							</td>
+							<td class="table2">
+								<label for="rate1">⭐</label>
+							</td>
+							<td class="table3">
+								읽음
+							</td>
+							<td class="table4">
+								김희용
+							</td>
+							<td class="table5">
+								전 귀여운 희용이에용~!
+							</td>
+							<td class="table6">
+								2023-02-01
+							</td>					
+						</tr>	
+					</table>
+				</div>
+			</div>
+		</div>
+	</article>
+</body>
+</html>
