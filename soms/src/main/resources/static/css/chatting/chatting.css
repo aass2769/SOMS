@@ -1,0 +1,118 @@
+/*친구 목록의 친구 수 부분*/
+.friend-count{
+	font-size: 30px;
+	font-weight: 30px;
+	font-family: 'Noto Sans KR', sans-serif;
+	margin-left: 40px;
+}
+
+
+/*채팅 방 안의 친구명 부분*/
+.puppy{
+    font-size: 40px;
+    font-weight: bold;
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+/*연도,월,일 흰색 줄 알림부분*/
+.date {
+    display: flex;
+    flex-basis: 100%;
+    align-items: center;
+    color: #0e0b0b;
+    font-size: 20px;
+    margin: 8px 0px;
+  }
+  .date::before,
+  .date::after {
+    content: "";
+    flex-grow: 1;
+    background: rgba(0, 0, 0, 0.35);
+    height: 1px;
+    font-size: 0px;
+    line-height: 0px;
+    margin: 0px 16px;
+  }
+
+/*대화창 말풍선*/
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+a {
+    text-decoration: none;
+}
+
+.wrap {
+    padding: 40px 0;
+    background-color: white;
+}
+
+.wrap .chat {
+    display: flex;
+    align-items: flex-start;
+    padding: 20px;
+}
+
+
+.wrap .chat .textbox {
+    position: relative;
+    display: inline-block;
+    max-width: calc(100% - 70px);
+    padding: 10px;
+    margin-top: 7px;
+    font-size: 15px;
+    border-radius: 10px;
+}
+
+.wrap .chat .textbox::before {
+    position: absolute;
+    display: block;
+    top: 0;
+    font-size: 1.5rem;
+}
+
+.wrap .ch1 .textbox {
+    margin-left: 20px;
+    background-color: #E86E1C;
+}
+
+.wrap .ch1 .textbox::before {
+    left: -15px;
+    content: "◀";
+    color: #E86E1C;
+}
+
+.wrap .ch2 {
+    flex-direction: row-reverse;
+}
+
+.wrap .ch2 .textbox {
+    margin-right: 20px;
+    background-color: #f4f4f4;
+}
+
+.wrap .ch2 .textbox::before {
+    right: -15px;
+    content: "▶";
+    color: #f4f4f4;
+}
+.icon{
+    padding-left: 10px;
+    padding-right: 10px;
+
+}
+.time{
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 13px;
+}
+/*텍스트 박스*/
+#textarea {
+    outline-style: none;
+    resize: none;
+    width: 96%;
+    background-color: #E1E1E1;
+}
