@@ -52,5 +52,33 @@ public class CommonServiceImpl implements CommonService{
 		return commonSelect;
 	}
 
+	@Override
+	public List<CommonDto> selectedCommon(String[] teams, String employeeTeam, String manage, String employeeName) {
+		
+		String employeeTeamCheck = employeeTeam;
+		
+		if(employeeTeamCheck == null || Arrays.asList(teams).indexOf(employeeTeamCheck) < 0) {
+			employeeTeamCheck = "";
+		} 
+		if(manage == null) {
+			manage = "";
+		}
+		
+		//부서, 직급, 이름을 db에서 가지고옴
+		List<CommonDto> selectList = commonSelect(employeeTeamCheck, manage, employeeName);
+		
+		//임원인 경우를 판별하는 부분
+		List<CommonDto> list = new ArrayList<>();
+	    if(Arrays.asList(teams).indexOf(employeeTeam) < 0 && employeeTeam != null) {
+	      for (CommonDto select : selectList) {
+	        if(Arrays.asList(teams).indexOf(select.getEmployeeTeam()) < 0) {
+	          list.add(select);
+	        }
+	      }
+	      selectList = list;
+	    }
+	    return selectList;
+	}
+
 
 }

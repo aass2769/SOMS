@@ -17,23 +17,27 @@
 
 <body>
 	<section class="Article">
+		<!-- 버튼 클릭 시 오프캔버스가 열림.-->
 		<button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"
 			aria-controls="offcanvasRight" id="common_title">사원 조회</button>
 
+		<!-- 직원 클릭 시 이부분에 value값이 전달됩니다. 응용해서 사용하시면됩니다.-->
 		<input type="text" value="" id="newInput" placeholder="직급 이름">
 
 
 
-		<div class="offcanvas offcanvas-end" th:classappend="${commonSelect} ? 'show' : '' " tabindex="-1"
-			id="offcanvasRight" aria-labelledby="offcanvasRightLabel" style="width: 560px;">
+		<div class="offcanvas offcanvas-end" data-bs-backdrop="false" th:classappend="${commonSelect} ? 'show' : '' "
+			tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel" style="width: 560px;">
 			<div class="offcanvas-header">
 				<h4 class="offcanvas-title" id="offcanvasRightLabel" style="color: #D8542E; font-weight: bold;">사원 조회
 				</h4>
 				<button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
 			</div>
 			<div class="offcanvas-body">
+				
+				<!-- 부서 or 직급 or 이름을 검색하는 부분입니다.-->
 				<div class="common_form">
-					<form method="get" th:action="@{/common/submit}">
+					<form method="get" th:action>
 						<select name="employeeTeam" class="select_employeeTeam">
 							<option disabled selected>부서선택</option>
 							<option value="임원">임원</option>
@@ -68,21 +72,16 @@
 					</form>
 				</div>
 
+
+				<!--부서, 직급, 이름 선택 후 검색 했을 때 출력되는 부분-->
 				<th:block th:each="select : ${commonSelect}">
 					<div class="select_list">
-					<span th:text="|${select.employeeTeam} / |">
-						<button></button>
-					</span>
-					<span th:text=${select.manage}>
-						<button></button>
-					</span>
-					<span th:text=${select.employeeName}>
-						<button></button>
-					</span>
+						<button class="select_list_button"
+							th:text="${select.employeeTeam} + ' / ' + ${select.manage} + ' ' + ${select.employeeName}"
+							th:value="${select.employeeName}">
+						</button>
 					</div>
 				</th:block>
-
-
 
 
 				<div>
@@ -97,14 +96,13 @@
 						</p>
 						<div class="collapse" id="common_employee_container0">
 							<div class="row">
-								<div id="common_employee_item" class="col-6" th:each="team : ${teamExecutive}">
+								<div id="common_employee_item" class="col-6" th:each="team : ${team0}">
 									<div class="attendance_check">
 										<p></p>
 									</div>
 									<span class="td_common_manage_name">
-										<input class="common_manage_name"
-											th:value="${team.manage} + ' | ' + ${team.employeeName}" type="button"
-											value="">
+										<button class="common_manage_name" th:value="${team.employeeNo}"
+											th:text="${team.manage} + ' | ' + ${team.employeeName}"></button>
 									</span>
 								</div>
 							</div>
@@ -122,14 +120,13 @@
 						</p>
 						<div class="collapse" id="common_employee_container1">
 							<div class="row">
-								<div id="common_employee_item" class="col-6" th:each="team : ${team0}">
+								<div id="common_employee_item" class="col-6" th:each="team : ${team1}">
 									<div class="attendance_check">
 										<p></p>
 									</div>
 									<span class="td_common_manage_name">
-										<input class="common_manage_name"
-											th:value="${team.manage} + ' | ' + ${team.employeeName}" type="button"
-											value="">
+										<button class="common_manage_name" th:value="${team.employeeNo}"
+											th:text="${team.manage} + ' | ' + ${team.employeeName}"></button>
 									</span>
 								</div>
 							</div>
@@ -147,14 +144,13 @@
 						</p>
 						<div class="collapse" id="common_employee_container2">
 							<div class="row">
-								<div id="common_employee_item" class="col-6" th:each="team : ${team1}">
+								<div id="common_employee_item" class="col-6" th:each="team : ${team2}">
 									<div class="attendance_check">
 										<p></p>
 									</div>
 									<span class="td_common_manage_name">
-										<input class="common_manage_name"
-											th:value="${team.manage} + ' | ' + ${team.employeeName}" type="button"
-											value="">
+										<button class="common_manage_name" th:value="${team.employeeNo}"
+											th:text="${team.manage} + ' | ' + ${team.employeeName}"></button>
 									</span>
 								</div>
 							</div>
@@ -172,14 +168,13 @@
 						</p>
 						<div class="collapse" id="common_employee_container3">
 							<div class="row">
-								<div id="common_employee_item" class="col-6" th:each="team : ${team2}">
+								<div id="common_employee_item" class="col-6" th:each="team : ${team3}">
 									<div class="attendance_check">
 										<p></p>
 									</div>
 									<span class="td_common_manage_name">
-										<input class="common_manage_name"
-											th:value="${team.manage} + ' | ' + ${team.employeeName}" type="button"
-											value="">
+										<button class="common_manage_name" th:value="${team.employeeNo}"
+											th:text="${team.manage} + ' | ' + ${team.employeeName}"></button>
 									</span>
 								</div>
 							</div>
@@ -197,14 +192,13 @@
 						</p>
 						<div class="collapse" id="common_employee_container4">
 							<div class="row">
-								<div id="common_employee_item" class="col-6" th:each="team : ${team3}">
+								<div id="common_employee_item" class="col-6" th:each="team : ${team4}">
 									<div class="attendance_check">
 										<p></p>
 									</div>
 									<span class="td_common_manage_name">
-										<input class="common_manage_name"
-											th:value="${team.manage} + ' | ' + ${team.employeeName}" type="button"
-											value="">
+										<button class="common_manage_name" th:value="${team.employeeNo}"
+											th:text="${team.manage} + ' | ' + ${team.employeeName}"></button>
 									</span>
 								</div>
 							</div>
@@ -222,14 +216,13 @@
 						</p>
 						<div class="collapse" id="common_employee_container5">
 							<div class="row">
-								<div id="common_employee_item" class="col-6" th:each="team : ${team4}">
+								<div id="common_employee_item" class="col-6" th:each="team : ${team5}">
 									<div class="attendance_check">
 										<p></p>
 									</div>
 									<span class="td_common_manage_name">
-										<input class="common_manage_name"
-											th:value="${team.manage} + ' | ' + ${team.employeeName}" type="button"
-											value="">
+										<button class="common_manage_name" th:value="${team.employeeNo}"
+											th:text="${team.manage} + ' | ' + ${team.employeeName}"></button>
 									</span>
 								</div>
 							</div>
@@ -247,14 +240,13 @@
 						</p>
 						<div class="collapse" id="common_employee_container6">
 							<div class="row">
-								<div id="common_employee_item" class="col-6" th:each="team : ${team5}">
+								<div id="common_employee_item" class="col-6" th:each="team : ${team6}">
 									<div class="attendance_check">
 										<p></p>
 									</div>
 									<span class="td_common_manage_name">
-										<input class="common_manage_name"
-											th:value="${team.manage} + ' | ' + ${team.employeeName}" type="button"
-											value="">
+										<button class="common_manage_name" th:value="${team.employeeNo}"
+											th:text="${team.manage} + ' | ' + ${team.employeeName}"></button>
 									</span>
 								</div>
 							</div>
@@ -272,14 +264,13 @@
 						</p>
 						<div class="collapse" id="common_employee_container7">
 							<div class="row">
-								<div id="common_employee_item" class="col-6" th:each="team : ${team6}">
+								<div id="common_employee_item" class="col-6" th:each="team : ${team7}">
 									<div class="attendance_check">
 										<p></p>
 									</div>
 									<span class="td_common_manage_name">
-										<input class="common_manage_name"
-											th:value="${team.manage} + ' | ' + ${team.employeeName}" type="button"
-											value="">
+										<button class="common_manage_name" th:value="${team.employeeNo}"
+											th:text="${team.manage} + ' | ' + ${team.employeeName}"></button>
 									</span>
 								</div>
 							</div>
@@ -297,14 +288,13 @@
 						</p>
 						<div class="collapse" id="common_employee_container8">
 							<div class="row">
-								<div id="common_employee_item" class="col-6" th:each="team : ${team7}">
+								<div id="common_employee_item" class="col-6" th:each="team : ${team8}">
 									<div class="attendance_check">
 										<p></p>
 									</div>
 									<span class="td_common_manage_name">
-										<input class="common_manage_name"
-											th:value="${team.manage} + ' | ' + ${team.employeeName}" type="button"
-											value="">
+										<button class="common_manage_name" th:value="${team.employeeNo}"
+											th:text="${team.manage} + ' | ' + ${team.employeeName}"></button>
 									</span>
 								</div>
 							</div>
@@ -322,14 +312,13 @@
 						</p>
 						<div class="collapse" id="common_employee_container9">
 							<div class="row">
-								<div id="common_employee_item" class="col-6" th:each="team : ${team8}">
+								<div id="common_employee_item" class="col-6" th:each="team : ${team9}">
 									<div class="attendance_check">
 										<p></p>
 									</div>
 									<span class="td_common_manage_name">
-										<input class="common_manage_name"
-											th:value="${team.manage} + ' | ' + ${team.employeeName}" type="button"
-											value="">
+										<button class="common_manage_name" th:value="${team.employeeNo}"
+											th:text="${team.manage} + ' | ' + ${team.employeeName}"></button>
 									</span>
 								</div>
 							</div>
@@ -337,13 +326,26 @@
 					</div>
 				</div>
 			</div>
-		</div>
 			<script>
+				
+				//버튼을 클릭 했을 시 값이 전달되는 함수입니다.
 				$(function () {
 					$(".common_manage_name").on("click", function () {
 						var newInput = $(this).val();
 						$("#newInput").val(newInput);
 					});
+				});
+				$(function () {
+					$(".select_list_button").on("click", function () {
+						var newInput = $(this).val();
+						$("#newInput").val(newInput);
+					});
+				});
+				
+				//근무중이면 초록색, 근무중이아니면 붉은색
+				$(function () {
+					$('.attendance_check').css('background-color', 'red');
+					$('.attendance_check').css('border', 'red');
 				});
 			</script>
 	</section>

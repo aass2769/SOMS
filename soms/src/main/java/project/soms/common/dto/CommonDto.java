@@ -7,7 +7,8 @@ public class CommonDto {
 
 	private String employeeTeam;
 	private String manage;
-	private String employeeName;	
+	private String employeeName;
+	private String employeeNo;
 	
 	public CommonDto() {}
 	

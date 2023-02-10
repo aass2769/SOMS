@@ -55,7 +55,7 @@
 .text_employee_name {
     border: 1px solid #4B4B4B;
     color: #4B4B4B;
-    width: 150px;
+    width: 120px;
 }
 
 .submit_employee {
@@ -80,6 +80,14 @@
 }
 
 .select_list{
-	border: 1px solid;
-	width: 300px;
+	border-left: 2px solid #D8542E;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+.select_list_button{
+	border:none;
+	background-color: white;
+	font-size: 18px;
+	font-family: sans-serif;
 }
