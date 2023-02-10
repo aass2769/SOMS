@@ -28,7 +28,7 @@
 
         <!-- 결재자 누락 검증 -->
         <div th:if="${#fields.hasGlobalErrors()}" class="text-end text-black-50 mb-1" style="font-size: 0.7rem;">
-          [결재자를 추가하세요]
+          [결재자 선택이 올바르지 않습니다]
         </div>
         <div style="display:flex; height:8rem;" class="align-middle border">
 
@@ -65,9 +65,10 @@
                 <option value="검토" th:selected="${approver.submissionSection.toString().equals('검토')}">검토</option>
               </select>
               <input type="text" th:name="|approverName${approverStat.index}|" th:value="${approver.employeeName}" style="height:60%; font-size: 0.8rem;"
-                     class="border border-start-0 w-100 text-center" th:id="|approver${approverStat.index}|" readonly>
-              <input type="hidden" th:name="|approver${approverStat.index}|" th:value="${approver.employeeNo}">
-              <button style="height:20%; font-size: 0.7rem;" class="w-100 border border-start-0 bg-transparent">변경</button>
+                     class="border border-start-0 w-100 text-center" th:id="|approverName${approverStat.index}|" readonly>
+              <input type="hidden" th:name="|approverNo${approverStat.index}|" th:id="|approverNo${approverStat.index}|" th:value="${approver.employeeNo}">
+              <button style="height:20%; font-size: 0.7rem;" class="w-100 border border-start-0 bg-transparent" type="button" th:id="${'approverSelect' + approverStat.index}"
+                      data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"></button>
             </div>
             <!-- 남은 결재라인 -->
             <div th:each="i : ${#numbers.sequence((approverDto.size()), 7)}" style="width:12.5%; font-size: 3px;">
@@ -75,10 +76,11 @@
                 <option value="결재">결재</option>
                 <option value="검토">검토</option>
               </select>
-              <input type="text" value="" style="height:60%;" th:id="|approver${i}|"
+              <input type="text" style="height:60%; font-size: 0.8rem;" th:id="|approverName${i}|"  th:name="|approverName${i}|"
                      class="border border-start-0 w-100 text-center" readonly>
-              <input type="hidden" th:name="|approver${i}|" value="">
-              <button style="height:20%; font-size: 0.7rem;" class="w-100 border border-start-0 bg-transparent">추가</button>
+              <input type="hidden" th:name="|approverNo${i}|" th:id="|approverNo${i}|" value="">
+              <button style="height:20%; font-size: 0.7rem;" class="w-100 border border-start-0 bg-transparent" type="button" th:id="${'approverSelect' + i}"
+                      data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"></button>
             </div>
           </div>
         </div>

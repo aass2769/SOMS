@@ -16,6 +16,7 @@ title은 페이지의 브라우저에 보이는 타이틀이고, article은 화�
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
     <title th:replace="${title}">레이아웃 메인</title>
+    <link th:href="@{/css/common/common.css}" rel="stylesheet">
 </head>
 <body>
     <!-- * class "All"은 모든 작업영역입니다 건들지 말아주세요! -->
@@ -40,8 +41,75 @@ title은 페이지의 브라우저에 보이는 타이틀이고, article은 화�
         <div class = "Article" th:replace="${article}">
         </div>
 
+        <div th:replace="~{submission/layout/common :: common}"></div>
+
+        <!-- team0 Modal
+        <div th:each="team : ${team0}">-->
+            <div class="modal fade" th:id="approverSelect" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">결재자 선택</h1>
+                        </div>
+                        <div class="modal-body" id="modalBody"><!--th:text="|${team.employeeName} 님을 결재자로 선택하시겠습니까?|"-->
+                        </div>
+                        <div class="modal-footer In-Modal-Btn align-middle">
+                            <button type="button" class="Close" data-bs-dismiss="modal">닫기</button>
+                            <button type="button" onclick="approverChange()" class="Submit">선택</button>
+                            <input type="hidden" id="teamApproverName" value=""> <!--th:value="${team.employeeName}"-->
+                            <input type="hidden" id="teamApproverNo" value="">  <!--th:value="${team.employeeNo}"-->
+                            <input type="hidden" id="insertKey" name="insertKey">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <!--</div>-->
     </div>
 </body>
+<script>
+    let teamApproverNo = document.getElementById("teamApproverNo").value;
+    let teamApproverName = document.getElementById("teamApproverName").value;
+    for (let i = 0; i < 10; i++) {
+        for (let j = 0; j < 20; j++) {
+            $('#team' + i + 'approverKey' + j).on("click", function() {
+                teamApproverNo =  $('#team' + i + 'approverNo' + j).val();
+                teamApproverName = $('#team' + i + 'approverName' + j).val();
+                document.getElementById("modalBody").innerText = $('#team'+i+'approverName'+j).val() + "님";
+                console.log(teamApproverNo);
+                console.log(teamApproverName);
+            });
+        }
+    }
+    function approverChange() {
+        let keyNum = document.getElementById("insertKey").value;
+        console.log(keyNum);
+        for (let i = 0; i < 8; i++) {
+            if (keyNum == i) {
+                let approverNo = document.getElementById("approverNo" + i);
+                let approverName = document.getElementById("approverName" + i);
+                let approverSelect = document.getElementById("approverSelect" + i);
+                approverNo.setAttribute('value', teamApproverNo);
+                approverName.setAttribute('value', teamApproverName);
+                approverSelect.innerText = "변경";
+                $('#approverSelect').modal("hide");
+                $('#offcanvasRight').offcanvas('hide');
+            }
+        }
+    }
+    for (let i = 0; i < 8; i++) {
+        $('#approverSelect' + i).click(function() {
+            document.getElementById("insertKey").setAttribute('value', i);
+            document.getElementById("deleteKey").setAttribute('value', i);
+        })
+    }
+    for (let i = 0; i < 8; i++) {
+        if ($('#approverNo' + i).val() != "") {
+            document.getElementById("approverSelect" + i).innerHTML = "변경";
+        } else {
+            document.getElementById("approverSelect" + i).innerHTML = "추가";
+        }
+    }
+</script>
 <script>
     const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
     const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
