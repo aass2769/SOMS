@@ -16,4 +16,7 @@ public class ApproverDto {
     this.employeeName = employeeName;
     this.submissionSection = submissionSection;
   }
+
+  public ApproverDto() {
+  }
 }

@@ -21,4 +21,7 @@ public class AnnualLeaveDto {
     this.annualLeaveTime = annualLeaveTime;
     this.annualLeaveContent = annualLeaveContent;
   }
+
+  public AnnualLeaveDto() {
+  }
 }

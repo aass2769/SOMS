@@ -1,8 +1,10 @@
 package project.soms.submission.service;
 
+import org.springframework.validation.BindingResult;
 import project.soms.submission.dto.ApproverDto;
 import project.soms.submission.dto.ProposerDto;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public interface EmployeeService {
@@ -18,6 +20,8 @@ public interface EmployeeService {
   List<ApproverDto> businessTripApprover(Long employeeNo);
 
   List<ApproverDto> incidentApprover(Long employeeNo);
+
+  List<ApproverDto> approverCheck(BindingResult result, HttpServletRequest request, Long employeeNo);
 
 
 }

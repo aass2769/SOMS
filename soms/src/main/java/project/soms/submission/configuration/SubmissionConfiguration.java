@@ -3,6 +3,7 @@ package project.soms.submission.configuration;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import project.soms.common.service.CommonService;
 import project.soms.submission.repository.ApprovalSubmitRepository;
 import project.soms.submission.repository.ApprovalSubmitRepositoryImpl;
 import project.soms.submission.repository.EmployeeRepository;
@@ -20,7 +21,7 @@ public class SubmissionConfiguration {
 
   private final ApprovalSubmitMapper approvalSubmitMapper;
   private final EmployeeMapper employeeMapper;
-
+  private final CommonService commonService;
   @Bean
   public EmployeeRepository employeeRepository() {
     return new EmployeeRepositoryImpl(employeeMapper);

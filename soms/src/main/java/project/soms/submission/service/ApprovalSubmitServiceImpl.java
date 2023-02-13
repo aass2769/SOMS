@@ -48,6 +48,9 @@ public class ApprovalSubmitServiceImpl implements ApprovalSubmitService{
     submissionDto.setOvertimeNo(overtimeDto.getOvertimeNo());
     submissionDto.setProposerEmployeeNo(proposerEmployeeNo);
     submissionDto.setSubmissionShowable("가능");
+    submissionDto.setSubmissionStatus("대기");
+    submissionDto.setSubmissionOpen("미열람");
+
     ProposerDto proposerDto = employeeService.proposer(proposerEmployeeNo);
 
     insertSubmission(submissionDto, approverDto, proposerDto);
@@ -61,6 +64,9 @@ public class ApprovalSubmitServiceImpl implements ApprovalSubmitService{
     submissionDto.setAnnualLeaveNo(annualLeaveDto.getAnnualLeaveNo());
     submissionDto.setProposerEmployeeNo(proposerEmployeeNo);
     submissionDto.setSubmissionShowable("가능");
+    submissionDto.setSubmissionStatus("대기");
+    submissionDto.setSubmissionOpen("미열람");
+
     ProposerDto proposerDto = employeeService.proposer(proposerEmployeeNo);
 
     insertSubmission(submissionDto, approverDto, proposerDto);
@@ -74,6 +80,9 @@ public class ApprovalSubmitServiceImpl implements ApprovalSubmitService{
     submissionDto.setBusinessTripNo(businessTripDto.getBusinessTripNo());
     submissionDto.setProposerEmployeeNo(proposerEmployeeNo);
     submissionDto.setSubmissionShowable("가능");
+    submissionDto.setSubmissionStatus("대기");
+    submissionDto.setSubmissionOpen("미열람");
+
     ProposerDto proposerDto = employeeService.proposer(proposerEmployeeNo);
 
     insertSubmission(submissionDto, approverDto, proposerDto);

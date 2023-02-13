@@ -23,4 +23,7 @@ public class OvertimeDto {
     this.overtimeEndTime = overtimeEndTime;
     this.overtimeContent = overtimeContent;
   }
+
+  public OvertimeDto() {
+  }
 }

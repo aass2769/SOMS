@@ -18,4 +18,7 @@ public class ProposerDto {
     this.manageNo = manageNo;
     this.manage = manage;
   }
+
+  public ProposerDto() {
+  }
 }

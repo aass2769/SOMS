@@ -8,7 +8,7 @@
 
 <section class="Article">
   <!-- 폼 태그 설정 - action은 경로의 이름이 같아서 기입 생략 , 폼 안에 필드값 설정을 위해 오브젝트를 하나 선언 (결재 서식을 내용을 담는 폼) -->
-  <form method="post" id="expenseForm" th:action th:object="${overtimeInsertForm}">
+  <form method="post" id="expenseForm" th:action th:object="${businessTripInsertForm}">
   <div style="width:90%; margin-left: 7%">
 
     <div class="position-fixed bg-white" style="width:78.8%">
@@ -24,7 +24,7 @@
 
 
     <div class="text-center">
-      <h2 class="font-monospace my-5">연장근로신청서</h2>
+      <h2 class="font-monospace my-5">출장신청서</h2>
 
         <!-- 결재자 누락 검증 -->
         <div th:if="${#fields.hasGlobalErrors()}" class="text-end text-black-50 mb-1" style="font-size: 0.7rem;">
@@ -87,60 +87,65 @@
 
           <!-- 지출구분과 지출일자를 선택하는 영역 -->
         <div style="height:4rem; justify-content: space-around; align-items: center;" class="border border-2 border-top-1 border-bottom-1 d-flex "
-        th:classappend="${#fields.hasErrors('overtimeStartDate') || #fields.hasErrors('overtimeStartTime')
-        || #fields.hasErrors('overtimeEndDate') || #fields.hasErrors('overtimeEndDate') ? 'border-danger' : ''}">
+        th:classappend="${#fields.hasErrors('businessTripStart') || #fields.hasErrors('businessTripEnd')
+        || #fields.hasErrors('businessTripTime') ? 'border-danger' : ''}">
           <div class="d-flex align-middle justify-content-center">
-            <p class="m-0" style="font-size: 0.9rem; width:5rem;">근로 구분 : </p>
-            <select name="overtimeSection" class="border-0 border-bottom" style="font-size: 0.7rem;">
-              <option value="연장근로">연장근로</option>
-              <option value="휴일특근">휴일특근</option>
+            <p class="m-0" style="font-size: 0.9rem; width:5rem;">출장 구분 : </p>
+            <select name="annualLeaveSection" class="border-0 border-bottom" style="font-size: 0.7rem;">
+              <option value="해외 출장">해외 출장</option>
+              <option value="국내 출장">국내 출장</option>
+              <option value="외근">외근</option>
             </select>
           </div>
           <!-- 지출 일자를 선택하는 date 폼 - 오류 발생시 오류 메세지 응답 . null 검증 -->
           <div class="d-flex align-middle justify-content-center">
-            <div th:if="${#fields.hasErrors('overtimeStartDate') || #fields.hasErrors('overtimeEndDate')}" class="text-end text-black-50 mb-1" style="font-size: 0.7rem;">
+            <div th:if="${#fields.hasErrors('businessTripStart') || #fields.hasErrors('businessTripEnd')}" class="text-end text-black-50 mb-1" style="font-size: 0.7rem;">
               [날짜 선택이 올바르지 않습니다]
             </div>
 
-            <p class="m-0" style="font-size: 0.9rem; width:5rem;">근로 시작 : </p>
-            <input type="date" name="overtimeStartDate" class="border-0 border-bottom" style="font-size: 0.7rem; outline:none; width:6rem;" id="overtimeStartDate"
-                   th:field="*{overtimeStartDate}" th:errorclass="border-danger" th:min="${#dates.format(date, 'yyyy-MM-dd')}" >
-            <input type="text" name="overtimeStartTime" class="ms-1 border-0 border-bottom text-center" style="font-size: 0.7rem; outline:none; width:6rem;"
-                   th:field="*{overtimeStartTime}" th:errorclass="border-danger"
-                   th:placeholder="${#fields.hasErrors('overtimeStartTime') ? #fields.errors('overtimeStartTime') : ''}">
-            <p class="m-0" style="font-size: 0.9rem;">시</p>
+            <p class="m-0" style="font-size: 0.9rem; width:5rem;">시작 일 : </p>
+            <input type="date" name="businessTripStart" class="border-0 border-bottom" style="font-size: 0.7rem; outline:none; width:6rem;" id="businessTripStart"
+                   th:field="*{businessTripStart}" th:errorclass="border-danger" th:min="${#dates.format(date, 'yyyy-MM-dd')}">
 
-            <p class="m-0 ms-3" style="font-size: 0.9rem; width:5rem;">근로 종료 : </p>
-            <input type="date" name="overtimeEndDate" class="border-0 border-bottom" style="font-size: 0.7rem; outline:none; width:6rem;" id="overtimeEndDate"
-                   th:field="*{overtimeEndDate}" th:errorclass="border-danger">
-            <input type="text" name="overtimeEndTime" class="ms-1 border-0 border-bottom text-center" style="font-size: 0.7rem; outline:none; width:6rem;"
-                   th:field="*{overtimeEndTime}" th:errorclass="border-danger"
-                   th:placeholder="${#fields.hasErrors('overtimeEndTime') ? #fields.errors('overtimeEndTime') : ''}">
-            <p class="m-0" style="font-size: 0.9rem;">시</p>
+            <p class="m-0 ms-3" style="font-size: 0.9rem; width:5rem;">종료 일 : </p>
+            <input type="date" name="businessTripEnd" class="border-0 border-bottom" style="font-size: 0.7rem; outline:none; width:6rem;" id="businessTripEnd"
+                   th:field="*{businessTripEnd}" th:errorclass="border-danger">
+
+            <p class="m-0 ms-3" style="font-size: 0.9rem; width:3rem;">시간 : </p>
+            <input type="text" name="businessTripTime" class="ms-1 border-0 border-bottom text-center" style="font-size: 0.7rem; outline:none; width:6rem;"
+                   th:field="*{businessTripTime}" th:errorclass="border-danger"
+                   th:placeholder="${#fields.hasErrors('businessTripTime') ? #fields.errors('businessTripTime') : ''}">
 
           </div>
         </div>
 
         <!-- 지출 내용을 입력하는 텍스트 상자 - 오류 발생시 오류 메세지 응답 . null 검증 -->
         <div style="height:20rem; display:flex; justify-content: center; align-items: center;" class="border border-2"
-             th:classappend="${#fields.hasErrors('overtimeContent') ? 'border-danger' : ''}">
-          <textarea class="w-100 h-100 border-0 p-3" id="overtimeContent" name="overtimeContent"
-                    th:field="*{overtimeContent}" th:placeholder="${#fields.hasErrors('overtimeContent') ? #fields.errors('overtimeContent') : ''}"
+             th:classappend="${#fields.hasErrors('businessTripContent') ? 'border-danger' : ''}">
+          <textarea class="w-100 h-100 border-0 p-3" id="businessTripContent" name="businessTripContent"
+                    th:field="*{businessTripContent}" th:placeholder="${#fields.hasErrors('businessTripContent') ? #fields.errors('businessTripContent') : ''}"
                     style="outline: none; resize: none; font-size: 0.7rem;"></textarea>
         </div>
 
         <div style="height:4rem; display:flex; justify-content: center; align-items: center;" class="border border-2 border-top-1"
-        th:classappend="${#fields.hasErrors('overtimePjt') ? 'border-danger' : ''}">
+        th:classappend="${#fields.hasErrors('businessTripPjt') || #fields.hasErrors('businessTripPjt')  ? 'border-danger' : ''}">
 
           <!-- 지출 합계를 입력하는 영역 -->
           <div class="d-flex w-75 justify-content-center align-middle">
             <p class="m-0 ms-3" style="font-size: 0.9rem; width:5rem;">프로젝트명 : </p>
             <div>
               <!-- pjt입력 폼 - 오류 발생시 오류 메세지 응답 . null 검증 -->
-              <input type="text" id="overtimePjt" name="overtimePjt" th:field="*{overtimePjt}" class="ms-1 border-0 border-bottom text-center"
-                     th:errorclass="border-danger"  th:placeholder="${#fields.hasErrors('overtimePjt') ? #fields.errors('overtimePjt') : ''}"
+              <input type="text" id="businessTripPjt" name="businessTripPjt" th:field="*{businessTripPjt}" class="ms-1 border-0 border-bottom text-center"
+                     th:errorclass="border-danger"  th:placeholder="${#fields.hasErrors('businessTripPjt') ? #fields.errors('businessTripPjt') : ''}"
                      style="font-size: 0.7rem; outline:none; width:7rem;">
             </div>
+            <!--   -->
+            <p class="m-0 ms-3" style="font-size: 0.9rem; width:5rem;">합계 : </p>
+            <input type="text" name="businessTripDestination" th:errorclass="border-danger" th:field="*{businessTripDestination}"
+                   class="ms-1 border-0 border-bottom text-center" style="font-size: 0.7rem; outline:none; width:7rem;" id="businessTripDestination"
+                   th:placeholder="${#fields.hasErrors('businessTripDestination') ? #fields.errors('businessTripDestination') : ''}">
+            <p class="m-0" style="font-size: 0.9rem;" th:classappend="${#fields.hasErrors('businessTripDestination') ? 'text-danger' : ''}">원</p>
+
           </div>
 
           <!-- 신청서 상신 및 취소 버튼 -->
@@ -162,12 +167,12 @@
     <div th:replace="~{submission/layout/common :: common}" style="justify-content: start;"></div>
   </form>
   <script th:inline="javascript">
-      $('#overtimeStartDate').on("change", function() {
+      $('#businessTripStart').on("change", function() {
           let minDate = $(this).val();
-          $('#overtimeEndDate').attr("min", minDate);
-          if ($('#overtimeEndDate').val() != "" && $(this).val() > $('#overtimeEndDate').val()) {
-              document.getElementById("overtimeStartDate").value = "";
-              $('#overtimeEndDate').attr("min", [[${#dates.format(date, 'yyyy-MM-dd')}]]);
+          $('#businessTripEnd').attr("min", minDate);
+          if ($('#businessTripEnd').val() != "" && $(this).val() > $('#businessTripEnd').val()) {
+              document.getElementById("businessTripStart").value = "";
+              $('#businessTripEnd').attr("min", [[${#dates.format(date, 'yyyy-MM-dd')}]]);
           }
       });
 

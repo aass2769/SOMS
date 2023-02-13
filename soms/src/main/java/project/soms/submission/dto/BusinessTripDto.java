@@ -23,4 +23,7 @@ public class BusinessTripDto {
     this.businessTripDestination = businessTripDestination;
     this.businessTripContent = businessTripContent;
   }
+
+  public BusinessTripDto() {
+  }
 }
