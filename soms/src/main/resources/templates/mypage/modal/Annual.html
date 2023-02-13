@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" th:href="@{css/Annual.css}">
+</head>
+
+<body>
+	<div th:fragment="annual">
+			
+		<div style="display: flex;justify-content: flex-end;margin: 0 0.3rem 0.5rem 0;">
+			<select style="border: none; font-size: 0.85rem;">
+				<option selected>2023년 2월</option>
+			</select>
+		</div>
+	
+		<table>
+			<tr>
+				<th>시작 날짜</th>
+				<th>종료 날짜</th>
+				<th>시작 시</th>
+				<th>종료 시</th>
+				<th>상태</th>
+			</tr>
+			<tr>
+				<td>2022-02-01</td>
+				<td>2022-02-03</td>
+				<td></td>
+				<td></td>
+				<td>연차</td>
+			</tr>
+			<tr>
+				<td>2022-02-05</td>
+				<td></td>
+				<td>14:00</td>
+				<td>18:00</td>
+				<td>반차</td>
+			</tr>
+			<tr>
+				<td>2022-02-07</td>
+				<td></td>
+				<td>11:00</td>
+				<td>15:00</td>
+				<td>외출</td>
+			</tr>
+			<tr>
+				<td>2022-02-10</td>
+				<td></td>
+				<td>15:00</td>
+				<td></td>
+				<td>조퇴</td>
+			</tr>
+			
+		</table>
+		
+		<div style="margin: 0.5rem 0 0 0; display: flex;" >
+			<span style="font-size: 0.75rem; border-bottom: 0.05rem solid black;">잔여 연차는 총 <b>1.2</b>개 입니다.</sapn>
+		</div>
+		
+	</div>
+</body>
+
+
+	
+	
+	
+</html>

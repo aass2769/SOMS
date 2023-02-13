@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+</head>
+<body>
+<!-- 아래에 선언한 categorys를 main레이아웃에서 인클루드하여 레이아웃이 완성됩니다. 개별로 작성해야할 코드의 구분을 위하여 html파일을 구분하였습니다. -->
+  <ul class = "Categorys" th:fragment="categorys">
+
+    <!-- 카테고리 제목입니다 -->
+    <div class = Category-Title>
+      <i class="fa-solid fa-bars"></i>
+      &nbsp;&nbsp;
+      <p>마이페이지</p>
+    </div>
+    
+    <div class = "Category-Btn" style="margin-top: 0.6rem;">
+      <button>출근하기</button>
+    </div>
+
+    <!-- 카테고리 드롭다운입니다 -->
+    <!-- Item-Title의 value와 Item-Menu의 value를 동일하게 만들어주세요 -->
+    <!-- 다른태그와 겹치는것도 안됩니다! -->
+    <div class = "Category">
+      <div class = "Item">
+        <a class="Item-Title" value = "1"><p>개인정보 수정</p></a>
+        <div class = "Item-Menu" value = "1">
+		  <a href="#" data-bs-toggle="modal" data-bs-target="#pwChangeModal">비밀번호 변경</a>
+          <a href="#" data-bs-toggle="modal" data-bs-target="#emailChangeModal">이메일 변경</a>
+          <a href="#" data-bs-toggle="modal" data-bs-target="#emailPwChangeModal">이메일 비밀번호 변경/등록</a>
+        </div>
+      </div>
+    </div>
+
+
+    <div class = "Category">
+      <div class = "Item">
+        <a class="Item-Title" value = "2"><p>조회</p></a>
+        <div class = "Item-Menu" value = "2">
+		  <a href="#" data-bs-toggle="modal" data-bs-target="#attendanceModal">출퇴근 조회</a>
+          <a href="#" data-bs-toggle="modal" data-bs-target="#annualModal">연차 조회</a>
+
+        </div>
+      </div>
+    </div>
+    
+    <div class = Category-A>
+      <a href="#">최근 급여 확인</a>
+    </div>
+    
+    <div class = Category-A>
+      <a href="#">다이어리</a>
+    </div>
+    
+    <div class = Category-A>
+      <a href="#">자료실</a>
+    </div>
+    
+    <div class = Category-A>
+      <a href="#" data-bs-toggle="modal" data-bs-target="#employeeRegisterModal">계정 생성</a>
+    </div>
+
+	
+   	<!-- 드롭다운 기능 스크립트 입니다 -->
+	<script>
+	    $('.Item-Title').click(function(){		
+	        let val = $(this).attr('value');
+	        let cas = $('.Item-Menu[value='+ val + ']');    
+	            if(cas.is(':visible')){
+	                cas.hide('fast');
+	            }else{
+	                cas.show('fast');
+	            }
+	    })
+	</script>
+  </ul>
+
+
+
+	
+</body>
+</html>

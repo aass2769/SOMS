@@ -8,7 +8,7 @@ import project.soms.employee.dto.EmployeeDto;
 
 @Service
 public class LoginServiceImpl implements LoginService{
-
+	
 	@Override
 	public String LoginGo(EmployeeDto employee, HttpServletRequest req) {
 		if(employee == null) {
@@ -18,7 +18,5 @@ public class LoginServiceImpl implements LoginService{
 			return "login/success";
 		}
 	}
-
-
 
 }

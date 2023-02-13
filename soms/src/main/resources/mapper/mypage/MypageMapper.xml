@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        
+<mapper namespace="project.soms.mypage.repository.mapper.MypageMapper">
+	
+	<update id="changePassword">
+		update employee
+		set employee_pw = #{pw}
+		where employee_no = #{no}
+	</update>
+	
+	<update id="changeEmail">
+		update employee
+		set employee_email = #{email}
+		where employee_no = #{no}
+	</update>
+	
+	
+    <update id="changeEmailPw">
+		update employee
+		set employee_emailpw = #{emailpw}
+		where employee_no = #{no}
+	</update>
+	
+	<select id="getManages" resultType="project.soms.mypage.dto.ManageDto">
+		select manage from manage;
+	</select>
+	
+	
+</mapper>
