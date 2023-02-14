@@ -15,4 +15,7 @@ public class IncidentDto {
     this.incidentPjt = incidentPjt;
     this.incidentContent = incidentContent;
   }
+
+  public IncidentDto() {
+  }
 }

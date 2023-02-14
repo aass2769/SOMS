@@ -46,7 +46,7 @@
 
     <!-- 결재 내역 리스트 -->
     <div class="d-flex align-middle justify-content-center w-75 border-bottom" style="margin-left: 12.5%; height:2.3rem;"
-         th:each="i : ${#numbers.sequence(1,20)}">
+         th:each="i : ${#numbers.sequence(20,1)}">
 
       <!-- 연속 번호 -->
       <p class="px-2 my-2 text-center" style="width:5%; font-size:0.9rem;" th:text="${i}"></p>

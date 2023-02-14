@@ -96,6 +96,9 @@ public class ApprovalSubmitServiceImpl implements ApprovalSubmitService{
     submissionDto.setIncidentNo(incidentDto.getIncidentNo());
     submissionDto.setProposerEmployeeNo(proposerEmployeeNo);
     submissionDto.setSubmissionShowable("가능");
+    submissionDto.setSubmissionStatus("대기");
+    submissionDto.setSubmissionOpen("미열람");
+
     ProposerDto proposerDto = employeeService.proposer(proposerEmployeeNo);
 
     insertSubmission(submissionDto, approverDto, proposerDto);

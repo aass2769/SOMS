@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="project.soms.submission.repository.mapper.ApprovalListMapper">
+
+    <select id="underApprovalList" resultType="project.soms.submission.dto.SubmissionDto">
+        select min(case when proposer_employee_no = #{employeeNo} or approver_employee_no = #{employeeNo} then submission_no else null end) as submission_no,
+               submission_subject, submission_pri, submission_datetime,
+               min(case(submission_status) when '반려' then 0 when '대기' then 1 else 2 end) as submission_status,
+               max(case when submission_coment is null then 0 else submission_coment end)as submission_coment,
+               max(case when submission_open = '미열람' and proposer_employee_no = #{employeeNo} then submission_open else '열람' end) as submission_open,
+               max(case(proposer_employee_no) when #{employeeNo} then proposer_employee_no else null end) as proposer_employee_no,
+               max(case(approver_employee_no) when #{employeeNo} then approver_employee_no else null end) as approver_employee_no,
+               min(case when submission_showable = '가능' and proposer_employee_no = #{employeeNo} or approver_employee_no = #{employeeNo}
+                            then submission_showable else '불가' end) as submission_showable
+        from submission
+        <where>
+            <if test="submissionSection != '' and submissionSection.equals('expense')">
+                expense_no is not null
+            </if>
+            <if test="submissionSection != '' and submissionSection.equals('overtime')">
+                overtime_no is not null
+            </if>
+            <if test="submissionSection != '' and submissionSection.equals('annualLeave')">
+                annual_leave_no is not null
+            </if>
+            <if test="submissionSection != '' and submissionSection.equals('businessTrip')">
+                business_trip_no is not null
+            </if>
+            <if test="submissionSection != '' and submissionSection.equals('incident')">
+                incident_no is not null
+            </if>
+            <if test="submissionDatetime != ''">
+                and submission_datetime like concat('%', #{submissionDatetime}, '%')
+            </if>
+        </where>
+        group by submission_pri, submission_subject, submission_datetime
+        order by submission_datetime desc
+    </select>
+
+</mapper>

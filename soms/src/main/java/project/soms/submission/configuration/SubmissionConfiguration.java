@@ -3,17 +3,11 @@ package project.soms.submission.configuration;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import project.soms.common.service.CommonService;
-import project.soms.submission.repository.ApprovalSubmitRepository;
-import project.soms.submission.repository.ApprovalSubmitRepositoryImpl;
-import project.soms.submission.repository.EmployeeRepository;
-import project.soms.submission.repository.EmployeeRepositoryImpl;
+import project.soms.submission.repository.*;
+import project.soms.submission.repository.mapper.ApprovalListMapper;
 import project.soms.submission.repository.mapper.ApprovalSubmitMapper;
 import project.soms.submission.repository.mapper.EmployeeMapper;
-import project.soms.submission.service.ApprovalSubmitService;
-import project.soms.submission.service.ApprovalSubmitServiceImpl;
-import project.soms.submission.service.EmployeeService;
-import project.soms.submission.service.EmployeeServiceImpl;
+import project.soms.submission.service.*;
 
 @Configuration
 @RequiredArgsConstructor
@@ -21,7 +15,8 @@ public class SubmissionConfiguration {
 
   private final ApprovalSubmitMapper approvalSubmitMapper;
   private final EmployeeMapper employeeMapper;
-  private final CommonService commonService;
+  private final ApprovalListMapper approvalListMapper;
+
   @Bean
   public EmployeeRepository employeeRepository() {
     return new EmployeeRepositoryImpl(employeeMapper);
@@ -40,5 +35,15 @@ public class SubmissionConfiguration {
   @Bean
   public ApprovalSubmitService approvalSubmitService() {
     return new ApprovalSubmitServiceImpl(approvalSubmitRepository(), employeeService());
+  }
+
+  @Bean
+  public ApprovalListRepository approvalListRepository() {
+    return new ApprovalListRepositoryImpl(approvalListMapper);
+  }
+
+  @Bean
+  public ApprovalListService approvalListService() {
+    return new ApprovalListServiceImpl(approvalListRepository());
   }
 }

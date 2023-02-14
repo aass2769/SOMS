@@ -12,10 +12,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import project.soms.common.dto.CommonDto;
 import project.soms.common.service.CommonService;
 import project.soms.submission.dto.*;
-import project.soms.submission.dto.form.AnnualLeaveInsertForm;
-import project.soms.submission.dto.form.BusinessTripInsertForm;
-import project.soms.submission.dto.form.ExpenseInsertForm;
-import project.soms.submission.dto.form.OvertimeInsertForm;
+import project.soms.submission.dto.form.*;
 import project.soms.submission.service.ApprovalSubmitService;
 import project.soms.submission.service.EmployeeService;
 
@@ -241,11 +238,11 @@ public class SubmissionSubmitController {
     model.addAttribute("approverDto", approverDto);
     model.addAttribute("businessTripInsertForm", new BusinessTripDto());
 
-    return "submission/submitForm/businessTripSet";
+    return "submission/submitForm/businessTrip";
   }
 
   @PostMapping("businessTrip")
-  public String annualLeaveForm(SubmissionDto submissionDto, @Valid BusinessTripInsertForm businessTripInsertForm, BindingResult result,
+  public String businessTripSubmit(SubmissionDto submissionDto, @Valid BusinessTripInsertForm businessTripInsertForm, BindingResult result,
                                 Long employeeNo, HttpServletRequest request, Model model, RedirectAttributes redirect) {
 
     if (request.getParameter("check") != null) {
@@ -253,7 +250,7 @@ public class SubmissionSubmitController {
           businessTripInsertForm.getBusinessTripPjt(), businessTripInsertForm.getBusinessTripStart(), businessTripInsertForm.getBusinessTripEnd(),
           businessTripInsertForm.getBusinessTripTime(), businessTripInsertForm.getBusinessTripDestination(), businessTripInsertForm.getBusinessTripContent()));
       selectCommonList(request, model);
-      return "submission/submitForm/businessTripSet";
+      return "submission/submitForm/businessTrip";
     }
 
     //검증된 값을 지출결의서 dto 클래스에 저장
@@ -277,11 +274,69 @@ public class SubmissionSubmitController {
       employeeInfo(model, request);
       normalList(model, request);
       //해당 페이지로 리턴
-      return "submission/submitForm/businessTripSet";
+      return "submission/submitForm/businessTrip";
     }
 
     //해당 서식을 저장하는 메서드 호출하여 insert 진행
     approvalSubmitService.businessTripSubmit(submissionDto, businessTripDto, employeeNo, approverDto);
+
+    //결재 내역 - 결재중 페이지로 이동
+    return "redirect:/submission/form/underApproval";
+  }
+
+
+  @GetMapping("incident")
+  public String incidentForm(Model model, HttpServletRequest request) {
+
+    HttpSession session = employeeInfo(model, request);
+    normalList(model, request);
+    ProposerDto login_employee = (ProposerDto) session.getAttribute("LOGIN_EMPLOYEE");
+
+    //해당 서식의 필드값 생성을 위한 expenseInsertForm 객체와 approver 배열 저장
+    List<ApproverDto> approverDto = employeeService.incidentApprover(login_employee.getEmployeeNo());
+
+    model.addAttribute("approverDto", approverDto);
+    model.addAttribute("incidentInsertForm", new IncidentDto());
+
+    return "submission/form/incident";
+  }
+
+  @PostMapping("incident")
+  public String incidentSubmit(SubmissionDto submissionDto, @Valid IncidentInsertForm incidentInsertForm, BindingResult result,
+                               Long employeeNo, HttpServletRequest request, Model model, RedirectAttributes redirect) {
+
+    if (request.getParameter("check") != null) {
+      model.addAttribute("incidentInsertForm", new IncidentDto(incidentInsertForm.getIncidentSection(),
+          incidentInsertForm.getIncidentPjt(), incidentInsertForm.getIncidentContent()));
+      selectCommonList(request, model);
+      return "submission/form/incident";
+    }
+
+    //검증된 값을 지출결의서 dto 클래스에 저장
+    IncidentDto incidentDto = new IncidentDto(incidentInsertForm.getIncidentSection(), incidentInsertForm.getIncidentPjt(),
+        incidentInsertForm.getIncidentContent());
+
+    //결재자 관계및 결재 라인 검증
+    List<ApproverDto> approverDto = employeeService.approverCheck(result, request, employeeNo);
+
+    //들어온 Dto 값들에 오류가 없는지 검증
+    if (result.hasErrors()) {
+      //오류 내역 로그
+      log.warn("getFieldErrors={}", result.getFieldErrors());
+      log.warn("getGlobalError={}", result.getAllErrors());
+
+      //들어온 값을 다시 보내기 위해 모델에 저장
+      model.addAttribute("incidentInsertForm", incidentInsertForm);
+      model.addAttribute("approverDto", approverDto);
+      //페이지 내에 기본적으로 필요한 값들을 저장
+      employeeInfo(model, request);
+      normalList(model, request);
+      //해당 페이지로 리턴
+      return "submission/form/incident";
+    }
+
+    //해당 서식을 저장하는 메서드 호출하여 insert 진행
+    approvalSubmitService.incidentSubmit(submissionDto, incidentDto, employeeNo, approverDto);
 
     //결재 내역 - 결재중 페이지로 이동
     return "redirect:/submission/form/underApproval";
@@ -299,18 +354,14 @@ public class SubmissionSubmitController {
   //기안자의 정보를 담는 메서드
 
   public HttpSession employeeInfo(Model model, HttpServletRequest request) {
-    //파라미터 하나로 합치기 가능 여부 확인
-    ProposerDto employee = employeeService.proposer(20230201011L);
-    HttpSession session = request.getSession();
-
-    //세션에서 회원 정보를 조회
-    session.setAttribute("LOGIN_EMPLOYEE", employee);
+    HttpSession session = setTestSession(request);
     ProposerDto login_employee = (ProposerDto) session.getAttribute("LOGIN_EMPLOYEE");
     //회원정보에 맞는 결재라인 자동 생성
     model.addAttribute("employee", login_employee);
     model.addAttribute("date", new Date());
     return session;
   }
+
   public void normalList(Model model, HttpServletRequest request) {
     String[] teams = {"경영 지원-경영 관리", "경영 지원-재무 회계", "경영 지원-정보 보안" , "경영 지원-구매팀", "개발 연구-개발 1팀", "개발 연구-개발 2팀", "개발 연구-연구팀", "영업-홍보 마케팅", "영업-해외 사업"};
     String employeeTeam = request.getParameter("employeeTeam");
@@ -349,14 +400,14 @@ public class SubmissionSubmitController {
     return approverDto;
   }
 
-  @GetMapping("incident")
-  public String incidentForm() {
-    return "submission/submitForm/incident";
-  }
+  private HttpSession setTestSession(HttpServletRequest request) {
+    //파라미터 하나로 합치기 가능 여부 확인
+    ProposerDto employee = employeeService.proposer(20230201011L);
+    HttpSession session = request.getSession();
 
-  @GetMapping("underApproval")
-  public String underApproval() {
-    return "submission/approvalList/underApproval";
+    //세션에서 회원 정보를 조회
+    session.setAttribute("LOGIN_EMPLOYEE", employee);
+    return session;
   }
 
   @GetMapping("completeApproval")

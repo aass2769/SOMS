@@ -34,12 +34,12 @@
     </insert>
 
     <insert id="submissionSubmit" useGeneratedKeys="true" keyProperty="submissionNo"  keyColumn="submission_no">
-        insert into submission (submission_pri, submission_datetime, submission_section,
+        insert into submission (submission_pri, submission_subject, submission_datetime, submission_section,
                                 submission_status, submission_coment, submission_open, submission_showable,
                                 proposer_employee_no, approver_employee_no,
                                 expense_no, overtime_no, annual_leave_no, business_trip_no, incident_no)
-        values (#{submissionPri}, #{submissionDatetime}, #{submissionSection}, #{submissionStatus}, null,
-                #{submissionOpen}, #{submissionShowable}, #{proposerEmployeeNo}, #{approverEmployeeNo},
+        values (#{submissionPri}, #{submissionSubject}, #{submissionDatetime}, #{submissionSection}, #{submissionStatus},
+                null, #{submissionOpen}, #{submissionShowable}, #{proposerEmployeeNo}, #{approverEmployeeNo},
                 <if test="expenseNo != null and expenseNo != 0">#{expenseNo}, null, null, null, null</if>
                 <if test="overtimeNo != null and overtimeNo != 0">null, #{overtimeNo}, null, null, null</if>
                 <if test="annualLeaveNo != null and annualLeaveNo != 0">null, null, #{annualLeaveNo}, null, null</if>

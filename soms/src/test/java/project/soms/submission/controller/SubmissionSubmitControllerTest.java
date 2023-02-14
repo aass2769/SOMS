@@ -44,6 +44,7 @@ class SubmissionSubmitControllerTest {
     //then 세션 값으로 기안자 객체 생성 성공 검증
     assertThat(result.getAttribute("LOGIN_EMPLOYEE")).isEqualTo(employee);
   }
+
   @Test
   void employeeInfoFail() {
     //given parameter 설정을 위한 객체들 Mock으로 선언 후 사번 할당
@@ -80,6 +81,7 @@ class SubmissionSubmitControllerTest {
     assertThat(approverDtos.size()).isEqualTo(2);
     assertThat(approverDtos.get(0)).isEqualTo(new ApproverDto(20230201009L, "모주혜", "검토"));
   }
+
   @Test
   public void getParameterApproversFail() {
     //given parameter를 위한 객체 Mock으로 설정 후 파라미터 값 설정. 사번에 할당될 수 없는 값 설정

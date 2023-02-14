@@ -51,6 +51,7 @@
             <input type="hidden" name="submissionPri" th:value="|${#dates.format(date, 'yyyy-MM-dd hh:mm:ss')} ${employee.getEmployeeNo()}|">
             <input type="hidden" name="employeeNo" th:value="${employee.getEmployeeNo()}">
             <input type="hidden" name="submissionDatetime" th:value="${#dates.format(date, 'yyyy-MM-dd hh:mm:ss')}">
+            <input type="hidden" name="submissionSubject" th:value="|${employee.getManage()}_${employee.getEmployeeName()}_연차신청서_${#dates.format(date, 'yyyy-MM-dd')}|">
           </div>
 
           <!-- 결재 라인 - 결재 구분(결재 / 검토) 선택 및 결재자 추가 및 변경 -->
