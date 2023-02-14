@@ -16,19 +16,27 @@
 }
 
 
-.board_thead_no, .board_thead_title, .board_thead_manage, .board_thead_name, .board_thead_date, .board_thead_views{
+.board_thead_no, .board_thead_title, .board_thead_manage, .board_thead_name, .board_thead_date, .board_thead_views, .board_thead_team{
 	text-align: center;
 }
 
-.board_thead_no, .board_thead_manage, .board_thead_name, .board_thead_date, .board_thead_views{
+.board_thead_no, .board_thead_manage, .board_thead_name, .board_thead_views {
+	width: 5%;
+}
+
+.board_thead_date{
 	width: 10%;
 }
 
-.board_thead_title{
-	width: 40%;
+.board_thead_team{
+	width: 15%;
 }
 
-.board_tbody_no, .board_tbody_manage, .board_tbody_name, .board_tbody_date, .board_tbody_views{
+.board_thead_title{
+	width: 35%;
+}
+
+.board_tbody_no, .board_tbody_manage, .board_tbody_name, .board_tbody_date, .board_tbody_views, .board_tbody_team{
 	text-align: center;
 }
 

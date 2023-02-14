@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="project.soms.board.repository.mapper.BoardMapper">
+	<!-- 게시판에 출력할 변수들을 SELECT 하는 쿼리-->
+	<!-- 만약 검색을 했다면 where if 절에 있는 조건에 따라 쿼리 select-->
+	<select id="selectBoard" resultType="project.soms.board.dto.BoardDto">
+		SELECT board_no, board_section, board_announcement, board_title, board_content, board_date, board_views, employee_name, employee_team, manage
+		FROM board as A
+		LEFT JOIN employee as B
+		ON A.employee_no = B.employee_no
+		LEFT JOIN manage as C
+		ON B.manage_no = C.manage_no
+		<where>
+			board_section = #{boardSection}
+			<if test="selectList != '' and selectList == '제목'">and A.board_title like concat('%',#{searchInput},'%')</if>
+			<if test="selectList != '' and selectList == '내용'">and A.board_content like concat('%',#{searchInput},'%')</if>
+			<if test="selectList != '' and selectList == '작성자'">and B.employee_name like concat('%',#{searchInput},'%')</if>
+		</where>
+		ORDER BY A.board_date DESC
+    </select>
+	<!-- 총 게시물 수를 SELECT 하는 쿼리-->
+	<select id="boardListSum" resultType="Integer">
+		SELECT COUNT(board_no)
+		FROM board A
+		LEFT JOIN employee B
+		ON A.employee_no = B.employee_no
+		LEFT JOIN manage C
+		ON B.manage_no = C.manage_no
+		WHERE board_section = #{boardSection}
+    </select>
+</mapper>

@@ -8,7 +8,6 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import project.soms.common.dto.CommonDto;
 import project.soms.common.repository.CommonRepository;
 

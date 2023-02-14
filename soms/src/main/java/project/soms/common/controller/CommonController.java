@@ -21,7 +21,7 @@ public class CommonController {
 		String[] teams = {"경영 지원-경영 관리", "경영 지원-재무 회계", "경영 지원-정보 보안" , "경영 지원-구매팀", "개발 연구-개발 1팀", "개발 연구-개발 2팀", "개발 연구-연구팀", "영업-홍보 마케팅", "영업-해외 사업"};
 		
 		// 검색 조건 확인 및 검색 리스트 생성
-		if(employeeTeam != null || manage != null || employeeName != null) {
+		if(employeeTeam != null || manage != null || employeeName != "") {
 			
 			List<CommonDto> selectList = commonService.selectedCommon(teams, employeeTeam, manage, employeeName);
 			model.addAttribute("commonSelect", selectList);
