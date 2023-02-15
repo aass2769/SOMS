@@ -39,7 +39,7 @@ public class SubmissionConfiguration {
 
   @Bean
   public ApprovalListRepository approvalListRepository() {
-    return new ApprovalListRepositoryImpl(approvalListMapper);
+    return new ApprovalListRepositoryImpl(approvalListMapper, employeeMapper);
   }
 
   @Bean

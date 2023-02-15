@@ -5,14 +5,18 @@
 
     <select id="underApprovalList" resultType="project.soms.submission.dto.SubmissionDto">
         select min(case when proposer_employee_no = #{employeeNo} or approver_employee_no = #{employeeNo} then submission_no else null end) as submission_no,
-               submission_subject, submission_pri, submission_datetime,
-               min(case(submission_status) when '반려' then 0 when '대기' then 1 else 2 end) as submission_status,
-               max(case when submission_coment is null then 0 else submission_coment end)as submission_coment,
-               max(case when submission_open = '미열람' and proposer_employee_no = #{employeeNo} then submission_open else '열람' end) as submission_open,
-               max(case(proposer_employee_no) when #{employeeNo} then proposer_employee_no else null end) as proposer_employee_no,
-               max(case(approver_employee_no) when #{employeeNo} then approver_employee_no else null end) as approver_employee_no,
-               min(case when submission_showable = '가능' and proposer_employee_no = #{employeeNo} or approver_employee_no = #{employeeNo}
-                            then submission_showable else '불가' end) as submission_showable
+            submission_subject, submission_pri, submission_datetime,
+            min(case(submission_status) when '반려' then 0 when '대기' then 1 else 2 end) as submission_status,
+            min(case when submission_status = '대기' and approver_employee_no = #{employeeNo} then submission_status else null end) as approval_able,
+            max(case when submission_coment is null then 0 else submission_coment end)as submission_coment,
+            min(case when submission_open = '미열람' and approver_employee_no = #{employeeNo} then submission_open
+                when submission_open = '미열람' and proposer_employee_no = #{employeeNo} then '본인건' else '열람' end) as submission_open,
+            max(case(proposer_employee_no) when #{employeeNo} then proposer_employee_no else null end) as proposer_employee_no,
+            max(case(approver_employee_no) when #{employeeNo} then approver_employee_no else null end) as approver_employee_no,
+            min(case when submission_showable = '가능' and proposer_employee_no = #{employeeNo} or approver_employee_no = #{employeeNo}
+                then submission_showable else '불가' end) as submission_showable,
+            max(case when expense_no is not null then 'expense' when overtime_no is not null then 'overtime' when annual_leave_no is not null then 'annualLeave'
+                when business_trip_no is not null then 'businessTrip' when incident_no is not null then 'incident' end) as submission_join_table
         from submission
         <where>
             <if test="submissionSection != '' and submissionSection.equals('expense')">
@@ -35,7 +39,35 @@
             </if>
         </where>
         group by submission_pri, submission_subject, submission_datetime
-        order by submission_datetime desc
+        order by submission_no desc
     </select>
+
+    <update id="approvalOpen">
+        update submission set submission_open = '열람' where submission_no = #{submissionNo}
+    </update>
+
+    <select id="expenseApprovalDetail" resultType="project.soms.submission.dto.form.ExpenseApprovalDetailForm">
+        select a.submission_no, a.submission_pri, a.submission_section, a.submission_status, a.proposer_employee_no, a.approver_employee_no, b.* from submission as a
+            join expense as b on a.expense_no = b.expense_no
+        where a.submission_no = #{submissionNo} or a.submission_pri = #{submissionPri}
+        order by a.proposer_employee_no desc, a.submission_no asc
+    </select>
+
+    <update id="approve">
+        update submission set submission_status = '결재' where submission_no = #{submissionNo}
+    </update>
+
+    <update id="nextApproverShowable">
+        update submission set submission_showable = '가능'
+        <where>
+            submission_pri = #{submissionPri} and proposer_employee_no = #{proposerEmployeeNo}
+        </where>
+    </update>
+
+    <update id="rejectApproval">
+        update submission set submission_coment = #{submissionComent}, submission_status = '반려' where submission_no = #{submissionNo};
+    </update>
+
+
 
 </mapper>

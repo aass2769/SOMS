@@ -3,8 +3,12 @@ package project.soms.submission.repository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
+import project.soms.submission.dto.ApproverDto;
+import project.soms.submission.dto.ProposerDto;
 import project.soms.submission.dto.SubmissionDto;
+import project.soms.submission.dto.form.ExpenseApprovalDetailForm;
 import project.soms.submission.repository.mapper.ApprovalListMapper;
+import project.soms.submission.repository.mapper.EmployeeMapper;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -18,6 +22,7 @@ import java.util.List;
 public class ApprovalListRepositoryImpl implements ApprovalListRepository{
 
   private final ApprovalListMapper approvalListMapper;
+  private final EmployeeMapper employeeMapper;
   SimpleDateFormat datetimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
   SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -32,7 +37,7 @@ public class ApprovalListRepositoryImpl implements ApprovalListRepository{
 
     for(SubmissionDto approval : approvalList) {
       //서식번호가 널이 아니것, status가 0이면 반려건, 1이면 결재 중건, 2면 결재 완료건
-      if (approval.getSubmissionNo() != null && approval.getSubmissionStatus().equals("1")) {
+      if (approval.getSubmissionNo() != null && approval.getSubmissionStatus().equals("1") && approval.getSubmissionShowable().equals("가능")) {
         //datetime으로 저장된 값을 date(yyyy-MM-dd)로 변환
         Date date = dateParse(approval.getSubmissionDatetime());
         String submissionDate = dateFormat.format(date);
@@ -41,6 +46,49 @@ public class ApprovalListRepositoryImpl implements ApprovalListRepository{
       }
     }
     return underApprovalList;
+  }
+
+  @Override
+  public void approvalOpen(Long submissionNo) {
+    approvalListMapper.approvalOpen(submissionNo);
+  }
+
+  @Override
+  public ExpenseApprovalDetailForm expenseApprovalDetail(Long submissionNo, String submissionPri) {
+    List<ExpenseApprovalDetailForm> expenseApprovalDetails = approvalListMapper.expenseApprovalDetail(submissionNo, submissionPri);
+    ExpenseApprovalDetailForm expenseApprovalDetail = new ExpenseApprovalDetailForm(expenseApprovalDetails.get(0).getSubmissionNo(),
+        expenseApprovalDetails.get(0).getSubmissionPri(), expenseApprovalDetails.get(0).getApprovalAble(),
+        expenseApprovalDetails.get(0).getProposerEmployeeNo(), expenseApprovalDetails.get(0).getApproverEmployeeNo(),
+        expenseApprovalDetails.get(0).getExpenseNo(), expenseApprovalDetails.get(0).getExpenseSection(), expenseApprovalDetails.get(0).getExpensePjt(),
+        expenseApprovalDetails.get(0).getExpenseDate(), expenseApprovalDetails.get(0).getExpenseCost(), expenseApprovalDetails.get(0).getExpenseContent());
+    return expenseApprovalDetail;
+  }
+
+  @Override
+  public List<ApproverDto> expenseApproverList(Long submissionNo, String submissionPri) {
+    List<ExpenseApprovalDetailForm> expenseApprovalDetails = approvalListMapper.expenseApprovalDetail(submissionNo, submissionPri);
+    List<ApproverDto> approverList = new ArrayList<>();
+    for (ExpenseApprovalDetailForm detailList : expenseApprovalDetails) {
+      ProposerDto getApproverName = employeeMapper.proposer(detailList.getApproverEmployeeNo());
+      approverList.add(new ApproverDto(detailList.getApproverEmployeeNo(), getApproverName.getEmployeeName(),
+          detailList.getSubmissionSection(), detailList.getSubmissionStatus()));
+    }
+    return approverList;
+  }
+
+  @Override
+  public void approve(Long submissionNo) {
+    approvalListMapper.approve(submissionNo);
+  }
+
+  @Override
+  public void nextApproverShowable(String submissionPri, Long approverEmployeeNo) {
+    approvalListMapper.nextApproverShowable(submissionPri, approverEmployeeNo);
+  }
+
+  @Override
+  public void rejectApproval(Long submissionNo, String submissionComent) {
+    approvalListMapper.rejectApproval(submissionNo, submissionComent);
   }
 
 

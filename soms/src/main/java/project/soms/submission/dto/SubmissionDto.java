@@ -11,11 +11,13 @@ public class SubmissionDto {
   private String submissionDatetime;
   private String submissionSection;
   private String submissionStatus;
+  private String approvalAble;
   private String submissionComent;
   private String submissionOpen;
   private String submissionShowable;
   private Long proposerEmployeeNo;
   private Long approverEmployeeNo;
+  private String submissionJoinTable;
   private Long expenseNo;
   private Long overtimeNo;
   private Long annualLeaveNo;
