@@ -5,12 +5,11 @@
   <title>Title</title>
 </head>
 <body>
+<section class="Article" style="display: flex; justify-content: center; width:100%; height: 100%;">
+  <div style="width:90%;">
 
-<section class="Article">
-  <!-- 폼 태그 설정 - action은 경로의 이름이 같아서 기입 생략 , 폼 안에 필드값 설정을 위해 오브젝트를 하나 선언 (결재 서식을 내용을 담는 폼) -->
-  <div style="width:90%; margin-left: 7%">
+    <div class="bg-white" style="width:100%">
 
-    <div class="position-fixed bg-white" style="width:78.8%">
       <!-- 페이지 본문의 제목 -->
       <div>
         <h1 class="pt-4 px-4 text-start">결재 서식</h1>
@@ -18,9 +17,6 @@
       <!-- 본문의 제목과 내용을 구분하는 선 -->
       <hr style="border: solid 1px #EA471B; opacity: 1; margin:0;">
     </div>
-    <!-- 본문의 내용 위치를 잡기위해 만든 상담 공백 -->
-    <div style="height:5rem;"></div>
-
 
     <div class="text-center">
       <h2 class="font-monospace my-5">지출결의서</h2>
@@ -125,7 +121,8 @@
               <input type="hidden" name="submissionNo" th:value="${expenseApprovalDetail.getSubmissionNo()}">
               <input type="hidden" name="submissionPri" th:value="${expenseApprovalDetail.getSubmissionPri()}">
               <input type="hidden" name="approverEmployeeNo" th:value="${employeeNo}">
-              <input type="hidden" name="nextApprover" th:if="${expenseApprovalDetail.getApproverEmployeeNo()}" value="결재자 있음">
+              <input type="hidden" name="nextApprover" th:if="${nextApproverCheck}" value="결재자 있음">
+              <input type="hidden" name="proposerValue" th:value="${expenseApprovalDetail.getRejectValue()}">
               <button th:id="${expenseApprovalDetail.getApprovalAble() == '대기' ? 'approve' : 'other'}"
                       type="button" class="btn btn-outline-dark border w-100 h-100 rounded-0 text-light" style="background-color: #EA471B">
                 결재
@@ -136,7 +133,7 @@
       <div style="height:4rem;"></div>
     </div>
   </div>
-  <div th:if="${section.equals('under')}">
+  <div th:if="${approvalSection.equals('under')}">
     <form th:action="@{/submission/approval/reject}" method="post" id="rejectForm">
       <div class="modal fade" id="rejectModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -147,6 +144,10 @@
             <div class="modal-body" id="modalBody">
               <textarea name="submissionComent" id="submissionComent" class="w-100 h-100 border-0" style="outline: none; resize: none; font-size: 0.7rem;"></textarea>
               <input type="hidden" name="submissionNo" th:value="${expenseApprovalDetail.getSubmissionNo()}">
+              <input type="hidden" name="submissionPri" th:value="${expenseApprovalDetail.getSubmissionPri()}">
+              <input type="hidden" name="approverEmployeeNo" th:value="${expenseApprovalDetail.getApproverEmployeeNo()}">
+              <input type="hidden" name="nextApprover" th:if="${nextApproverCheck}" value="결재자 있음">
+              <input type="hidden" name="rejectValue" th:value="${expenseApprovalDetail.getRejectValue()}">
             </div>
             <div class="modal-footer In-Modal-Btn align-middle">
               <button type="button" class="Close" data-bs-dismiss="modal">닫기</button>
@@ -160,7 +161,6 @@
   <script>
     $('#approve').on("click", function() {
        $('#approveForm').submit();
-       console.log("성공");
     });
 
     $('#reject').on("click", function() {

@@ -55,7 +55,7 @@ public class SubmissionSubmitController {
 
   @PostMapping("expense")
   public String expenseSubmit(SubmissionDto submissionDto, @Valid ExpenseInsertForm expenseInsertForm, BindingResult result,
-                         Long employeeNo, HttpServletRequest request, Model model, RedirectAttributes redirect) {
+                              Long employeeNo, HttpServletRequest request, Model model) {
 
     /**
      * submissionDto 에는 결재 서식의 기본 정보 : 서식번호, 상신 일시가 전달됨
@@ -100,9 +100,8 @@ public class SubmissionSubmitController {
 
     //해당 서식을 저장하는 메서드 호출하여 insert 진행
     approvalSubmitService.expenseSubmit(submissionDto, expenseDtos, employeeNo, approverDto);
-
     //결재 내역 - 결재중 페이지로 이동
-    return "redirect:/submission/form/underApproval";
+    return "redirect:/submission/approval/underApprovalList";
   }
 
   @GetMapping("overtime")
@@ -298,7 +297,7 @@ public class SubmissionSubmitController {
     model.addAttribute("approverDto", approverDto);
     model.addAttribute("incidentInsertForm", new IncidentDto());
 
-    return "submission/form/incident";
+    return "submission/submitForm/incident";
   }
 
   @PostMapping("incident")
@@ -309,7 +308,7 @@ public class SubmissionSubmitController {
       model.addAttribute("incidentInsertForm", new IncidentDto(incidentInsertForm.getIncidentSection(),
           incidentInsertForm.getIncidentPjt(), incidentInsertForm.getIncidentContent()));
       selectCommonList(request, model);
-      return "submission/form/incident";
+      return "submission/submitForm/incident";
     }
 
     //검증된 값을 지출결의서 dto 클래스에 저장
@@ -332,7 +331,7 @@ public class SubmissionSubmitController {
       employeeInfo(model, request);
       normalList(model, request);
       //해당 페이지로 리턴
-      return "submission/form/incident";
+      return "submission/submitForm/incident";
     }
 
     //해당 서식을 저장하는 메서드 호출하여 insert 진행

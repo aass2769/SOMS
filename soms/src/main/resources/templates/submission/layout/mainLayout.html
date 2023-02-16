@@ -114,7 +114,11 @@ title은 페이지의 브라우저에 보이는 타이틀이고, article은 화�
             }
         }
     });
-
+    window.addEventListener("pageshow", function() {
+        var form = document.getElementById("form");
+        form.reset();
+        form.elements.myfield.value = "";
+    });
 </script>
 <script>
     const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');

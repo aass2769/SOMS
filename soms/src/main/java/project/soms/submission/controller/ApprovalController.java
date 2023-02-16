@@ -27,19 +27,29 @@ public class ApprovalController {
   private final ApprovalListService approvalListService;
   private final EmployeeService employeeService;
 
-  @GetMapping("underApprovalList")
+  @GetMapping("approvalList")
   public String underApprovalList(HttpServletRequest request, Model model) {
 
     //세션에서 사원의 정보를 조회
     HttpSession session = setTestSession(request);
     ProposerDto login_employee = (ProposerDto) session.getAttribute("LOGIN_EMPLOYEE");
 
+    String responsePage = request.getParameter("approvalSection");
+
     //결재중 내역을 반화히여 모델에 저장
     List<SubmissionDto> approvalList = approvalListService.underApprovalList(login_employee.getEmployeeNo(), request);
     model.addAttribute("employeeNo", login_employee.getEmployeeNo());
     model.addAttribute("approvalList", approvalList);
 
-    return "submission/approvalList/underApproval";
+    if (responsePage.equals("under")) {
+      return "submission/approvalList/underApproval";
+    } else if (responsePage.equals("complete")) {
+      return "submission/approvalList/completeApproval";
+    } else if (responsePage.equals("reject")) {
+      return "submission/approvalList/rejectedApproval";
+    }
+
+    return "redirect:"+ request.getRequestURL();
   }
 
   @PostMapping("detail/expense")
@@ -50,24 +60,15 @@ public class ApprovalController {
     ProposerDto proposer = employeeService.proposer(expenseApprovalDetail.getProposerEmployeeNo());
     List<ApproverDto> approverList = approvalListService.approverList(request);
 
+    model.addAttribute("nextApproverCheck", request.getParameter("nextApproverCheck"));
+    log.error("nextApproverCheck={}", request.getParameter("nextApproverCheck"));
     model.addAttribute("employeeNo", request.getParameter("employeeNo"));
-    model.addAttribute("section", request.getParameter("section"));
+    model.addAttribute("approvalSection", request.getParameter("approvalSection"));
     model.addAttribute("expenseApprovalDetail", expenseApprovalDetail);
-    log.error("expenseApprovalDetail={}", expenseApprovalDetail);
     model.addAttribute("proposer", proposer);
     model.addAttribute("approverList", approverList);
 
     return "submission/approvalForm/expense";
-  }
-
-  @GetMapping("completeApprovalList")
-  public String completeApprovalList(HttpServletRequest request, Model model) {
-    return "submission/approvalList/completeApproval";
-  }
-
-  @GetMapping("rejectedApprovalList")
-  public String rejectedApprovalList(HttpServletRequest request, Model model) {
-    return "submission/approvalList/rejectedApproval";
   }
 
   @PostMapping("approve")
@@ -87,16 +88,23 @@ public class ApprovalController {
     return "redirect:/submission/approvalList/rejectedApproval";
   }
 
+  @PostMapping("delete")
+  public String delete(HttpServletRequest request) {
+
+    approvalListService.deleteApproval(request);
+
+    return "redirect:" + request.getHeader("Referer");
+  }
+
   private HttpSession setTestSession(HttpServletRequest request) {
     //파라미터 하나로 합치기 가능 여부 확인
-    ProposerDto employee = employeeService.proposer(20230201007L);
+    ProposerDto employee = employeeService.proposer(20230201011L);
     HttpSession session = request.getSession();
 
     //세션에서 회원 정보를 조회
     session.setAttribute("LOGIN_EMPLOYEE", employee);
     return session;
   }
-
 
 
 }

@@ -7,6 +7,7 @@ import project.soms.submission.dto.ApproverDto;
 import project.soms.submission.dto.ProposerDto;
 import project.soms.submission.dto.SubmissionDto;
 import project.soms.submission.dto.form.ExpenseApprovalDetailForm;
+import project.soms.submission.dto.form.OvertimeApprovalDetailForm;
 import project.soms.submission.repository.mapper.ApprovalListMapper;
 import project.soms.submission.repository.mapper.EmployeeMapper;
 
@@ -32,7 +33,7 @@ public class ApprovalListRepositoryImpl implements ApprovalListRepository{
   public List<SubmissionDto> underApprovalList(Long employeeNo, String submissionSection, String submissionDatetime) {
 
     //해당 사원의 결재 내역 전체를 가져오고, 거기서 결재중 내역만 담을 새로운 배열을 생성
-    List<SubmissionDto> approvalList = approvalListMapper.underApprovalList(employeeNo, submissionSection, submissionDatetime);
+    List<SubmissionDto> approvalList = approvalListMapper.approvalList(employeeNo, submissionSection, submissionDatetime);
     List<SubmissionDto> underApprovalList = new ArrayList<>();
 
     for(SubmissionDto approval : approvalList) {
@@ -49,18 +50,80 @@ public class ApprovalListRepositoryImpl implements ApprovalListRepository{
   }
 
   @Override
+  public List<SubmissionDto> completeApprovalList(Long employeeNo, String submissionSection, String submissionDatetime) {
+
+    //해당 사원의 결재 내역 전체를 가져오고, 거기서 결재중 내역만 담을 새로운 배열을 생성
+    List<SubmissionDto> approvalList = approvalListMapper.approvalList(employeeNo, submissionSection, submissionDatetime);
+    List<SubmissionDto> completeApprovalList = new ArrayList<>();
+
+    for(SubmissionDto approval : approvalList) {
+      //서식번호가 널이 아니것, status가 0이면 반려건, 1이면 결재 중건, 2면 결재 완료건
+      if (approval.getSubmissionNo() != null && approval.getSubmissionStatus().equals("2") && approval.getSubmissionShowable().equals("가능")) {
+        //datetime으로 저장된 값을 date(yyyy-MM-dd)로 변환
+        Date date = dateParse(approval.getSubmissionDatetime());
+        String submissionDate = dateFormat.format(date);
+        approval.setSubmissionDatetime(submissionDate);
+        completeApprovalList.add(approval);
+      }
+    }
+    return completeApprovalList;
+  }
+
+  @Override
+  public List<SubmissionDto> rejectedApprovalList(Long employeeNo, String submissionSection, String submissionDatetime) {
+
+    //해당 사원의 결재 내역 전체를 가져오고, 거기서 결재중 내역만 담을 새로운 배열을 생성
+    List<SubmissionDto> approvalList = approvalListMapper.approvalList(employeeNo, submissionSection, submissionDatetime);
+    List<SubmissionDto> rejectedApprovalList = new ArrayList<>();
+
+    for(SubmissionDto approval : approvalList) {
+      //서식번호가 널이 아니것, status가 0이면 반려건, 1이면 결재 중건, 2면 결재 완료건
+      if (approval.getSubmissionNo() != null && approval.getSubmissionStatus().equals("0") && approval.getSubmissionShowable().equals("가능")) {
+        //datetime으로 저장된 값을 date(yyyy-MM-dd)로 변환
+        Date date = dateParse(approval.getSubmissionDatetime());
+        String submissionDate = dateFormat.format(date);
+        approval.setSubmissionDatetime(submissionDate);
+        rejectedApprovalList.add(approval);
+      }
+    }
+    return rejectedApprovalList;
+  }
+
+  @Override
   public void approvalOpen(Long submissionNo) {
     approvalListMapper.approvalOpen(submissionNo);
   }
 
   @Override
-  public ExpenseApprovalDetailForm expenseApprovalDetail(Long submissionNo, String submissionPri) {
+  public void rejectOpen(String submissionPri, Long proposerEmployeeNo) {
+    approvalListMapper.rejectOpen(submissionPri, proposerEmployeeNo);
+  }
+
+  @Override
+  public void comProposerOpen(Long submissionNo) {
+    approvalListMapper.comProposerOpen(submissionNo);
+  }
+
+  @Override
+  public ExpenseApprovalDetailForm expenseApprovalDetail(Long submissionNo, String submissionPri, Long employeeNo) {
     List<ExpenseApprovalDetailForm> expenseApprovalDetails = approvalListMapper.expenseApprovalDetail(submissionNo, submissionPri);
-    ExpenseApprovalDetailForm expenseApprovalDetail = new ExpenseApprovalDetailForm(expenseApprovalDetails.get(0).getSubmissionNo(),
-        expenseApprovalDetails.get(0).getSubmissionPri(), expenseApprovalDetails.get(0).getApprovalAble(),
-        expenseApprovalDetails.get(0).getProposerEmployeeNo(), expenseApprovalDetails.get(0).getApproverEmployeeNo(),
-        expenseApprovalDetails.get(0).getExpenseNo(), expenseApprovalDetails.get(0).getExpenseSection(), expenseApprovalDetails.get(0).getExpensePjt(),
-        expenseApprovalDetails.get(0).getExpenseDate(), expenseApprovalDetails.get(0).getExpenseCost(), expenseApprovalDetails.get(0).getExpenseContent());
+    ExpenseApprovalDetailForm expenseApprovalDetail = new ExpenseApprovalDetailForm();
+    for (ExpenseApprovalDetailForm i : expenseApprovalDetails){
+      if (i.getApproverEmployeeNo().equals(employeeNo)) {
+        expenseApprovalDetail = new ExpenseApprovalDetailForm(i.getSubmissionNo(), i.getSubmissionPri(), i.getApprovalAble(),
+            i.getProposerEmployeeNo(), i.getApproverEmployeeNo(), i.getExpenseNo(), i.getExpenseSection(), i.getExpensePjt(),
+            i.getExpenseDate(), i.getExpenseCost(), i.getExpenseContent());
+      }
+    }
+    if (expenseApprovalDetail.getSubmissionPri() == null) {
+      expenseApprovalDetail = new ExpenseApprovalDetailForm(expenseApprovalDetails.get(0).getSubmissionNo(),
+          expenseApprovalDetails.get(0).getSubmissionPri(), expenseApprovalDetails.get(0).getApprovalAble(),
+          expenseApprovalDetails.get(0).getProposerEmployeeNo(), expenseApprovalDetails.get(0).getApproverEmployeeNo(),
+          expenseApprovalDetails.get(0).getExpenseNo(), expenseApprovalDetails.get(0).getExpenseSection(), expenseApprovalDetails.get(0).getExpensePjt(),
+          expenseApprovalDetails.get(0).getExpenseDate(), expenseApprovalDetails.get(0).getExpenseCost(), expenseApprovalDetails.get(0).getExpenseContent());
+    }
+    expenseApprovalDetail.setRejectValue(expenseApprovalDetails.get(0).getSubmissionNo());
+    log.error("expenseApprovalDetail={}", expenseApprovalDetail);
     return expenseApprovalDetail;
   }
 
@@ -69,6 +132,40 @@ public class ApprovalListRepositoryImpl implements ApprovalListRepository{
     List<ExpenseApprovalDetailForm> expenseApprovalDetails = approvalListMapper.expenseApprovalDetail(submissionNo, submissionPri);
     List<ApproverDto> approverList = new ArrayList<>();
     for (ExpenseApprovalDetailForm detailList : expenseApprovalDetails) {
+      ProposerDto getApproverName = employeeMapper.proposer(detailList.getApproverEmployeeNo());
+      approverList.add(new ApproverDto(detailList.getApproverEmployeeNo(), getApproverName.getEmployeeName(),
+          detailList.getSubmissionSection(), detailList.getSubmissionStatus()));
+    }
+    return approverList;
+  }
+
+  @Override
+  public OvertimeApprovalDetailForm overtimeApprovalDetail(Long submissionNo, String submissionPri, Long employeeNo) {
+    List<OvertimeApprovalDetailForm> overtimeApprovalDetails = approvalListMapper.overtimeApprovalDetail(submissionNo, submissionPri);
+    OvertimeApprovalDetailForm overtimeApprovalDetail = new OvertimeApprovalDetailForm();
+    for (OvertimeApprovalDetailForm i : overtimeApprovalDetails){
+      if (i.getApproverEmployeeNo().equals(employeeNo)) {
+        overtimeApprovalDetail = new OvertimeApprovalDetailForm(i.getSubmissionNo(), i.getSubmissionPri(), i.getApprovalAble(),
+            i.getProposerEmployeeNo(), i.getApproverEmployeeNo(), i.getOvertimeNo(), i.getOvertimeSection(), i.getOvertimePjt(),
+            i.getOvertimeStartDate(), i.getOvertimeStartTime(), i.getOvertimeEndDate(), i.getOvertimeEndTime(), i.getOvertimeContent());
+      }
+    }
+    if (overtimeApprovalDetail.getSubmissionPri() == null) {
+      overtimeApprovalDetail = new OvertimeApprovalDetailForm(overtimeApprovalDetails.get(0).getSubmissionNo(), overtimeApprovalDetails.get(0).getSubmissionPri(),
+          overtimeApprovalDetails.get(0).getApprovalAble(), overtimeApprovalDetails.get(0).getProposerEmployeeNo(), overtimeApprovalDetails.get(0).getApproverEmployeeNo(),
+          overtimeApprovalDetails.get(0).getOvertimeNo(), overtimeApprovalDetails.get(0).getOvertimeSection(), overtimeApprovalDetails.get(0).getOvertimePjt(),
+          overtimeApprovalDetails.get(0).getOvertimeStartDate(), overtimeApprovalDetails.get(0).getOvertimeStartTime(), overtimeApprovalDetails.get(0).getOvertimeEndDate(),
+          overtimeApprovalDetails.get(0).getOvertimeEndTime(), overtimeApprovalDetails.get(0).getOvertimeContent());
+    }
+    return overtimeApprovalDetail;
+
+  }
+
+  @Override
+  public List<ApproverDto> overtimeApproverList(Long submissionNo, String submissionPri) {
+    List<OvertimeApprovalDetailForm> expenseApprovalDetails = approvalListMapper.overtimeApprovalDetail(submissionNo, submissionPri);
+    List<ApproverDto> approverList = new ArrayList<>();
+    for (OvertimeApprovalDetailForm detailList : expenseApprovalDetails) {
       ProposerDto getApproverName = employeeMapper.proposer(detailList.getApproverEmployeeNo());
       approverList.add(new ApproverDto(detailList.getApproverEmployeeNo(), getApproverName.getEmployeeName(),
           detailList.getSubmissionSection(), detailList.getSubmissionStatus()));
@@ -89,6 +186,11 @@ public class ApprovalListRepositoryImpl implements ApprovalListRepository{
   @Override
   public void rejectApproval(Long submissionNo, String submissionComent) {
     approvalListMapper.rejectApproval(submissionNo, submissionComent);
+  }
+
+  @Override
+  public void deleteApproval(Long submissionNo) {
+    approvalListMapper.deleteApproval(submissionNo);
   }
 
 

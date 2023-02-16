@@ -6,10 +6,10 @@
 </head>
 <body>
 
-<section class="Article">
-  <div style="width:90%; margin-left: 5%">
+<section class="Article" style="display: flex; justify-content: center; width:100%; height: 100%;">
+  <div style="width:90%;">
 
-    <div class="position-fixed bg-white" style="width:78.8%">
+    <div class="bg-white" style="width:100%">
       <!-- 페이지 본문의 제목 -->
       <div>
         <h1 class="pt-4 px-4 text-start">결재 내역 - 결재 완료</h1>
@@ -18,58 +18,110 @@
       <hr style="border: solid 1px #EA471B; opacity: 1; margin:0;">
     </div>
     <!-- 본문의 내용 위치를 잡기위해 만든 상담 공백 -->
-    <div style="height:5rem;"></div>
 
+    <form th:action method="get">
 
-    <!-- 조회 조건 검색 -->
-    <div class="d-flex justify-content-center align-middle my-5">
+      <!-- 조회 조건 검색 -->
+      <div class="d-flex justify-content-center align-middle my-5">
 
-      <!-- 결재 서식 구분 선택 -->
-      <div class="d-flex align-middle justify-content-center">
-        <p class="m-0" style="font-size: 0.9rem; width:5rem;">결재 서식 : </p>
-        <select name="section" class="border-0 border-bottom" style="font-size: 0.7rem;">
-          <option value="expense">지출결의서</option>
-          <option value="overtime">연장근로신청서</option>
-          <option value="annualLeave">연차신청서</option>
-          <option value="businessTrip">출장신청서</option>
-          <option value="incident">시말서</option>
-        </select>
+        <!-- 결재 서식 구분 선택 -->
+        <div class="d-flex align-middle justify-content-center">
+          <p class="m-auto" style="font-size: 0.9rem; width:5rem;">결재 서식 : </p>
+          <select name="submissionSection" class="border-0 border-bottom" style="font-size: 0.7rem;">
+            <option disabled selected>서식 선텍</option>
+            <option value="expense">지출결의서</option>
+            <option value="overtime">연장근로신청서</option>
+            <option value="annualLeave">연차신청서</option>
+            <option value="businessTrip">출장신청서</option>
+            <option value="incident">시말서</option>
+          </select>
+        </div>
+
+        <!-- 발의 날짜 선택 -->
+        <div class="d-flex align-middle justify-content-center ms-4">
+          <p class="m-auto" style="font-size: 0.9rem; width:5rem;">발의 일 : </p>
+          <input type="date" name="submissionDatetime" class="border-0 border-bottom" style="font-size: 0.7rem; outline:none;">
+        </div>
+
+        <!-- 결재 서식 구분 및 발의일 조건으로 검색 -->
+        <div class="Modal-Btn align-middle ms-4">
+          <button style="margin:0.4rem;" type="submit">조회</button>
+        </div>
+
       </div>
 
-      <!-- 발위 날짜 선택 -->
-      <div class="d-flex align-middle justify-content-center ms-4">
-        <p class="m-0" style="font-size: 0.9rem; width:5rem;">발의 일 : </p>
-        <input type="date" name="startDate" class="border-0 border-bottom" style="font-size: 0.7rem; outline:none;">
-      </div>
+    </form>
 
-    </div>
 
     <!-- 결재 내역 리스트 -->
     <div class="d-flex align-middle justify-content-center w-75 border-bottom" style="margin-left: 12.5%; height:2.3rem;"
-         th:each="i : ${#numbers.sequence(1,20)}">
+         th:each="approval : ${approvalList}" th:classappend="${approval.getSubmissionOpen() == '본인건' ? 'opacity-100' : 'opacity-75'}">
 
       <!-- 연속 번호 -->
-      <p class="px-2 my-2 text-center" style="width:5%; font-size:0.9rem;" th:text="${i}"></p>
+      <p class="px-2 my-2 text-center" style="width:5%; font-size:0.9rem;" th:text="${approvalList.size - approvalStat.index}"></p>
       <!-- 서식 제목 : 사용자 입력값 x, 상신시 자동 완성 직급+이름+발의일 -->
-      <div class="d-flex my-1" style="width:50%">
-        <p class="px-2 my-1 border-start text-end" style="width:30%; font-size:0.9rem;">제목 : </p>
-        <p class="px-2 my-1 border-end text-start" style="width:70%; font-size:0.9rem;">대리_김희용_지출결의서_2023-02-01</p>
-      </div>
+      <form class="d-flex my-1 text-dark" style="width:50%; text-decoration: none;" onmouseover="this.style.cursor='pointer'" method="post" th:id="${'detailForm' + approvalStat.index}"
+         th:action="@{/submission/approval/detail/{joinValue}(joinValue=${approval.getSubmissionJoinTable()})}">
+        <input type="hidden" name="joinValue" th:value="${approval.getSubmissionJoinTable()}">
+        <input type="hidden" th:id="${'getSubmissionNo' + approvalStat.index}" name="submissionNo" th:value="${approval.getSubmissionNo()}">
+        <input type="hidden" name="submissionPri" th:value="${approval.getSubmissionPri()}">
+        <input type="hidden" name="approvalSection" value="complete">
+        <input type="hidden" name="submissionOpen" th:value="${approval.getSubmissionOpen()}">
+        <input type="hidden" name="employeeNo" th:value="${employeeNo}">
+        <input type="hidden" name="approvalAble" th:value="${approval.getApprovalAble()}">
+        <p class="px-2 my-1 border-start text-end" style="width:20%; font-size:0.9rem;">제목 : </p>
+        <p class="px-2 my-1 border-end text-start" th:id="${'getSubmissionSubject' + approvalStat.index}" style="width:80%; font-size:0.9rem;"
+           th:text="${approval.getSubmissionSubject()}">서식 제목</p>
+      </form>
       <!-- 발의 일자 -->
       <div class="d-flex my-1" style="width:35%">
         <p class="px-2 my-1 text-end" style="width:50%; font-size:0.9rem;">발의 일 : </p>
-        <p class="px-2 my-1 border-end text-start" style="width:50%; font-size:0.9rem;">2023-02-01</p>
+        <p class="px-2 my-1 border-end text-start" style="width:50%; font-size:0.9rem;" th:text="${approval.getSubmissionDatetime()}">상신 일자</p>
       </div>
-      <!-- 반려 코멘트 확인 -->
+      <!-- 결재 상태 -->
       <div style="width:10%;" class="Modal-Btn align-middle">
-        <button style="margin:0.4rem;" type="button" data-bs-toggle="modal"
-                th:data-bs-target="${'#coment' + i}">서식 삭제</button>
+        <button style="margin:0.4rem;" type="button" class="Submit" th:id="${'delete' + approvalStat.index}">서식 삭제</button>
       </div>
 
     </div>
     <div style="height:4rem;"></div>
 
+
+    <form th:action="@{/submission/approval/delete}" method="post" id="deleteForm">
+      <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">서식 삭제</h1>
+            </div>
+            <div class="modal-body" id="modalBody">
+              <textarea name="submissionComent" id="deleteCheck" class="w-100 h-100 border-0" style="outline: none; resize: none; font-size: 0.7rem;"></textarea>
+              <input type="hidden" name="submissionNo" id="submissionNo" value="">
+            </div>
+            <div class="modal-footer In-Modal-Btn align-middle">
+              <button type="button" class="Close" data-bs-dismiss="modal">닫기</button>
+              <button type="submit" class="Submit" id="delete">삭제</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
   </div>
+  <script th:inline="javascript">
+      let max = [[${approvalList.size}]];
+      for (let i = 0; i < max; i++){
+          $('#detailForm' + i).on("click", function() {
+              $('#detailForm' + i).submit();
+          });
+          $('#delete' + i).on("click", function() {
+              document.getElementById("submissionNo").value = $('#getSubmissionNo' + i).val();
+              document.getElementById("deleteCheck").innerHTML = "'" + document.getElementById("getSubmissionSubject" + i).innerText + "' 서식을 삭제하시겠습니까?";
+              $('#deleteModal').modal("show");
+              console.log(document.getElementById("submissionNo").value);
+          })
+      }
+
+  </script>
 </section>
 
 </body>

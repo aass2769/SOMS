@@ -11,7 +11,9 @@ public interface ApprovalListService {
 
   List<SubmissionDto> underApprovalList(Long employeeNo, HttpServletRequest request);
 
-  void approvalOpen(HttpServletRequest request);
+  List<SubmissionDto> completeApprovalList(Long employeeNo, HttpServletRequest request);
+
+  List<SubmissionDto> rejectedApprovalList(Long employeeNo, HttpServletRequest request);
 
   ExpenseApprovalDetailForm expenseApprovalDetail(HttpServletRequest request);
 
@@ -20,4 +22,6 @@ public interface ApprovalListService {
   void approve(HttpServletRequest request);
 
   void rejectApproval(HttpServletRequest request);
+
+  void deleteApproval(HttpServletRequest request);
 }

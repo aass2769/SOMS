@@ -23,6 +23,8 @@ public class ExpenseApprovalDetailForm {
   private Integer expenseCost;
   private String expenseContent;
 
+  private Long rejectValue;
+
   public ExpenseApprovalDetailForm(Long submissionNo, String submissionPri, String approvalAble, Long proposerEmployeeNo, Long approverEmployeeNo, Long expenseNo, String expenseSection, String expensePjt, String expenseDate, Integer expenseCost, String expenseContent) {
     this.submissionNo = submissionNo;
     this.submissionPri = submissionPri;

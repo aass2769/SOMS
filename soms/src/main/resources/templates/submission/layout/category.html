@@ -24,23 +24,23 @@
           <a th:href="@{/submission/form/expense}">지출결의서</a>
           <a th:href="@{/submission/form/overtime}">연장근로신청서</a>
           <a th:href="@{/submission/form/annualLeave}">연차신청서</a>
-          <a href="#">출장신청서</a>
-          <a href="#">시말서</a>
+          <a th:href="@{/submission/form/businessTrip}">출장신청서</a>
+          <a th:href="@{/submission/form/incident}">시말서</a>
         </div>
       </div>
     </div>
 
     <!-- 다이렉트 A태그입니다 -->
     <div class = Category-A>
-      <a href="#">결재 중</a>
+      <a th:href="@{/submission/approval/approvalList(approvalSection=under)}">결재 중</a>
     </div>
 
     <div class = Category-A>
-      <a href="#">결재 완료</a>
+      <a th:href="@{/submission/approval/approvalList(approvalSection=complete)}">결재 완료</a>
     </div>
 
     <div class = Category-A>
-      <a href="#">결재 반려</a>
+      <a th:href="@{/submission/approval/approvalList(approvalSection=reject)}">결재 반려</a>
     </div>
 
 
