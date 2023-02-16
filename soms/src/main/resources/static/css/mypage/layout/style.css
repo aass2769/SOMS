@@ -42,6 +42,7 @@ p, span, li, td{
     width: 9rem;
     height: 100vh;
     border-right: 0.1rem solid #f4f4f4;
+    background-color: white;
 }
 .Icons li{
     width: 100%;

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+</head>
+
+<body>
+	<div th:fragment="attendance" class = "attendance">
+		<div class = "attendance_flexbox">
+			
+			<h3>출퇴근 조회</h3>
+			
+			<div style="display: flex;justify-content: flex-end;margin: 0 0.3rem 0.5rem 0;">
+			
+			<select style="border: none; font-size: 0.85rem;" class = "attendanceSelect">
+				<option th:each="attendanceSelectDate : ${attendanceAtSixMonths}" th:text ="${attendanceSelectDate}" 
+					th:value ="${attendanceSelectDate}" th:selected="${attendanceSelectDate == attendanceDate}"></option>
+			</select>
+			
+		</div>
+	
+		<table class = "attendance_table">
+			<tr>
+				<th>날짜</th>
+				<th>출근 시간</th>
+				<th>퇴근 시간</th>
+			</tr>
+			<tr th:each="attendance : ${attendanceList}">
+				<td th:text="${attendance.attendanceGotodate}"></td>
+				<td th:text="${attendance.attendanceGototime}"></td>
+				<td th:text="${attendance.attendanceLeavetotime}"></td>
+			</tr>
+
+		</table>
+		
+		<div style="margin: 0.5rem 0 0 0; display: flex;" >
+			<span style="font-size: 0.75rem; border-bottom: 0.05rem solid black;">추가근로 12시간 중 총 <b>3</b>시간을 하셨습니다.</sapn>
+		</div>
+
+		</div>
+		
+		<form style="display: none;" class = "attendanceSelectForm"
+		method = "get" action="attendance">
+			<input type="hidden" class ="attendanceSelectInput" name = "attendanceSelectDate">
+		</form>
+		
+		<script>
+			const attendanceSelectForm = $('.attendanceSelectForm');
+			const attendanceSelect = $('.attendanceSelect');
+			const attendanceSelectInput = $('.attendanceSelectInput');
+			
+			attendanceSelect.change(function(){
+				attendanceSelectInput.val(attendanceSelect.val());
+				attendanceSelectForm.submit();
+			})
+		</script>
+		
+	</div>
+</body>
+
+
+	
+	
+	
+</html>

@@ -1,0 +1,35 @@
+
+.attendance{
+	display: flex;
+	justify-content: center;
+	
+}
+.attendance_flexbox{
+	width: 20rem;
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	border: 0.05rem solid black;
+	padding: 1rem;
+}
+
+
+.attendance_table, .attendance_table tr, .attendance_table th, .attendance_table td{
+	border: 0.05rem solid black;
+	box-sizing: border-box;
+	font-size: 0.9rem;
+	text-align: center;
+}
+
+.attendance_table th:nth-child(1){
+	width: 3rem;
+}
+
+.attendance_table th:nth-child(2){
+	width: 2rem;
+}
+
+.attendance_table th:nth-child(3){
+	width: 2rem;
+}
+

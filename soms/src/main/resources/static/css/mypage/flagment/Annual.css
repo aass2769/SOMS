@@ -1,0 +1,41 @@
+
+.annual{
+	display: flex;
+	justify-content: center;
+	
+}
+.annual_flexbox{
+	width: 31rem;
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	border: 0.05rem solid black;
+	padding: 1rem;
+}
+
+
+.annual_table, .annual_table tr, .annual_table th, .annual_table td{
+	border: 0.05rem solid black;
+	box-sizing: border-box;
+	font-size: 0.9rem;
+	text-align: center;
+}
+
+.annual_table th:nth-child(1){
+	width: 3rem;
+}
+
+.annual_table th:nth-child(2){
+	width: 2rem;
+}
+
+.annual_table th:nth-child(3){
+	width: 3rem;
+}
+
+.annual_table th:nth-child(4){
+	width: 2rem;
+}
+.annual_table th:nth-child(5){
+	width: 2rem;
+}

@@ -1,8 +1,6 @@
 package project.soms.login.controller;
 
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
@@ -14,8 +12,6 @@ import lombok.RequiredArgsConstructor;
 import project.soms.employee.dto.EmployeeDto;
 import project.soms.login.repository.mapper.LoginMapper;
 import project.soms.login.service.LoginServiceImpl;
-import project.soms.mypage.dto.ManageDto;
-import project.soms.mypage.repository.mapper.MypageMapper;
 
 @Controller
 @RequiredArgsConstructor
@@ -24,8 +20,7 @@ public class LoginController {
 	private final LoginMapper loginMapper;
 	
 	private final LoginServiceImpl loginServiceImpl;
-	
-	private final MypageMapper mypageMapper;
+
 	
 	@PostMapping("login")
 	public String Login(String id, String pw, HttpServletRequest req) {
@@ -36,14 +31,11 @@ public class LoginController {
 	@GetMapping("login.success")
 	public String LoginSucess(Model model, HttpServletRequest req) {
 		
-		
-		List<ManageDto> manages = mypageMapper.getManages();
-		model.addAttribute("manages", manages);
-		
+		// 세션에 employee 담기
 		EmployeeDto employee = (EmployeeDto) req.getSession().getAttribute("employee");
-		model.addAttribute("employee", employee);
+		model.addAttribute("employee", employee);		
 		
-		return "mypage/layout/employee";
+		return "error";
 	}
 	
 }

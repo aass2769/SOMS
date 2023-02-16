@@ -16,53 +16,28 @@
       &nbsp;&nbsp;
       <p>마이페이지</p>
     </div>
+  
+  <!-- th:text=${attendance == 1 ? '출근하기' : '퇴근하기'} -->
+  <!-- th:value=${attendance == 1 ? '1' : '2'} -->
+    <div class = "Category-Btn" style="margin-top: 0.6rem;" th:if="${attendance == 1}">
+      <button id = "Attendance_Btn" style="width: 4rem;" value = "1">퇴근하기</button>
+    </div>
+    
+    <div class = "Category-Btn" style="margin-top: 0.6rem;" th:if="${attendance == 2}">
+      <button id = "Attendance_Btn" style="width: 4rem;" value = "2">출근하기</button>
+    </div>
     
     <div class = "Category-Btn" style="margin-top: 0.6rem;">
-      <button>출근하기</button>
-    </div>
-
-    <!-- 카테고리 드롭다운입니다 -->
-    <!-- Item-Title의 value와 Item-Menu의 value를 동일하게 만들어주세요 -->
-    <!-- 다른태그와 겹치는것도 안됩니다! -->
-    <div class = "Category">
-      <div class = "Item">
-        <a class="Item-Title" value = "1"><p>개인정보 수정</p></a>
-        <div class = "Item-Menu" value = "1">
-		  <a href="#" data-bs-toggle="modal" data-bs-target="#pwChangeModal">비밀번호 변경</a>
-          <a href="#" data-bs-toggle="modal" data-bs-target="#emailChangeModal">이메일 변경</a>
-          <a href="#" data-bs-toggle="modal" data-bs-target="#emailPwChangeModal">이메일 비밀번호 변경/등록</a>
-        </div>
-      </div>
-    </div>
-
-
-    <div class = "Category">
-      <div class = "Item">
-        <a class="Item-Title" value = "2"><p>조회</p></a>
-        <div class = "Item-Menu" value = "2">
-		  <a href="#" data-bs-toggle="modal" data-bs-target="#attendanceModal">출퇴근 조회</a>
-          <a href="#" data-bs-toggle="modal" data-bs-target="#annualModal">연차 조회</a>
-
-        </div>
-      </div>
+      <button style="width: 4rem;">내 정보</button>
     </div>
     
     <div class = Category-A>
-      <a href="#">최근 급여 확인</a>
+      <a href="attendance">근태 조회</a>
     </div>
-    
-    <div class = Category-A>
-      <a href="#">다이어리</a>
+   
+    <div class = "Category-Btn" style="margin-top: 0.6rem;">
+      <button style="width: 4rem;">계정 생성</button>
     </div>
-    
-    <div class = Category-A>
-      <a href="#">자료실</a>
-    </div>
-    
-    <div class = Category-A>
-      <a href="#" data-bs-toggle="modal" data-bs-target="#employeeRegisterModal">계정 생성</a>
-    </div>
-
 	
    	<!-- 드롭다운 기능 스크립트 입니다 -->
 	<script>

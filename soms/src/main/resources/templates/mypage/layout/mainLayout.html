@@ -23,10 +23,11 @@ title은 페이지의 브라우저에 보이는 타이틀이고, article은 화�
     
 	<title th:replace="${title}">레이아웃 메인</title>
     
-    <link rel="stylesheet" th:href="@{/css/mypage/modal/Attendance.css}">
-    <link rel="stylesheet" th:href="@{/css/mypage/modal/Annual.css}">
-    
-    
+    <link rel="stylesheet" th:href="@{/css/mypage/flagment/Attendance.css}">
+    <link rel="stylesheet" th:href="@{/css/mypage/flagment/Annual.css}">
+   	<link rel="stylesheet" th:href="@{/css/mypage/mypage.css}">
+   	
+   	
 </head>
 <body>
 	
@@ -34,6 +35,7 @@ title은 페이지의 브라우저에 보이는 타이틀이고, article은 화�
     <div class = "All">
         <!-- 사이드 바입니다  -->
         <nav class = "Side">
+			
             <!-- 사이드바의 아이콘 구역입니다 -->
             <div th:replace="~{navIcon/icon :: icons}"></div>
 
@@ -49,15 +51,10 @@ title은 페이지의 브라우저에 보이는 타이틀이고, article은 화�
         </div>
     </div>
     
-    <div th:replace="~{mypage/layout/mypageModals :: mypageModals}"></div>
+    <!--<div th:replace="~{mypage/layout/mypageModals :: mypageModals}"></div>-->
     
 </body>
 
-
-	<!-- 이메일 변경, 이메일 비밀번호 변경, 비밀번호 변경 --> 
-	<script src="js/mypage/mypageChange.js"> </script>
-	<!-- 회원가입 -->
-	<script src="js/mypage/mypageRegister.js"></script>
 
 	<script>
 	    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');

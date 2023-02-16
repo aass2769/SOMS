@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        
+<mapper namespace="project.soms.mypage.repository.mapper.AttendanceMapper">
+	
+	<select id="workcheck" resultType="String">
+		select attendance_gototime from attendance
+		where employee_no = #{employeeNo}
+		and attendance_leavetotime is null
+		order by attendance_no desc
+		limit 1
+	</select>
+
+	
+	<insert id="goToWork">
+		insert into attendance(attendance_gotodate, attendance_gototime, employee_no) 
+			values(#{nowDate}, #{nowHour}, #{employeeNo})
+	</insert>
+	
+	<select id="getAttendanceNum" resultType="long">
+		select attendance_no from attendance
+		where employee_no = #{employeeNo}
+		order by attendance_no desc
+		limit 1;
+	</select>
+
+	<update id="leaveToWork">
+		update attendance
+		set attendance_leavetotime = #{nowHour}
+		where employee_no = #{employeeNo}
+		and attendance_no = #{attendanceNo}
+	</update>
+	
+	<select id="attendanceCheck" resultType="project.soms.mypage.dto.AttendanceCheckDto">
+		select attendance_gotodate, attendance_gototime, attendance_leavetotime
+		from attendance
+		where employee_no = #{employeeNo}
+		and attendance_gotodate like #{ym}"%"
+		order by attendance_no desc
+	</select>
+
+	
+</mapper>
