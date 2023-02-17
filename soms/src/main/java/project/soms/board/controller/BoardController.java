@@ -84,6 +84,7 @@ public class BoardController {
 	}
 	
 	//응답이 틀리면 http 메서드 오류가 발생할 수 있음 (클라이언트오류 405ERROR)
+	//게시판 수정 메서드
 	@PostMapping("boardUpdate")
 	public String updateBoard(Model model, BoardDto readBoardDto, RedirectAttributes redirect) {
 		
@@ -106,7 +107,7 @@ public class BoardController {
 			System.out.println("세션이 없습니다.");
 		}
 		
-		EmployeeDto employeeDto = (EmployeeDto) session.getAttribute("employee");
+		EmployeeDto employeeDto = (EmployeeDto) session.getAttribute("LOGIN_EMPLOYEE");
 		return employeeDto;
 	}
 	
@@ -136,6 +137,16 @@ public class BoardController {
 		redirectAttributes.addAttribute("boardNo", boardNo);
 		
 		return "redirect:/board/boardRead";
+	}
+	
+	//게시글 삭제 메서드
+	@PostMapping("boardDelete")
+	public String deleteBoard(Integer boardNo, String boardSection, RedirectAttributes redirectAttributes) {
+
+		boardService.deleteBoard(boardNo);
+		
+		redirectAttributes.addAttribute("boardSection", boardSection);
+		return "redirect:/board/boardList";
 	}
 	
 }

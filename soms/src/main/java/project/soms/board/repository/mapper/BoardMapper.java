@@ -20,6 +20,8 @@ public interface BoardMapper {
 	
 	void updateBoard(BoardDto readBoardDto);
 	
+	void deleteBoard(Integer boardNo);
+	
 	void updateViews(Integer boardNo);
 	
 	BoardDto readBoard(Integer boardNo);

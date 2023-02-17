@@ -15,6 +15,8 @@ public interface BoardRepository{
 	void insertBoard(BoardDto boardDto);
 	
 	void updateBoard(BoardDto readBoardDto);
+	
+	void deleteBoard(Integer boardNo);
 
 	void updateViews(Integer boardNo);
 	

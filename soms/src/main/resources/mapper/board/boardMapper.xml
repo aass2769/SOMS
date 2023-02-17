@@ -52,6 +52,12 @@
 		WHERE board_no = #{boardNo}
     </update>
     
+    <!-- 게시물을 DELETE하는 쿼리 -->
+    <delete id="deleteBoard">
+		DELETE FROM board
+		WHERE board_no = #{boardNo}
+    </delete>
+    
     <!-- 게시물 조회 수를 UPDATE하는 쿼리 -->
     <update id="updateViews"> 
 		UPDATE board

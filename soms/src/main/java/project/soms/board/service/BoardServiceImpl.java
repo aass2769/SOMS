@@ -1,5 +1,6 @@
 package project.soms.board.service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -21,8 +22,20 @@ public class BoardServiceImpl implements BoardService{
 	@Override
 	public List<BoardDto> selectBoard(String boardSection, String selectList, String searchInput) {
 		
-		List<BoardDto> boardList = boardRepository.selectBoard(boardSection, selectList, searchInput);	
-
+		List<BoardDto> boardList = boardRepository.selectBoard(boardSection, selectList, searchInput);
+		
+//		LocalDateTime now = LocalDateTime.now();
+//		LocalDate today = now.toLocalDate();
+//		
+//		for(int i = 0; i < boardList.size(); i++) {
+//			LocalDateTime boardDate = LocalDateTime.parse(boardList.get(i).getBoardDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+//			LocalDate boardDateOnly = boardDate.toLocalDate();
+//			
+//			if(boardDateOnly.isBefore(today)) {
+//				boardDate = boardDateOnly.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+//				boardList.get(i).setBoardDate(boardDate);
+//			}
+//		}
 		return boardList;
 	}
 	
@@ -46,6 +59,11 @@ public class BoardServiceImpl implements BoardService{
 		boardRepository.updateBoard(readBoardDto);
 	}
 	
+	@Override
+	public void deleteBoard(Integer boardNo) {
+
+		boardRepository.deleteBoard(boardNo);
+	}
 	
 	@Override
 	public void updateViews(Integer boardNo) {
@@ -76,6 +94,8 @@ public class BoardServiceImpl implements BoardService{
 		
 		boardRepository.writeComment(commentContent, employeeDto, boardNo, commentDate);
 	}
+
+	
 
 	
 

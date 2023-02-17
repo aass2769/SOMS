@@ -42,11 +42,13 @@
 						</div>
 						<div class="read_top_button_right">
 							<div th:if="${session.employee.employeeNo} == ${readBoardDto.employeeNo}">
-								<button type="button" class="top_update_button"><a class="toa_list_a"
+								<button type="button" class="top_update_button"><a class="top_update_a"
 										th:href="@{/board/boardWrite(boardNo = ${readBoardDto.boardNo})}">수정</a></button>
 							</div>
 							<div th:if="${session.employee.employeeNo} == ${readBoardDto.employeeNo}" class="top_delete_button_div">
-								<button type="button" class="top_delete_button">삭제</button>
+								<form th:action="@{/board/boardDelete(boardNo = ${readBoardDto.boardNo}, boardSection = ${readBoardDto.boardSection})}" method="post">
+								<button type="submit" class="top_delete_button">삭제</button>
+								</form>
 							</div>
 						</div>
 					</div>

@@ -42,6 +42,12 @@ public class BoardRepositoryImpl implements BoardRepository{
 		
 		boardMapper.updateBoard(readBoardDto);
 	}
+	
+	@Override
+	public void deleteBoard(Integer boardNo) {
+
+		boardMapper.deleteBoard(boardNo);
+	}
 
 	@Override
 	public void updateViews(Integer boardNo) {
@@ -68,6 +74,8 @@ public class BoardRepositoryImpl implements BoardRepository{
 		boardMapper.writeComment(commentContent, employeeDto, boardNo, commentDate);
 		
 	}
+
+
 
 	
 

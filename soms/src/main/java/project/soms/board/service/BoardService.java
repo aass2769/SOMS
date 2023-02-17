@@ -19,6 +19,8 @@ public interface BoardService {
 	//게시글 update 메서드
 	void updateBoard(BoardDto readBoardDto);
 	
+	void deleteBoard(Integer boardNo);
+	
 	BoardDto readBoard(Integer boardNo);
 	
 	//조회 수 업데이트 메서드
