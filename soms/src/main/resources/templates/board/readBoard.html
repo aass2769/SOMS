@@ -15,7 +15,8 @@
 			<div class="position-fixed bg-white" style="width:78.8%">
 				<!-- 페이지 본문의 제목 -->
 				<div>
-					<h1 class="pt-4 px-4 text-start">익명 게시판</h1>
+					<h1 class="pt-4 px-4 text-start" th:if="${readBoardDto.boardSection} == '전사'">전사 게시판</h1>
+					<h1 class="pt-4 px-4 text-start" th:unless="${readBoardDto.boardSection} == '전사'">부서 게시판</h1>
 				</div>
 				<!-- 본문의 제목과 내용을 구분하는 선 -->
 				<hr style="border: solid 1px #EA471B; opacity: 1; margin:0;">
@@ -26,14 +27,85 @@
 
 			<div class="read_container">
 				<div class="read_main_div">
-					<div class="read_title_time_div">
-						<div>
-							안녕하세요
+					<div class="read_top_container">
+						<div class="read_top_button_left">
+							<div class="top_list_button_div">
+								<button type="button" class="top_list_button"><a class="toa_list_a"
+										th:href="@{/board/boardList(boardSection = ${readBoardDto.boardSection})}">목록</a></button>
+							</div>
+							<div class="top_previous_button_div">
+								<button type="button" class="top_previous_button">이전글</button>
+							</div>
+							<div class="top_next_button_div">
+								<button type="button" class="top_next_button">다음글</button>
+							</div>
 						</div>
-						<div>
-							2023-02-10
+						<div class="read_top_button_right">
+							<div th:if="${session.employee.employeeNo} == ${readBoardDto.employeeNo}">
+								<button type="button" class="top_update_button"><a class="toa_list_a"
+										th:href="@{/board/boardWrite(boardNo = ${readBoardDto.boardNo})}">수정</a></button>
+							</div>
+							<div th:if="${session.employee.employeeNo} == ${readBoardDto.employeeNo}" class="top_delete_button_div">
+								<button type="button" class="top_delete_button">삭제</button>
+							</div>
 						</div>
 					</div>
+					<div class="read_top_info">
+						<div class="read_board_section_div">
+							<div class="read_board_section" th:text="${readBoardDto.boardSection}">
+							</div>
+							<th:block th:if="${readBoardDto.boardAnnouncement='공지있음'}" th:text="'<공지글>'">
+								</th>
+								<th:block th:unless="${readBoardDto.boardAnnouncement='공지있음'}" th:text="''">
+									</th>
+						</div>
+						<div class="read_board_title" th:text="${readBoardDto.boardTitle}">
+							테스트 1입니다
+						</div>
+						<div class="read_board_info">
+							<div class="info_team" th:text="${'부서 ' + readBoardDto.employeeTeam}">경영 지원-경영 관리</div>
+							<div class="info_manage" th:text="${'직급 '+ readBoardDto.manage}">직급 부장</div>
+							<div class="info_name" th:text="${'이름 ' + readBoardDto.employeeName}">이름 정우민</div>
+							<div class="info_views" th:text="${'조회 ' + readBoardDto.boardViews}">조회</div>
+							<div class="info_date" th:text="${readBoardDto.boardDate}">2023-02-15</div>
+							<div class="info_comment" th:text="|댓글 ${#lists.size(commentList)}건|"></div>
+						</div>
+					</div>
+					<div class="read_board_content" th:text="${readBoardDto.boardContent}">
+						
+					</div>
+				</div>
+			</div>
+			<div class="read_main_comment_div">
+				<div class="read_comment_section" th:if="${commentList.size > 0}" th:each="comment : ${commentList}">
+					<div class="comment_writer_info">
+						<div class="comment_writer_team">
+							경영 지원-경영 관리
+						</div>
+						<div class="comment_writer_name" th:text="|${comment.manage} ${comment.employeeName}|">
+							부장 정우민
+						</div>
+						<div class="comment_write_date" th:text="${comment.commentDate}">
+							2023-02-15
+						</div>
+					</div>
+					<div th:text="${comment.commentContent}">
+						테스트 댓글입니다.
+					</div>
+				</div>
+				<div class="write_comment_main">
+					<form id="comment_submit" method="post"
+						th:action="@{/board/commentWrite(boardNo = ${readBoardDto.boardNo})}">
+						<div class="write_comment_section_div">
+							<div class="write_comment_div">
+								<textarea id="commentContent" name="commentContent" class="write_comment" type="text"
+									placeholder="댓글을 적어주세요."></textarea>
+							</div>
+							<div class="button_comment_div">
+								<button class="write_comment_button" type="button" onclick="data_submit()">등록</button>
+							</div>
+						</div>
+					</form>
 				</div>
 			</div>
 		</div>
@@ -42,3 +114,18 @@
 </body>
 
 </html>
+<script>
+	function data_submit() {
+		if (document.getElementById("commentContent").value == "") {
+			alert("댓글을 작성해주세요.");
+			return;
+		} else {
+			alert("댓글이 작성되었습니다.");
+			document.getElementById('comment_submit').submit();
+		}
+	}
+	
+	if(noEmployeeNo == 0){
+		alert("");
+	}
+</script>

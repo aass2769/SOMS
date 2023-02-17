@@ -40,8 +40,21 @@
 	text-align: center;
 }
 
+.notice_board_tbody_no, .notice_board_tbody_manage, .notice_board_tbody_name, .notice_board_tbody_date, .notice_board_tbody_views, .notice_board_tbody_team{
+	text-align: center;
+}
+
+.notice_board_tbody_no, .notice_board_tbody_title, .notice_board_tbody_manage, .notice_board_tbody_name, .notice_board_tbody_date, .notice_board_tbody_views, .notice_board_tbody_team{
+	background-color: #EA471B;
+}
 .board_search{
 	display: flex;
+	margin-top: 2%;
+}
+
+.board_content_link{
+	text-decoration-line: none;
+	color: black;
 }
 
 /*writeBoard css*/
@@ -67,6 +80,7 @@
 	border: none;
 	width: 98%;	
 	height: 700px;
+	resize: none;
 }
 
 .write_content:focus {outline: none;}
@@ -109,19 +123,133 @@
 
 /*readBoard css*/
 .read_container{
-	width: 100%;
+	width: 95%;
 	height: 1000px;
 	border: 1px solid #EAEAEA;
 	margin-top: 40px;
 }
 
 .read_main_div{
-	border: 1px solid #EAEAEA;	
 	width: 90%;
 	margin: auto;
 }
 
-.read_title_time_div{
+.read_top_container{
 	display: flex;
-	justify-content:space-between;
+	justify-content: space-between;
+	border-bottom: 1px solid #EAEAEA;	
+	padding-top: 2%;
+	padding-bottom: 1%;
+	
+}
+
+.read_top_button_left{
+	display: flex;
+	justify-content: left;
+	width: 300px;
+}
+
+.read_top_button_right{	
+	display: flex;
+	justify-content: right;
+	width: 200px;
+}
+
+.top_list_button_div, .top_previous_button_div{
+	margin-right: 3%;
+}
+
+.top_delete_button_div{
+	margin-left: 3%;
+}
+
+.top_list_button, .top_previous_button, .top_next_button, .top_update_button, .top_delete_button{
+	border-color: #EA471B;
+	background-color: #EA471B;
+	color: white;
+}
+.read_board_section_div{
+	display: flex;
+	margin-top: 1%;
+
+}
+
+.read_board_section{
+	margin-right: 1%;
+}
+
+.read_board_title{
+	font-size: 30px;
+}
+
+.read_board_info{
+	display: flex;
+}
+
+.info_manage, .info_name, .info_views, .info_date, .info_comment, .info_team{
+	margin-right: 1%;
+}
+
+.read_top_info{
+	margin-bottom: 3%;
+}
+
+.read_main_comment_div{
+	width: 95%;
+	background-color: #F8F8F8;
+	border: 1px solid #F8F8F8;
+}
+
+.read_comment_section{
+	border-bottom: 1px solid #E7E7E7;
+	padding: 1% 1% 1% 2%;
+}
+
+.comment_writer_info{
+	display: flex;
+}
+
+.comment_writer_name{
+	margin-right: 1%;
+}
+
+.comment_write_date{
+	color: #C3C3C3;
+}
+
+.comment_writer_team{
+	margin-right: 1%;
+}
+
+.write_comment_section_div{
+	margin-top: 2%;
+	margin-left: 2%;
+	width: 95%;
+	background-color: #F8F8F8;
+	border: 1px solid #F8F8F8;
+	height: 300px;
+}
+
+.write_comment_div{
+	margin-bottom: 1%;
+}
+.write_comment{
+	width: 100%;
+	height: 200px;
+	resize: none;
+}
+
+.button_comment_div{
+	float: right;
+}
+
+.write_comment_button{
+	border-color: #EA471B;
+	background-color: #EA471B;
+	color: white;
+}
+
+.toa_list_a{
+	text-decoration-line: none;
+	color: white;
 }

@@ -15,8 +15,9 @@
 			<div class="position-fixed bg-white" style="width:78.8%">
 				<!-- 페이지 본문의 제목 -->
 				<div>
-					<h1 th:text="${boardList[0].getBoardSection + '게시판'}" class="pt-4 px-4 text-start">게시판
-						구분</h1>
+					<h1 th:if="${boardList.get(0).getBoardSection()} == '전사'" class="pt-4 px-4 text-start">전사 게시판</h1>
+					<h1 th:unless="${boardList.get(0).getBoardSection()} == '전사'" class="pt-4 px-4 text-start">부서 게시판
+					</h1>
 				</div>
 				<!-- 본문의 제목과 내용을 구분하는 선 -->
 				<hr style="border: solid 1px #EA471B; opacity: 1; margin:0;">
@@ -53,9 +54,23 @@
 						<td class="board_thead_date">날짜</td>
 						<td class="board_thead_views">조회</td>
 					</tr>
+					<th:bloak th:if="${noticeBoardList.size > 0}">
+						<tr th:each="noticeBoard : ${noticeBoardList}" class="board_tbody_tr">
+							<td th:text="'공지'" class="notice_board_tbody_no"></td>
+							<td class="notice_board_tbody_title"><a class="board_content_link"
+									th:text="${noticeBoard.boardTitle}"
+									th:href="@{/board/boardRead(boardNo=${noticeBoard.boardNo})}"></a></td>
+							<td th:text="${noticeBoard.employeeTeam}" class="notice_board_tbody_team">부서</td>
+							<td th:text="${noticeBoard.manage}" class="notice_board_tbody_manage">대리</td>
+							<td th:text="${noticeBoard.employeeName}" class="notice_board_tbody_name">희용</td>
+							<td th:text="${noticeBoard.boardDate}" class="notice_board_tbody_date">2023-02-03</td>
+							<td th:text="${noticeBoard.boardViews}" class="notice_board_tbody_views">1</td>
+						</tr>
+					</th:bloak>
 					<tr th:each="selectList : ${boardList}" class="board_tbody_tr">
-						<td th:text="${boardList.size - selectListStat.index}" class="board_tbody_no">1</td>
-						<td th:text="${selectList.boardTitle}" class="board_tbody_title">안녕</td>
+						<td th:text="${boardList.size - selectListStat.index}" class="board_tbody_no"></td>
+						<td class="board_tbody_title"><a class="board_content_link" th:text="${selectList.boardTitle}"
+								th:href="@{/board/boardRead(boardNo=${selectList.boardNo})}"></a></td>
 						<td th:text="${selectList.employeeTeam}" class="board_tbody_team">부서</td>
 						<td th:text="${selectList.manage}" class="board_tbody_manage">대리</td>
 						<td th:text="${selectList.employeeName}" class="board_tbody_name">희용</td>
@@ -64,8 +79,9 @@
 					</tr>
 				</table>
 			</div>
-			<div class="board_search">
-				<form method="get" th:action="@{/board/boardList}">
+			<form method="get" th:action="@{/board/boardList}">
+				<div class="board_search">
+
 					<div>
 						<select name="selectList" class="page_list">
 							<option value="제목">제목</option>
@@ -75,7 +91,7 @@
 					</div>
 					<div>
 						<input name="searchInput" type="text" value="" placeholder="입력해주세요">
-						<input name="boardSection" th:value="${boardList[0].getBoardSection}" type="hidden">
+						<input name="boardSection" th:value="${boardList.get(0).getBoardSection}" type="hidden">
 						<input name="boardTitle" value="" type="hidden">
 						<input name="boardContent" value="" type="hidden">
 						<input name="employeeName" value="" type="hidden">
@@ -84,12 +100,13 @@
 						<button type="submit">검색</button>
 					</div>
 					<div>
-						<button><a th:href="@{/board/writeBoard}">글쓰기</a></button>
+						<button><a
+								th:href="@{/board/boardWrite(boardSection=${boardList.get(0).getBoardSection()})}">글쓰기</a></button>
 					</div>
-				
-				</form>
-			</div>
 
+
+				</div>
+			</form>
 		</div>
 	</section>
 </body>

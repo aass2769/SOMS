@@ -15,7 +15,7 @@
 			<div class="position-fixed bg-white" style="width:78.8%">
 				<!-- 페이지 본문의 제목 -->
 				<div>
-					<h1 class="pt-4 px-4 text-start">익명 게시판</h1>
+					<h1 class="pt-4 px-4 text-start">게시글 작성</h1>
 				</div>
 				<!-- 본문의 제목과 내용을 구분하는 선 -->
 				<hr style="border: solid 1px #EA471B; opacity: 1; margin:0;">
@@ -25,15 +25,46 @@
 
 
 			<div class="write_container">
-				<form method="post" action="">
+				<form id="form" method="post" th:if="${not #strings.isEmpty(readBoardDto.employeeNo)}" th:action="@{/board/boardUpdate}">
+					<div>
+						<input type="checkbox" name="boardAnnouncement" value="공지있음"> 공지 선택
+					</div>
 					<div class="write_title_div">
-						<input class="write_title" type="text" placeholder="제목을 작성해주세요" value="안녕하세요">
+						<input th:if="${not #strings.isEmpty(readBoardDto.boardTitle)}" th:value="${readBoardDto.boardTitle}" name="boardTitle" id="boardTitle" class="write_title" type="text" placeholder="제목을 입력하세요" value="">
+						<input th:unless="${not #strings.isEmpty(readBoardDto.boardTitle)}" name="boardTitle" id="boardTitle" class="write_title" type="text" placeholder="제목을 입력하세요" value="">
 					</div>
 					<div class="write_content_div">
-						<textarea class="write_content" name="content">반가워용</textarea>
+						<textarea th:if="${not #strings.isEmpty(readBoardDto.boardContent)}" th:text="${readBoardDto.boardContent}"  name="boardContent" id="boardContent" class="write_content" placeholder="내용을 입력하세요"></textarea>
+						<textarea th:unless="${not #strings.isEmpty(readBoardDto.boardContent)}" name="boardContent" id="boardContent" class="write_content" placeholder="내용을 입력하세요"></textarea>
+						<input name="boardSection" type="hidden" th:value="${boardSection}">
+						<input name="employeeNo" type="hidden" th:value="${employee.getEmployeeNo()}">
+						<input name="boardDate" type="hidden" th:value="${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd HH:mm:ss')}">
+						<input name="boardNo" type="hidden" th:if="${readBoardDto.boardNo != null}" th:value="${readBoardDto.boardNo}">
 					</div>
 					<div class="write_button_div">
-						<button class="write_button">등록</button>
+						<button type="button" id="write_submit" onclick="data_submit()" class="write_button">등록</button>
+					</div>
+				</form>
+				
+				
+				<form id="form" method="post" th:unless="${not #strings.isEmpty(readBoardDto.employeeNo)}" th:action="@{/board/boardWrite}">
+					<div>
+						<input type="checkbox" name="boardAnnouncement" value="공지있음"> 공지 선택
+					</div>
+					<div class="write_title_div">
+						<input th:if="${not #strings.isEmpty(readBoardDto.boardTitle)}" th:value="${readBoardDto.boardTitle}" name="boardTitle" id="boardTitle" class="write_title" type="text" placeholder="제목을 입력하세요" value="">
+						<input th:unless="${not #strings.isEmpty(readBoardDto.boardTitle)}" name="boardTitle" id="boardTitle" class="write_title" type="text" placeholder="제목을 입력하세요" value="">
+					</div>
+					<div class="write_content_div">
+						<textarea th:if="${not #strings.isEmpty(readBoardDto.boardContent)}" th:text="${readBoardDto.boardContent}"  name="boardContent" id="boardContent" class="write_content" placeholder="내용을 입력하세요"></textarea>
+						<textarea th:unless="${not #strings.isEmpty(readBoardDto.boardContent)}" name="boardContent" id="boardContent" class="write_content" placeholder="내용을 입력하세요"></textarea>
+						<input name="boardSection" type="hidden" th:value="${boardSection}">
+						<input name="employeeNo" type="hidden" th:value="${employee.getEmployeeNo()}">
+						<input name="boardDate" type="hidden" th:value="${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd HH:mm:ss')}">
+						<!--<input name="boardNo" type="hidden" th:if="${readBoardDto.boardNo != null}" th:value="${readBoardDto.boardNo}">-->
+					</div>
+					<div class="write_button_div">
+						<button type="button" id="write_submit" onclick="data_submit()" class="write_button">등록</button>
 					</div>
 				</form>
 			</div>
@@ -41,5 +72,21 @@
 
 	</section>
 </body>
-
 </html>
+<script>
+	function data_submit(){
+		if(document.getElementById("boardTitle").value == "" && document.getElementById("boardContent").value == ""){
+			alert("제목과 내용을 입력하세요.");
+			return;
+		} else if(document.getElementById("boardTitle").value == ""){
+			alert("제목을 입력하세요.");
+			return;
+		} else if(document.getElementById("boardContent").value == ""){
+			alert("내용을 입력하세요.");
+			return;
+		} else{
+			alert("게시글이 작성되었습니다.");
+			document.getElementById('form').submit();
+		}
+	}
+</script>

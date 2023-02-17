@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class BoardDto {
-
+	
 	private Integer boardNo;
 	private String boardAnnouncement;
 	private String boardTitle;
@@ -19,5 +19,7 @@ public class BoardDto {
 	private Integer boardNumber;
 	private String selectList;
 	private String searchInput;
+	private Long employeeNo;
+
 	
 }
