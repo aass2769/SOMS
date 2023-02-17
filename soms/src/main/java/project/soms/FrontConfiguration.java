@@ -13,6 +13,6 @@ public class FrontConfiguration implements WebMvcConfigurer {
 
   @Override
   public void addInterceptors(InterceptorRegistry registry) {
-    registry.addInterceptor(sessionInterceptor).addPathPatterns("/**").excludePathPatterns("/submission/form/expense");
+    registry.addInterceptor(sessionInterceptor).addPathPatterns("/**").excludePathPatterns("/login");
   }
 }

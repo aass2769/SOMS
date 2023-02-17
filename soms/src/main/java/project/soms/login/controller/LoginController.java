@@ -22,6 +22,11 @@ public class LoginController {
 	private final LoginServiceImpl loginServiceImpl;
 
 	
+	@GetMapping("login")
+	public String login() {
+		return "login/login";
+	}
+	
 	@PostMapping("login")
 	public String Login(String id, String pw, HttpServletRequest req) {
 		EmployeeDto employee = loginMapper.LoginCheck(id, pw);
@@ -33,7 +38,7 @@ public class LoginController {
 		
 		// 세션에 employee 담기
 		EmployeeDto employee = (EmployeeDto) req.getSession().getAttribute("employee");
-		model.addAttribute("employee", employee);		
+		model.addAttribute("LOGIN_EMPLOYEE", employee);		
 		
 		return "error";
 	}
