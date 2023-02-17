@@ -1,17 +1,16 @@
 package project.soms.login.controller;
 
 
-import javax.servlet.http.HttpServletRequest;
-
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-
-import lombok.RequiredArgsConstructor;
 import project.soms.employee.dto.EmployeeDto;
 import project.soms.login.repository.mapper.LoginMapper;
 import project.soms.login.service.LoginServiceImpl;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Controller
 @RequiredArgsConstructor
@@ -37,8 +36,8 @@ public class LoginController {
 	public String LoginSucess(Model model, HttpServletRequest req) {
 		
 		// 세션에 employee 담기
-		EmployeeDto employee = (EmployeeDto) req.getSession().getAttribute("employee");
-		model.addAttribute("LOGIN_EMPLOYEE", employee);		
+		EmployeeDto employee = (EmployeeDto) req.getSession().getAttribute("LOGIN_EMPLOYEE");
+		model.addAttribute("LOGIN_EMPLOYEE", employee);
 		
 		return "error";
 	}
