@@ -4,28 +4,31 @@
         
 <mapper namespace="project.soms.mypage.repository.mapper.MypageMapper">
 	
-	<update id="changePassword">
-		update employee
-		set employee_pw = #{pw}
-		where employee_no = #{no}
-	</update>
 	
-	<update id="changeEmail">
-		update employee
-		set employee_email = #{email}
-		where employee_no = #{no}
-	</update>
-	
-	
-    <update id="changeEmailPw">
-		update employee
-		set employee_emailpw = #{emailpw}
-		where employee_no = #{no}
-	</update>
+	<select id="getManage" resultType="String">
+		select manage from manage
+		where manage_no = #{manageNo}
+	</select>
 	
 	<select id="getManages" resultType="project.soms.mypage.dto.ManageDto">
 		select manage from manage;
 	</select>
 	
+	<update id="mypageInfomationUpdate">
+		update employee
+		set 
+		employee_no = #{employeeNo},
+		employee_id = #{employeeId},
+		employee_pw = #{employeePw},
+		employee_name = #{employeeName},
+		employee_phone = #{employeePhone},
+		employee_addr = #{employeeAddr},
+		employee_team = #{employeeTeam},
+		employee_admin = #{employeeAdmin},
+		employee_email = #{employeeEmail},
+		manage_no = #{manageNo}
+		
+		where employee_no = #{employeeNo}
+	</update>
 	
 </mapper>

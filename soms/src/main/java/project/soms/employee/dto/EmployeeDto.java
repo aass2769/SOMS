@@ -10,7 +10,6 @@ public class EmployeeDto {
 	private String employeeName;
 	private String employeePhone;
 	private String employeeEmail;
-	private String employeeEmailPw;
 	private String employeeAddr;
 	private String employeeTeam;
 	private long employeeAdmin;

@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import lombok.RequiredArgsConstructor;
+import project.soms.mypage.dto.AttendanceCheckDto;
 import project.soms.mypage.dto.WorkDto;
 import project.soms.mypage.repository.mapper.AttendanceMapper;
 
@@ -30,7 +31,11 @@ public class AttendanceRepository {
 		return attendanceMapper.getAttendanceNum(employeeNo);
 	}
 	
-	public List<String> attendanceCheck(long employeeNo, String ym){
+	public List<AttendanceCheckDto> attendanceCheck(long employeeNo, String ym){
 		return attendanceMapper.attendanceCheck(employeeNo,ym);
+	}
+	
+	public AttendanceCheckDto getWorkTime(long employeeNo, String workDate) {
+		return attendanceMapper.getWorkTime(employeeNo, workDate);
 	}
 }

@@ -18,7 +18,8 @@
 					  
 	    			<!-- 페이지 본문의 제목 -->
 				    <div>
-				      <h1 class="pt-4 px-4 text-start">마이 페이지</h1>
+				      <h1 class="pt-4 px-4 text-start" style="width: 30rem; margin-right: 0; font-size: 3rem;">마이 페이지</h1>
+			
 				    </div>
 				    
 				    <!-- 본문의 제목과 내용을 구분하는 선 -->
@@ -26,7 +27,11 @@
 	 		 
 	 			</div>
 	 			
-	 			<div style="margin-top: 2rem;"></div>
+	 			<div style="margin-top: 0.5rem;"></div>
+	 			<div style="display: flex; justify-content: flex-end; align-items: center;" >
+	 			<b th:text="${employee.getEmployeeName}" style="font-size: 2rem; margin-left:1.5rem;"></b>&nbsp;<span style="margin-right:0.3rem">님 오늘 하루 잘부탁합니다.</span>
+	 			</div>
+	 			<div style="margin-top: 0.5rem;"></div>
 	 			<div style="display: flex; justify-content: space-around;">
 					<form style="display: none;" method="get" th:action="@{/login.success}" id = "mypage_reflash"></form>
 					<div><div th:replace="~{mypage/flagment/Attendance :: attendance}"></div></div>
@@ -37,7 +42,10 @@
 			</div>
 		</div>
 		
+		<div th:replace="~{common/layout/commonList :: commonList}"></div>
+		<div th:replace="~{mypage/flagment/mypageModals :: mypageModals}"></div>
 		<script src="js/mypage/attendance.js" th:inline="javascript"></script>
+		<script src="js/mypage/MypageEmployeeUpdate.js"></script>
 	</section>
 		
 </body>

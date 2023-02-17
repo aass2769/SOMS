@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import project.soms.mypage.dto.AttendanceCheckDto;
 import project.soms.mypage.dto.WorkDto;
 
 public interface AttendanceService {
@@ -16,9 +17,13 @@ public interface AttendanceService {
 	
 	long getAttendanceNum(long employeeNo);
 	
-	List<String> attendanceCheck(long employeeNo,String ym);
+	List<AttendanceCheckDto> attendanceCheck(long employeeNo,String ym);
 	
 	String getAttendanceDate(String attendanceDate);
 	
 	List<String> getAttendanceAtSixMonths();
+	
+	AttendanceCheckDto getWorkTime(long employeeNo, String workDate);
+	
+	String getWeekWorkTime(long employeeNo);
 }

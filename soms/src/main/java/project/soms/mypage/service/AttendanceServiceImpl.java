@@ -3,6 +3,7 @@ package project.soms.mypage.service;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import project.soms.employee.dto.EmployeeDto;
+import project.soms.mypage.dto.AttendanceCheckDto;
 import project.soms.mypage.dto.WorkDto;
 import project.soms.mypage.repository.AttendanceRepository;
 
@@ -73,7 +75,7 @@ public class AttendanceServiceImpl implements AttendanceService{
 	}
 	
 	@Override
-	public List<String> attendanceCheck(long employeeNo,String ym) {
+	public List<AttendanceCheckDto> attendanceCheck(long employeeNo,String ym) {
 		return attendanceRepository.attendanceCheck(employeeNo, ym);
 	}
 	
@@ -108,6 +110,52 @@ public class AttendanceServiceImpl implements AttendanceService{
 		return attendanceAtSixMonths;
 		
 	}
+	
+	@Override
+	public AttendanceCheckDto getWorkTime(long employeeNo, String workDate) {
+		return attendanceRepository.getWorkTime( employeeNo, workDate);
+	}
+	
+	@Override
+	public String getWeekWorkTime(long employeeNo) {
+		
+		Integer DayWorkingHours = 0;
+		
+		Integer weekWorkingHours = 0;
+		
+		Integer GoToTime = 0;
+		
+		Integer LeaveToTime = 0;
+		
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		Calendar cal = Calendar.getInstance();
+		
+		for(int i = 0; i<7; i++) {;
+			cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY + i);
+			String Today = format.format(cal.getTime());
+			
+			AttendanceCheckDto times = getWorkTime(employeeNo, Today);
+			
+			if(times != null) {				
+				
+				
+				if (times.getAttendanceLeavetotime() == null) {
+					GoToTime = 0;
+					LeaveToTime = 0;
+					
+				}else {
+					GoToTime = times.getAttendanceGototime();
+					LeaveToTime = times.getAttendanceLeavetotime();
+				}
+				DayWorkingHours = LeaveToTime - GoToTime;
+				weekWorkingHours += DayWorkingHours;
+			}
+		}
+		
+		return weekWorkingHours.toString();
+	}
+	
+	
 	
 
 }

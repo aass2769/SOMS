@@ -21,12 +21,13 @@ title은 페이지의 브라우저에 보이는 타이틀이고, article은 화�
     
     <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
     
+    
 	<title th:replace="${title}">레이아웃 메인</title>
     
     <link rel="stylesheet" th:href="@{/css/mypage/flagment/Attendance.css}">
     <link rel="stylesheet" th:href="@{/css/mypage/flagment/Annual.css}">
    	<link rel="stylesheet" th:href="@{/css/mypage/mypage.css}">
-   	
+   	<link th:href="@{/css/common/common.css}" rel="stylesheet">
    	
 </head>
 <body>
@@ -51,7 +52,7 @@ title은 페이지의 브라우저에 보이는 타이틀이고, article은 화�
         </div>
     </div>
     
-    <!--<div th:replace="~{mypage/layout/mypageModals :: mypageModals}"></div>-->
+   
     
 </body>
 

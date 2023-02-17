@@ -39,6 +39,16 @@
 		and attendance_gotodate like #{ym}"%"
 		order by attendance_no desc
 	</select>
+	
+	<select id="getWorkTime" resultType="project.soms.mypage.dto.AttendanceCheckDto">
+		select attendance_gototime, attendance_leavetotime 
+		from attendance
+		where attendance_gotodate like #{workDate}"%"
+		and employee_no = #{employeeNo}
+		limit 1
+	</select>
+	
+	
 
 	
 </mapper>

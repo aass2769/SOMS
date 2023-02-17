@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import project.soms.mypage.dto.AttendanceCheckDto;
 import project.soms.mypage.dto.WorkDto;
 
 @Mapper
@@ -18,5 +19,7 @@ public interface AttendanceMapper {
 
 	long getAttendanceNum(long employeeNo);
 	
-	List<String> attendanceCheck(@Param("employeeNo")long employeeNo, @Param("ym")String ym);
+	List<AttendanceCheckDto> attendanceCheck(@Param("employeeNo")long employeeNo, @Param("ym")String ym);
+	
+	AttendanceCheckDto getWorkTime(@Param("employeeNo")long employeeNo, @Param("workDate")String workDate);
 }

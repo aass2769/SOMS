@@ -19,6 +19,14 @@
   
   <!-- th:text=${attendance == 1 ? '출근하기' : '퇴근하기'} -->
   <!-- th:value=${attendance == 1 ? '1' : '2'} -->
+  
+    <div class = Category-A>
+      <a href="mypage">근태 조회</a>
+    </div>
+    
+
+  
+  	<!--
     <div class = "Category-Btn" style="margin-top: 0.6rem;" th:if="${attendance == 1}">
       <button id = "Attendance_Btn" style="width: 4rem;" value = "1">퇴근하기</button>
     </div>
@@ -27,16 +35,23 @@
       <button id = "Attendance_Btn" style="width: 4rem;" value = "2">출근하기</button>
     </div>
     
-    <div class = "Category-Btn" style="margin-top: 0.6rem;">
-      <button style="width: 4rem;">내 정보</button>
+    -->
+    
+    
+    <div class = Category-A >
+      <a href="#" data-bs-toggle="modal" data-bs-target="#employeeUpdateModal">내정보 </a>
+    </div>   
+    
+    <div class = Category-A th:if="${attendance == 1}">
+      <a id = "Attendance_Btn" value = "1" href="#">퇴근하기</a>
     </div>
     
-    <div class = Category-A>
-      <a href="attendance">근태 조회</a>
+    <div class = Category-A th:if="${attendance == 2}">
+      <a id = "Attendance_Btn" value = "2" href="#">출근하기</a>
     </div>
-   
-    <div class = "Category-Btn" style="margin-top: 0.6rem;">
-      <button style="width: 4rem;">계정 생성</button>
+    
+    <div class = "Category-Btn" style="margin-top: 0.6rem;" th:if="${employee.manageNo > 10}" >
+      <button style="width: 4rem;" data-bs-toggle="modal" data-bs-target="#employeeRegisterModal">계정 생성</button>
     </div>
 	
    	<!-- 드롭다운 기능 스크립트 입니다 -->

@@ -34,7 +34,8 @@
 		</table>
 		
 		<div style="margin: 0.5rem 0 0 0; display: flex;" >
-			<span style="font-size: 0.75rem; border-bottom: 0.05rem solid black;">추가근로 12시간 중 총 <b>3</b>시간을 하셨습니다.</sapn>
+			<span style="font-size: 0.75rem; border-bottom: 0.05rem solid black;" 
+			th:text = "|주 근로 52시간중 총 ${weekWorkingHours}시간을 하셨습니다.|"></sapn>
 		</div>
 
 		</div>
@@ -44,7 +45,9 @@
 			<input type="hidden" class ="attendanceSelectInput" name = "attendanceSelectDate">
 		</form>
 		
+		
 		<script>
+			
 			const attendanceSelectForm = $('.attendanceSelectForm');
 			const attendanceSelect = $('.attendanceSelect');
 			const attendanceSelectInput = $('.attendanceSelectInput');
@@ -53,6 +56,7 @@
 				attendanceSelectInput.val(attendanceSelect.val());
 				attendanceSelectForm.submit();
 			})
+			
 		</script>
 		
 	</div>
