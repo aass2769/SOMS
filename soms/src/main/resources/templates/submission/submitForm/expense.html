@@ -139,7 +139,7 @@
               취소
             </button>
             <!-- 상신 버튼 클릭 시 controller에 @PostMapping submission/form/expense 로 요청 -->
-            <button type="submit" id="submit" class="btn btn-outline-dark border w-50 h-100 rounded-0 text-light" style="background-color: #EA471B">
+            <button type="submit" id="formSubmit" class="btn btn-outline-dark border w-50 h-100 rounded-0 text-light" style="background-color: #EA471B">
               상신
             </button>
           </div>
@@ -150,7 +150,7 @@
     <div th:replace="~{submission/layout/common :: common}" style="justify-content: start;"></div>
   </form>
   <script>
-    $('#submit').on("click", function() {
+    $('#formSubmit').on("click", function() {
         if (confirm("결재 상신 하시겠습니까?")) {
             $('#submitForm').submit();
         } else {}
