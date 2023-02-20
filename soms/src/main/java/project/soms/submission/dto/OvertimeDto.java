@@ -3,6 +3,7 @@ package project.soms.submission.dto;
 import lombok.Data;
 
 @Data
+//연장근로신청서 필드값
 public class OvertimeDto {
 
   private Long overtimeNo;

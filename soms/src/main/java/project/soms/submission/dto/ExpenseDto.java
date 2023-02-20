@@ -3,6 +3,7 @@ package project.soms.submission.dto;
 import lombok.Data;
 
 @Data
+//지출결의서 필드값
 public class ExpenseDto {
 
   private Long expenseNo;

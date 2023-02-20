@@ -3,6 +3,7 @@ package project.soms.submission.dto;
 import lombok.Data;
 
 @Data
+//시말서 필드값
 public class IncidentDto {
 
   private Long incidentNo;

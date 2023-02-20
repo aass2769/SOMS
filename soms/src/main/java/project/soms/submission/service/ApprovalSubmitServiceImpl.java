@@ -13,12 +13,17 @@ import java.util.List;
 @Service
 @Transactional
 @RequiredArgsConstructor
+//결재 상신을 처리하는 service impl클래스
 public class ApprovalSubmitServiceImpl implements ApprovalSubmitService{
 
+  /**
+   * 결재 상신 insert 기능를 담은 repository인터페이스와
+   * 기안자 결재자 정보를 조회하는 repository인터페이스
+   */
   private final ApprovalSubmitRepository approvalSubmitRepository;
   private final EmployeeService employeeService;
 
-  //지출 결의서 상신 메서드
+  //지출결의서 상신 메서드
   @Override
   public void expenseSubmit(SubmissionDto submissionDto, ExpenseDto expenseDto, Long proposerEmployeeNo,
                             List<ApproverDto> approverDto) {
@@ -26,7 +31,7 @@ public class ApprovalSubmitServiceImpl implements ApprovalSubmitService{
     //받아온 지출결의서의 값을 데이터에 추가
     approvalSubmitRepository.expenseSubmit(expenseDto);
 
-    //결재서식에 필요한 값을 할당. 지출결의서 PK, 기안자의 번호, 서식 열람 가능 여부
+    //결재서식에 필요한 값을 할당. 지출결의서 pk, 기안자의 번호, 서식 열람 가능 여부
     submissionDto.setExpenseNo(expenseDto.getExpenseNo());
     submissionDto.setProposerEmployeeNo(proposerEmployeeNo);
     submissionDto.setSubmissionShowable("가능");
@@ -40,67 +45,87 @@ public class ApprovalSubmitServiceImpl implements ApprovalSubmitService{
     insertSubmission(submissionDto, approverDto, proposerDto);
   }
 
+  //연장근로신청서 상신 메서드
   @Override
   public void overtimeSubmit(SubmissionDto submissionDto, OvertimeDto overtimeDto, Long proposerEmployeeNo,
                              List<ApproverDto> approverDto) {
+    //받아온 연장근로신청서의 값을 데이터에 추가
     approvalSubmitRepository.overtimeSubmit(overtimeDto);
 
+    //결재서식에 필요한 값을 할당. 지출결의서 pk, 기안자의 번호, 서식 열람 가능 여부
     submissionDto.setOvertimeNo(overtimeDto.getOvertimeNo());
     submissionDto.setProposerEmployeeNo(proposerEmployeeNo);
     submissionDto.setSubmissionShowable("가능");
     submissionDto.setSubmissionStatus("대기");
     submissionDto.setSubmissionOpen("미열람");
 
+    //결재자와 기안자의 관계 검증을 위해 기안자 정보 조회
     ProposerDto proposerDto = employeeService.proposer(proposerEmployeeNo);
 
+    //위의 정보를 입력하여 결재 서식 insert
     insertSubmission(submissionDto, approverDto, proposerDto);
   }
 
+  //연차신청서 상신 메서드
   @Override
   public void annualLeaveSubmit(SubmissionDto submissionDto, AnnualLeaveDto annualLeaveDto, Long proposerEmployeeNo,
                                 List<ApproverDto> approverDto) {
+    //받아온 연차신청서의 값을 데이터에 추가
     approvalSubmitRepository.annualLeaveSubmit(annualLeaveDto);
 
+    //결재서식에 필요한 값을 할당. 지출결의서 pk, 기안자의 번호, 서식 열람 가능 여부
     submissionDto.setAnnualLeaveNo(annualLeaveDto.getAnnualLeaveNo());
     submissionDto.setProposerEmployeeNo(proposerEmployeeNo);
     submissionDto.setSubmissionShowable("가능");
     submissionDto.setSubmissionStatus("대기");
     submissionDto.setSubmissionOpen("미열람");
 
+    //결재자와 기안자의 관계 검증을 위해 기안자 정보 조회
     ProposerDto proposerDto = employeeService.proposer(proposerEmployeeNo);
 
+    //위의 정보를 입력하여 결재 서식 insert
     insertSubmission(submissionDto, approverDto, proposerDto);
   }
 
+  //출장신청서 상신 메서드
   @Override
   public void businessTripSubmit(SubmissionDto submissionDto, BusinessTripDto businessTripDto, Long proposerEmployeeNo,
                                  List<ApproverDto> approverDto) {
+    //받아온 출장신청서의 값을 데이터에 추가
     approvalSubmitRepository.businessTripSubmit(businessTripDto);
 
+    //결재서식에 필요한 값을 할당. 지출결의서 pk, 기안자의 번호, 서식 열람 가능 여부
     submissionDto.setBusinessTripNo(businessTripDto.getBusinessTripNo());
     submissionDto.setProposerEmployeeNo(proposerEmployeeNo);
     submissionDto.setSubmissionShowable("가능");
     submissionDto.setSubmissionStatus("대기");
     submissionDto.setSubmissionOpen("미열람");
 
+    //결재자와 기안자의 관계 검증을 위해 기안자 정보 조회
     ProposerDto proposerDto = employeeService.proposer(proposerEmployeeNo);
 
+    //위의 정보를 입력하여 결재 서식 insert
     insertSubmission(submissionDto, approverDto, proposerDto);
   }
 
+  //시말서 상신 메서드
   @Override
   public void incidentSubmit(SubmissionDto submissionDto, IncidentDto incidentDto, Long proposerEmployeeNo,
                              List<ApproverDto> approverDto) {
+    //받아온 시말서의 값을 데이터에 추가
     approvalSubmitRepository.incidentSubmit(incidentDto);
 
+    //결재서식에 필요한 값을 할당. 지출결의서 pk, 기안자의 번호, 서식 열람 가능 여부
     submissionDto.setIncidentNo(incidentDto.getIncidentNo());
     submissionDto.setProposerEmployeeNo(proposerEmployeeNo);
     submissionDto.setSubmissionShowable("가능");
     submissionDto.setSubmissionStatus("대기");
     submissionDto.setSubmissionOpen("미열람");
 
+    //결재자와 기안자의 관계 검증을 위해 기안자 정보 조회
     ProposerDto proposerDto = employeeService.proposer(proposerEmployeeNo);
 
+    //위의 정보를 입력하여 결재 서식 insert
     insertSubmission(submissionDto, approverDto, proposerDto);
   }
 

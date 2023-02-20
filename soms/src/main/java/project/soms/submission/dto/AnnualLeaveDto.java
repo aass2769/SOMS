@@ -3,6 +3,7 @@ package project.soms.submission.dto;
 import lombok.Data;
 
 @Data
+//연차신청서 필드값
 public class AnnualLeaveDto {
 
   private Long annualLeaveNo;

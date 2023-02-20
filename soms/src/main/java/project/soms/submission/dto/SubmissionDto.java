@@ -3,6 +3,7 @@ package project.soms.submission.dto;
 import lombok.Data;
 
 @Data
+//기본 결재 서식 필드값
 public class SubmissionDto {
 
   private Long submissionNo;
@@ -23,6 +24,7 @@ public class SubmissionDto {
   private Long annualLeaveNo;
   private Long businessTripNo;
   private Long incidentNo;
+  private String deleteCheck;
 
   public SubmissionDto() {
   }

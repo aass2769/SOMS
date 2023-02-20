@@ -6,6 +6,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @Data
+//지출결의서 상신시 데이터 검증을 위한 form클래스
 public class ExpenseInsertForm {
 
   @NotEmpty

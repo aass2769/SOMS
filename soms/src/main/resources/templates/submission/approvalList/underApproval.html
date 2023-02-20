@@ -2,11 +2,11 @@
 <html th:replace="~{submission/layout/mainLayout :: layout(~{::title}, ~{::section})}" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>Title</title>
+  <title>결재_내역-결재_중</title>
 </head>
 <body>
 
-<section class="Article" style="display: flex; justify-content: center; width:100%; height: 100%;">
+<section class="Article d-flex justify-content-center w-100 h-100">
   <div style="width:90%;">
 
     <div class="bg-white" style="width:100%">
@@ -17,10 +17,9 @@
       <!-- 본문의 제목과 내용을 구분하는 선 -->
       <hr style="border: solid 1px #EA471B; opacity: 1; margin:0;">
     </div>
-    <!-- 본문의 내용 위치를 잡기위해 만든 상담 공백 -->
 
+    <!-- 결재 내역을 불러오는데 추가할 수 있는 조건 -->
     <form th:action method="get">
-
       <!-- 조회 조건 검색 -->
       <div class="d-flex justify-content-center align-middle my-5">
 
@@ -43,25 +42,29 @@
           <input type="date" name="submissionDatetime" class="border-0 border-bottom" style="font-size: 0.7rem; outline:none;">
         </div>
 
+        <input type="hidden" name="approvalSection" value="under">
+
         <!-- 결재 서식 구분 및 발의일 조건으로 검색 -->
         <div class="Modal-Btn align-middle ms-4">
           <button style="margin:0.4rem;" type="submit">조회</button>
         </div>
 
       </div>
-
     </form>
 
 
-    <!-- 결재 내역 리스트 -->
+    <!-- 결재 내역 리스트. 리스트 안에 미확인 건들은 비교적 선명하게 보이게 하기 위해 투명도 조건을 사용 -->
     <div class="d-flex align-middle justify-content-center w-75 border-bottom" style="margin-left: 12.5%; height:2.3rem;"
          th:each="approval : ${approvalList}" th:classappend="${approval.getSubmissionOpen() != '미열람' ? 'opacity-75' : 'opacity-100'}">
 
-      <!-- 연속 번호 -->
+      <!-- 연속 번호 . 내림차순으로 만들기 위해 배열의 크기에서 인덱스 번호를 뺀 값을 할당 -->
       <p class="px-2 my-2 text-center" style="width:5%; font-size:0.9rem;" th:text="${approvalList.size - approvalStat.index}"></p>
-      <!-- 서식 제목 : 사용자 입력값 x, 상신시 자동 완성 직급+이름+발의일 -->
+      <!-- 해당 서식 클릭 시 서식의 상세 내용 열람을 요청 -->
       <form class="d-flex my-1 text-dark" style="width:50%; text-decoration: none;" onmouseover="this.style.cursor='pointer'" method="post" th:id="${'detailForm' + approvalStat.index}"
          th:action="@{/submission/approval/detail/{joinValue}(joinValue=${approval.getSubmissionJoinTable()})}">
+        <!-- 결재 내역 상세 및 상신 , 반려 기능을 구현하기 위해 필요한 값을 파라미터로 보내기 위해 히든타입으로 생성
+         현재 페이지에서 결재 내역을 삭제를 위해 필요한 값을 히든타입으로 생성
+         해당 객체에 담긴 값을 배열안에서 꺼내는데 중복 선언을 피하기 위해 이 위치에 선언-->
         <input type="hidden" name="joinValue" th:value="${approval.getSubmissionJoinTable()}">
         <input type="hidden" name="submissionNo" th:value="${approval.getSubmissionNo()}">
         <input type="hidden" name="submissionPri" th:value="${approval.getSubmissionPri()}">
@@ -70,14 +73,22 @@
         <input type="hidden" name="employeeNo" th:value="${employeeNo}">
         <input type="hidden" name="approvalAble" th:value="${approval.getApprovalAble()}">
         <input type="hidden" name="nextApproverCheck" th:if="${approval.getProposerEmployeeNo()}">
-        <p class="px-2 my-1 border-start text-end" style="width:20%; font-size:0.9rem;">제목 : </p>
-        <p class="px-2 my-1 border-end text-start" style="width:80%; font-size:0.9rem;" th:text="${approval.getSubmissionSubject()}">서식 제목</p>
+
+        <!-- 해당 서식이 미열람일 경우 선명하게 나타내기 위해 미열람 건은 <b>태그를 추가하여 폰트를 굵게함 -->
+        <p class="px-2 my-1 border-start text-end" style="width:20%; font-size:0.9rem;"
+           th:utext="${approval.getSubmissionOpen() == '미열람' ? '<b>제목</b>' : '제목'}">제목 : </p>
+
+        <!-- 서식 제목 : 사용자 입력값 x, 상신시 자동 완성 직급+이름+발의일 -->
+        <p class="px-2 my-1 border-end text-start" style="width:80%; font-size:0.9rem;"
+           th:utext="${approval.getSubmissionOpen() == '미열람' ? '<b>'+approval.getSubmissionSubject()+'</b>' : approval.getSubmissionSubject()}">서식 제목</p>
       </form>
+
       <!-- 발의 일자 -->
       <div class="d-flex my-1" style="width:35%">
         <p class="px-2 my-1 text-end" style="width:50%; font-size:0.9rem;">발의 일 : </p>
         <p class="px-2 my-1 border-end text-start" style="width:50%; font-size:0.9rem;" th:text="${approval.getSubmissionDatetime()}">상신 일자</p>
       </div>
+
       <!-- 결재 상태 -->
       <p class="px-2 my-2 text-center" style="width:10%; font-size:0.9rem;">결재 중</p>
 
@@ -86,8 +97,13 @@
 
   </div>
   <script th:inline="javascript">
+      <!-- 결재 내역 배열의 크기 -->
       let max = [[${approvalList.size}]];
+
+      <!-- 결재 내역의 수량만큼 반복문 실행 -->
       for (let i = 0; i < max; i++){
+
+          <!-- 서식 제목 클릭 시 상세 상세 폼 submit -->
           $('#detailForm' + i).on("click", function() {
               $('#detailForm' + i).submit();
           });

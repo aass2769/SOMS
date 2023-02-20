@@ -13,6 +13,10 @@ public class FrontConfiguration implements WebMvcConfigurer {
 
   @Override
   public void addInterceptors(InterceptorRegistry registry) {
+    /**
+     * 해당 인터셉터에 적용할 페이지 : 전체
+     * 제외 페이지 : 로그인 페이지, 정적 페이지
+     */
     registry.addInterceptor(sessionInterceptor).addPathPatterns("/**").
         excludePathPatterns("/login", "/css/**", "/img/**", "/js/**");
   }

@@ -2,21 +2,18 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>Title</title>
+  <title>결재 페이지 카테고리</title>
 </head>
 <body>
-
-<!-- 아래에 선언한 categorys를 main레이아웃에서 인클루드하여 레이아웃이 완성됩니다. 개별로 작성해야할 코드의 구분을 위하여 html파일을 구분하였습니다. -->
+  <!-- 결재 서식 관련 페이지 카테고리 -->
   <ul class = "Categorys" th:fragment="categorys">
-    <!-- 카테고리 제목입니다 -->
+    
     <div class="Category-Title">
       <i class="fa-solid fa-bars"></i>
       <p class="ps-2">결재 상신</p>
     </div>
-
-    <!-- 카테고리 드롭다운입니다 -->
-    <!-- Item-Title의 value와 Item-Menu의 value를 동일하게 만들어주세요 -->
-    <!-- 다른태그와 겹치는것도 안됩니다! -->
+    
+    <!-- 결재를 작성하는 서식 화면을 응답해주는 url -->
     <div class = "Category">
       <div class = "Item">
         <a class="Item-Title" value = "1"><p>결재 작성</p></a>
@@ -30,17 +27,34 @@
       </div>
     </div>
 
-    <!-- 다이렉트 A태그입니다 -->
+    <!-- 결재 중인 내역을 응답해주는 url
+    결재 리스트 위에 파라미터로 결재중을 나타내는 under 값을 추가-->
     <div class = Category-A>
-      <a th:href="@{/submission/approval/approvalList(approvalSection=under)}">결재 중</a>
+      <a th:href="@{/submission/approval/approvalList(approvalSection=under)}">결재 중
+        <!-- 미확인건이 있을시 옆에 나타남 -->
+        <span th:if="${#session.getAttribute('underApproval') > 0}" th:text="|미확인 : ${#session.getAttribute('underApproval')}건|" style="font-size: 0.6rem">
+        </span>
+      </a>
     </div>
 
+    <!-- 결재 완료 내역을 응답해주는 url
+    결재 리스트 위에 파라미터로 결재중을 나타내는 under 값을 추가-->
     <div class = Category-A>
-      <a th:href="@{/submission/approval/approvalList(approvalSection=complete)}">결재 완료</a>
+      <a th:href="@{/submission/approval/approvalList(approvalSection=complete)}">결재 완료
+        <!-- 미확인건이 있을시 옆에 나타남 -->
+        <span th:if="${#session.getAttribute('completeApproval') > 0}" th:text="|미확인 : ${#session.getAttribute('completeApproval')}건|" style="font-size: 0.6rem">
+        </span>
+      </a>
     </div>
 
+    <!-- 결재 반려 내역을 응답해주는 url
+    결재 리스트 위에 파라미터로 결재중을 나타내는 under 값을 추가-->
     <div class = Category-A>
-      <a th:href="@{/submission/approval/approvalList(approvalSection=reject)}">결재 반려</a>
+      <a th:href="@{/submission/approval/approvalList(approvalSection=reject)}">결재 반려
+        <!-- 미확인건이 있을시 옆에 나타남 -->
+        <span th:if="${#session.getAttribute('rejectApproval') > 0}" th:text="|미확인 : ${#session.getAttribute('rejectApproval')}건|" style="font-size: 0.6rem">
+        </span>
+      </a>
     </div>
 
 

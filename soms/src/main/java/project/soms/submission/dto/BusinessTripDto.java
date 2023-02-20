@@ -3,6 +3,7 @@ package project.soms.submission.dto;
 import lombok.Data;
 
 @Data
+//출장신청서 필드값
 public class BusinessTripDto {
 
   private Long businessTripNo;

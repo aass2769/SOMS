@@ -2,29 +2,26 @@
 <html th:replace="~{submission/layout/mainLayout :: layout(~{::title}, ~{::section})}" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>Title</title>
+  <title>출장신청서_결재_서식_작성</title>
 </head>
 <body>
 
-<section class="Article">
+<section class="Article d-flex justify-content-center w-100 h-100">
   <!-- 폼 태그 설정 - action은 경로의 이름이 같아서 기입 생략 , 폼 안에 필드값 설정을 위해 오브젝트를 하나 선언 (결재 서식을 내용을 담는 폼) -->
-  <form method="post" id="form" th:action th:object="${businessTripInsertForm}">
-  <div style="width:90%; margin-left: 7%">
+  <form style="width:90%;" method="post" id="submitForm" th:action th:object="${businessTripInsertForm}">
+    <div>
 
-    <div class="position-fixed bg-white" style="width:78.8%">
-      <!-- 페이지 본문의 제목 -->
-      <div>
-        <h1 class="pt-4 px-4 text-start">결재 작성</h1>
+      <div class="bg-white" style="width:100%">
+        <!-- 페이지 본문의 제목 -->
+        <div>
+          <h1 class="pt-4 px-4 text-start">결재 작성</h1>
+        </div>
+        <!-- 본문의 제목과 내용을 구분하는 선 -->
+        <hr style="border: solid 1px #EA471B; opacity: 1; margin:0;">
       </div>
-      <!-- 본문의 제목과 내용을 구분하는 선 -->
-      <hr style="border: solid 1px #EA471B; opacity: 1; margin:0;">
-    </div>
-    <!-- 본문의 내용 위치를 잡기위해 만든 상담 공백 -->
-    <div style="height:5rem;"></div>
 
-
-    <div class="text-center">
-      <h2 class="font-monospace my-5">출장신청서</h2>
+      <div class="text-center">
+        <h2 class="font-monospace my-5">출장신청서</h2>
 
         <!-- 결재자 누락 검증 -->
         <div th:if="${#fields.hasGlobalErrors()}" class="text-end text-black-50 mb-1" style="font-size: 0.7rem;">
@@ -93,8 +90,8 @@
           <div class="d-flex align-middle justify-content-center">
             <p class="m-0" style="font-size: 0.9rem; width:5rem;">출장 구분 : </p>
             <select name="businessTripSection" class="border-0 border-bottom" style="font-size: 0.7rem;">
-              <option value="해외 출장">해외 출장</option>
-              <option value="국내 출장">국내 출장</option>
+              <option value="해외출장">해외출장</option>
+              <option value="국내출장">국내출장</option>
               <option value="외근">외근</option>
             </select>
           </div>
@@ -160,9 +157,9 @@
             </button>
           </div>
         </div>
-      <div style="height:4rem;"></div>
+        <div style="height:4rem;"></div>
+      </div>
     </div>
-  </div>
     <div th:replace="~{submission/layout/common :: common}" style="justify-content: start;"></div>
   </form>
   <script th:inline="javascript">
@@ -174,31 +171,13 @@
               $('#businessTripEnd').attr("min", [[${#dates.format(date, 'yyyy-MM-dd')}]]);
           }
       });
+      $('#submit').on("click", function() {
+          if (confirm("결재 상신 하시겠습니까?")) {
+              $('#submitForm').submit();
+          } else {}
+      });
 
   </script>
-  <!--<script>
-      function submit(){
-          let approver = [];
-          for (let i = 0; i < 8; i++) {
-              approver[i] = $('#approver' + i).val();
-          }
-          let expenseDate = $('#expenseDate').val();
-          let expenseContent = $('#expenseContent').val();
-          let expensePjt = $('#expensePjt').val();
-          let expenseCost = $('#expenseCost').val();
-          let expenseAmount;
-          console.log(expenseDate);
-          console.log(expenseContent);
-          console.log(expensePjt);
-          console.log(expenseCost);
-          if(expenseDate == "" && expenseContent == "" && expensePjt == "" && expenseCost == ""){
-              alert("내용이 다 기입되지 않았거나 잘못된 값이 있습니다.");
-              return true;
-          }else{
-              return true;
-          }
-      }
-  </script>-->
 
 </section>
 

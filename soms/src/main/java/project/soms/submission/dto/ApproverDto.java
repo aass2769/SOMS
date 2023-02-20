@@ -3,6 +3,7 @@ package project.soms.submission.dto;
 import lombok.Data;
 
 @Data
+//결재자 필드값
 public class ApproverDto {
 
   private Long employeeNo;

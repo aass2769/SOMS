@@ -11,7 +11,11 @@
   <!-- 위에있는 아이콘 구역입니다 -->
   <div class = "Icon_Up">
     <li class = "Icon">
-      <a href="#"><i class="fa-solid fa-file-word fa-xl" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="결제상신"></i></a>
+      <a th:href="@{/submission/approval/approvalList(approvalSection=under)}"><i class="fa-solid fa-file-word fa-xl position-relative" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="결제상신">
+        <span th:if="${#session.getAttribute('totalApproval') > 0}" th:text="${#session.getAttribute('totalApproval')}"
+              class="position-absolute translate-middle badge rounded-pill bg-dark" style="top:-40px; left:30px; width:2rem; height:1rem; font-size: 0.6rem">
+        </span>
+      </i></a>
     </li>
     <li class = "Icon">
       <a href="#"><i class="fa-solid fa-user fa-xl" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="마이페이지"></i></a>
