@@ -28,7 +28,7 @@ public class AttendanceServiceImpl implements AttendanceService{
 	@Override
 	public void workcheck(HttpServletRequest req) {
 		
-		EmployeeDto employee = (EmployeeDto) req.getSession().getAttribute("employee");
+		EmployeeDto employee = (EmployeeDto) req.getSession().getAttribute("LOGIN_EMPLOYEE");
 		long employeeNo = employee.getEmployeeNo();
 		
 		Optional<String> bool = Optional.ofNullable(attendanceRepository.goToWorkCheck(employeeNo));

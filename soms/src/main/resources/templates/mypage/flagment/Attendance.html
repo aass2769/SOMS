@@ -27,8 +27,8 @@
 			</tr>
 			<tr th:each="attendance : ${attendanceList}">
 				<td th:text="${attendance.attendanceGotodate}"></td>
-				<td th:text="${attendance.attendanceGototime}"></td>
-				<td th:text="${attendance.attendanceLeavetotime}"></td>
+				<td th:text="${attendance.attendanceGototime} ? ${attendance.attendanceGototime} + '시' : ''"></td>
+				<td th:text="${attendance.attendanceLeavetotime} ? ${attendance.attendanceLeavetotime} + '시' : ''"></td>
 			</tr>
 
 		</table>
@@ -41,7 +41,7 @@
 		</div>
 		
 		<form style="display: none;" class = "attendanceSelectForm"
-		method = "get" action="attendance">
+		method = "get" action="mypage">
 			<input type="hidden" class ="attendanceSelectInput" name = "attendanceSelectDate">
 		</form>
 		

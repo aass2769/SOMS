@@ -29,13 +29,12 @@ Attendance_Btn.click(function(){
 			url : Attendance_Url,
 			success : function(){
 				alert(success_text);
-				location.href = Attendance_Dummy_Url;
+				location.href = "attendance.dummy";
 			},
 			error : function(){
 				alert("서버 요청 실패");
 			}
 		})
-		
 		
 	}
 })

@@ -14,7 +14,7 @@ public class LoginServiceImpl implements LoginService{
 			return "login/error";
 		}else {
 			req.getSession().setAttribute("LOGIN_EMPLOYEE", employee);
-			return "login/success";
+			return "mypage/AttendanceDummy";
 		}
 	}
 

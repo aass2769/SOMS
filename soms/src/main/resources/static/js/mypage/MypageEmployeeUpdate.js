@@ -80,14 +80,12 @@ MypageEmployeeUpdate_Sucess_Btn.click(function(){
 
 			
 	mypageEmployeeUpdate_Form.submit();
-			
-			
-		
+			alert("수정이 완료되었습니다.")
 })
 
 
 MypageEmployeeUpdate_Mod.on('hidden.bs.modal', function () {
- 	location.href="mypage";
+ 	window.location.reload();
 })
 
 	

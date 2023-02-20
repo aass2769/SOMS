@@ -27,6 +27,13 @@ title은 페이지의 브라우저에 보이는 타이틀이고, article은 화�
     <link rel="stylesheet" th:href="@{/css/mypage/flagment/Attendance.css}">
     <link rel="stylesheet" th:href="@{/css/mypage/flagment/Annual.css}">
    	<link rel="stylesheet" th:href="@{/css/mypage/mypage.css}">
+   	<div th:replace="~{mypage/flagment/mypageModals :: mypageModals}"></div>
+	<script src="js/mypage/MypageEmployeeUpdate.js"></script>
+	
+	
+   	<div th:replace="~{mypage/common/commonList :: commonList}"></div>
+   	<div th:replace="~{mypage/common/commonListSearch :: commonListSearch}"></div>
+   	<div th:replace="~{mypage/common/commonListUpdate :: commonListUpdate}"></div>
    	<link th:href="@{/css/common/common.css}" rel="stylesheet">
    	
 </head>

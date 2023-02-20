@@ -11,7 +11,7 @@
 	</select>
 	
 	<select id="getManages" resultType="project.soms.mypage.dto.ManageDto">
-		select manage from manage;
+		select manage, manage_no from manage;
 	</select>
 	
 	<update id="mypageInfomationUpdate">
@@ -30,5 +30,41 @@
 		
 		where employee_no = #{employeeNo}
 	</update>
+	
+	<select id="getManageNo" resultType="long">
+		select manage_no from employee
+		where employee_no = #{emoloyeeAdmin}
+	</select>
+	
+	<select id="getEmployeeCheck" resultType="Integer">
+		select count(*) from employee
+		where employee_no = #{employeeNo}
+		and employee_id = #{employeeId}
+	</select>
+	
+	<insert id="register" keyProperty="employeeNo"  keyColumn="employee_no">
+		insert into employee(employee_no, employee_id, employee_pw, employee_name,  employee_phone, employee_email,  employee_addr,  employee_team,  employee_admin, manage_no) 
+		values(#{employeeNo}, #{employeeId}, '1234', #{employeeName}, #{employeePhone}, #{employeeEmail}, #{employeeAddr}, #{employeeTeam}, #{employeeAdmin}, #{manageNo});
+	</insert>
+	
+	<select id="searchModalEmployeePrivacy" resultType="project.soms.employee.dto.EmployeeDto">
+		select * from employee
+		where employee_no = #{employeeNo}
+	</select>
+	
+	<select id="getEmployeeAnnualLeave" resultType="project.soms.mypage.dto.AnnualLeaveDto">
+		select
+		submission_pri,
+		min(case(proposer_employee_no) when #{employeeNo} then proposer_employee_no else null end) as proposer_employee_no,
+		min(case(submission_status) when '반려' then 0 when '대기' then 1 else 2 end) as submission_status,
+		max(case(approver_employee_no) when #{employeeNo} then approver_employee_no else null end) as approver_employee_no,
+		max(case when annual_leave_section = '연차' then (select (datediff(annual_leave_end, annual_leave_start) + 1)) else 0 end) as date_diff,
+		annual_leave_section, annual_leave_start, annual_leave_end, annual_leave_time
+		from submission as a join annual_leave as b on a.annual_leave_no = b.annual_leave_no
+		where annual_leave_start like concat(#{year},'%')
+		group by submission_pri, annual_leave_section, annual_leave_start, annual_leave_end, annual_leave_time
+	</select>
+	
+	
 	
 </mapper>

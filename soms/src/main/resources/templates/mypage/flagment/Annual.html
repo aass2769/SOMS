@@ -18,20 +18,23 @@
 			<tr>
 				<th>시작 날짜</th>
 				<th>끝 날짜</th>
+				<th>일 수</th>
 				<th>시간</th>
 				<th>상태</th>
 			</tr>
-			<tr>
-				<td>2022-02-01</td>
-				<td>2022-02-02</td>
-				<td></td>
-				<td>연차</td>
+			
+			<tr th:each="annuals : ${annualList}">
+				<td th:text="${annuals.annualLeaveStart}"></td>
+				<td th:text="${annuals.annualLeaveEnd}"></td>
+				<td th:text="${annuals.dateDiff} ? ${annuals.dateDiff} + '일' : ''"></td>
+				<td th:text="${annuals.annualLeaveTime} ? ${annuals.annualLeaveTime} + '시간' : ''"></td>
+				<td th:text="${annuals.annualLeaveSection}"></td>
 			</tr>
 
 		</table>
 		
 		<div style="margin: 0.5rem 0 0 0; display: flex;" >
-			<span style="font-size: 0.75rem; border-bottom: 0.05rem solid black;">남은 연차의 갯수는 총 <b>3</b>개 입니다.</sapn>
+			<span style="font-size: 0.75rem; border-bottom: 0.05rem solid black;" th:text = "|올해 총 12개중 총 ${annualHaveDate}일을 사용하셨습니다.|"></sapn>
 		</div>
 		</div>
 	</div>
