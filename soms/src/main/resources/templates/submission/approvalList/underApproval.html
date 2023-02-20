@@ -76,7 +76,7 @@
 
         <!-- 해당 서식이 미열람일 경우 선명하게 나타내기 위해 미열람 건은 <b>태그를 추가하여 폰트를 굵게함 -->
         <p class="px-2 my-1 border-start text-end" style="width:20%; font-size:0.9rem;"
-           th:utext="${approval.getSubmissionOpen() == '미열람' ? '<b>제목</b>' : '제목'}">제목 : </p>
+           th:utext="${approval.getSubmissionOpen() == '미열람' ? '<b>제목 : </b>' : '제목 : '}">제목 : </p>
 
         <!-- 서식 제목 : 사용자 입력값 x, 상신시 자동 완성 직급+이름+발의일 -->
         <p class="px-2 my-1 border-end text-start" style="width:80%; font-size:0.9rem;"
