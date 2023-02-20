@@ -24,15 +24,7 @@ public class BoardServiceImpl implements BoardService{
 	@Override
 	public List<BoardDto> selectBoard(String boardSection, BoardDto boardDto) {
 		
-		 List<BoardDto> boardList = boardRepository.selectBoard(boardSection, boardDto);
-		 
-//		 for(int i=0; i<boardList.size(); i++) {
-//			 if(boardList.get(i).getBoardTitle() == null) {
-//				 boardList.get(i).setBoardTitle("제목오류");
-//			 }
-//		 }
-		 
-		
+		List<BoardDto> boardList = boardRepository.selectBoard(boardSection, boardDto);
 		
 		transDate(boardList);
 		

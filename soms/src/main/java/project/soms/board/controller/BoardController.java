@@ -53,7 +53,6 @@ public class BoardController {
 		// 1page의 startRowNo(시작 행 넘버) = total(총게시물 수) - (viewPage(현재페이지) - 1) * 10(출력할 개시글 수) 
 		int startRowNo = total - (boardDto.getViewPage() - 1) * boardDto.getPageLimit();
 		
-		System.out.println(boardDto.getBoardTitle());
 		//공지 없는 리스트
 		List<BoardDto> boardList = new ArrayList<>();
 		boardList =	boardService.selectBoard(boardSection, boardDto);
