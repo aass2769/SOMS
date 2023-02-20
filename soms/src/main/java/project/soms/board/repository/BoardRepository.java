@@ -8,9 +8,11 @@ import project.soms.employee.dto.EmployeeDto;
 
 public interface BoardRepository{
 
-	List<BoardDto> selectBoard(String boardSection, String selectList, String searchInput);
+	List<BoardDto> selectBoard(String boardSection, BoardDto boardDto);
 	
-	List<BoardDto> selectNoticeBoard(String boardSection, String selectList, String searchInput);
+	List<BoardDto> selectNoticeBoard(String boardSection, BoardDto boardDto);
+	
+	int selectBoardTotal(String boardSection);
 	
 	void insertBoard(BoardDto boardDto);
 	

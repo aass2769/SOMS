@@ -1,5 +1,7 @@
 package project.soms.board.controller;
 
+import java.util.ArrayList;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,7 +12,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import lombok.RequiredArgsConstructor;
@@ -31,20 +32,43 @@ public class BoardController {
 	//전사 게시판,부서 게시판에 게시글 리스트 SELECT하는 메서드
 	//검색 하는 메서드
 	@GetMapping("boardList") // board/main
-	public String selectBoard(Model model, @RequestParam(defaultValue="") String selectList,
-										   @RequestParam(defaultValue="") String searchInput,
+	public String selectBoard(Model model, BoardDto boardDto,
 										   HttpServletRequest request) {
 		
 		//카테고리에서 원하는 부서 클릭 시 url로 boardSection 파라미터를 보내줌.
 		String boardSection = request.getParameter("boardSection");
 		
-		//공지 없는 리스트
-		List<BoardDto> boardList = boardService.selectBoard(boardSection, selectList, searchInput);
-		//공지 있는 리스트
-		List<BoardDto> noticeBoardList = boardService.selectNoticeBoard(boardSection, selectList, searchInput);
+		//전체 게시물 수
+		int total = boardService.selectBoardTotal(boardSection);
 		
+		//  전체 게시물 수에 따른 페이지의 개수  (double) 12/10 -> ceil(1.2) ->int(2.0) -> 2
+		
+		int totalPage = (int) Math.ceil((double)total/boardDto.getPageLimit());
+		
+		// pageOffset = 페이지당 제외하고 출력해야하는 글 개수, viewPage = 페이지 개수 중 페이지
+		boardDto.setPageOffset((boardDto.getViewPage() - 1) * boardDto.getPageLimit());
+		
+		//전체 게시글 수가 45개이고 10개씩 출력한다고 가정하면
+		//1page -> 45 ~ 36 2page -> 35 ~ 26 ....
+		// 1page의 startRowNo(시작 행 넘버) = total(총게시물 수) - (viewPage(현재페이지) - 1) * 10(출력할 개시글 수) 
+		int startRowNo = total - (boardDto.getViewPage() - 1) * boardDto.getPageLimit();
+		
+		System.out.println(boardDto.getBoardTitle());
+		//공지 없는 리스트
+		List<BoardDto> boardList = new ArrayList<>();
+		boardList =	boardService.selectBoard(boardSection, boardDto);
+		
+		//공지 있는 리스트
+		List<BoardDto> noticeBoardList = new ArrayList<>();
+		noticeBoardList = boardService.selectNoticeBoard(boardSection, boardDto);
+		
+		model.addAttribute("total", total);
+		model.addAttribute("totalPage", totalPage);
+		model.addAttribute("startRowNo", startRowNo);
 		model.addAttribute("boardList" , boardList);
+		model.addAttribute("boardSection", request.getParameter("boardSection"));
 		model.addAttribute("noticeBoardList", noticeBoardList);
+		model.addAttribute("pageLimit", boardDto.getPageLimit());
 		return "board/board";
 	}
 

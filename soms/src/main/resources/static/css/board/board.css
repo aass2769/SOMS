@@ -1,18 +1,24 @@
-/*전사 게시판 css*/
+/*board 게시판 css*/
 .page_list_container{
 	display: flex;
+	justify-content: space-between;
 	margin-top: 50px;
-	margin-left: 60%;
+	/*margin-left: 60%;*/
 	margin-bottom: 20px;
+}
+
+.board_right_info{
+	display: flex;	
 }
 
 .board_main_container{
 	width: 100%;
-	border: 1px solid;
+	
 }
 
 .board_thead_tr{
-	border: 1px solid black;
+	border-top: 3px solid black;
+	border-bottom: 1px solid black;
 }
 
 
@@ -34,6 +40,12 @@
 
 .board_thead_title{
 	width: 35%;
+	height: 70px;
+}
+
+.board_tbody_tr{
+	border-bottom: 1px solid black;
+	height: 60px;
 }
 
 .board_tbody_no, .board_tbody_manage, .board_tbody_name, .board_tbody_date, .board_tbody_views, .board_tbody_team{
@@ -50,6 +62,7 @@
 .board_search{
 	display: flex;
 	margin-top: 2%;
+	justify-content: center;
 }
 
 .board_content_link{
@@ -57,6 +70,63 @@
 	color: black;
 }
 
+.board_totalPage_container{
+	display: flex;
+	flex-direction: row;
+	margin-top: 3%;
+	justify-content: center;
+}
+
+.totalPage_button{
+	margin-right: 10px;
+	background-color: #EB471A;
+	border: 1px solid #EB471A;
+	border-radius: 5px;
+	width: 30px;
+}
+
+.totalPage_a{
+	color: white;
+	text-decoration-line: none;
+}
+
+.search_button{
+	background-color: #EB471A;
+	color: white;
+	border: 1px solid #EB471A;
+	border-radius: 5px;
+	width: 70px;
+	height: 50px;
+}
+
+.board_write_a{
+	color: white;
+	text-decoration-line: none;
+}
+
+.board_write_button{
+	background-color: #EB471A;
+	border: 1px solid #EB471A;
+	border-radius: 5px;
+	width: 80px;
+	height: 50px;
+}
+
+.board_search_selectList, .board_search_searchInput, .board_search_button, .board_search_write_button{
+	margin-left: 10px;
+	margin-right: 10px;
+
+}
+
+.board_tbody_tr_no{
+	width: 100%;
+}
+
+.boardList_no{
+	text-align: center;
+	width: 10%;
+	height: 500px;
+}
 /*writeBoard css*/
 
 .write_container{

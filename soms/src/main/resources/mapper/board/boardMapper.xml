@@ -14,11 +14,12 @@
 		<where>
 			board_section = #{boardSection}
 			AND board_announcement = '공지없음'
-			<if test="selectList != '' and selectList == '제목'">and A.board_title like concat('%',#{searchInput},'%')</if>
-			<if test="selectList != '' and selectList == '내용'">and A.board_content like concat('%',#{searchInput},'%')</if>
-			<if test="selectList != '' and selectList == '작성자'">and B.employee_name like concat('%',#{searchInput},'%')</if>
+			<if test="boardDto.selectList != '' and boardDto.selectList == '제목'">and A.board_title like concat('%',#{boardDto.searchInput},'%')</if>
+			<if test="boardDto.selectList != '' and boardDto.selectList == '내용'">and A.board_content like concat('%',#{boardDto.searchInput},'%')</if>
+			<if test="boardDto.selectList != '' and boardDto.selectList == '작성자'">and B.employee_name like concat('%',#{boardDto.searchInput},'%')</if>
 		</where>
 		ORDER BY A.board_date DESC, A.board_no DESC
+		LIMIT #{boardDto.pageLimit} OFFSET #{boardDto.pageOffset}
     </select>
     
    <!-- 공지가 있는 게시물을 SELECT 하는 쿼리 -->
@@ -32,12 +33,21 @@
 		<where>
 			board_section = #{boardSection}
 			AND board_announcement = '공지있음'
-			<if test="selectList != '' and selectList == '제목'">and A.board_title like concat('%',#{searchInput},'%')</if>
-			<if test="selectList != '' and selectList == '내용'">and A.board_content like concat('%',#{searchInput},'%')</if>
-			<if test="selectList != '' and selectList == '작성자'">and B.employee_name like concat('%',#{searchInput},'%')</if>
+			<if test="boardDto.selectList != '' and boardDto.selectList == '제목'">and A.board_title like concat('%',#{boardDto.searchInput},'%')</if>
+			<if test="boardDto.selectList != '' and boardDto.selectList == '내용'">and A.board_content like concat('%',#{boardDto.searchInput},'%')</if>
+			<if test="boardDto.selectList != '' and boardDto.selectList == '작성자'">and B.employee_name like concat('%',#{boardDto.searchInput},'%')</if>
 		</where>
 		ORDER BY A.board_date DESC, A.board_no DESC
     </select>
+    
+       <!-- 총 게시물의 수를 SELECT하는 쿼리 -->
+    <select id="selectBoardTotal" resultType="int">
+		SELECT COUNT(board_no)
+		FROM board
+		WHERE board_section = #{boardSection}
+		AND board_announcement = '공지없음'
+    </select>
+    
     
     <!-- 게시물을 INSERT하는 쿼리 -->
     <insert id="insertBoard">

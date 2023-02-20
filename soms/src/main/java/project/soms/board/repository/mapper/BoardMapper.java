@@ -12,9 +12,11 @@ import project.soms.employee.dto.EmployeeDto;
 @Mapper
 public interface BoardMapper {
 
-	List<BoardDto> selectBoard(@Param("boardSection") String boardSection, @Param("selectList") String selectList, @Param("searchInput") String searchInput);
+	List<BoardDto> selectBoard(@Param("boardSection") String boardSection, @Param("boardDto") BoardDto boardDto);
 	
-	List<BoardDto> selectNoticeBoard(@Param("boardSection") String boardSection, @Param("selectList") String selectList, @Param("searchInput") String searchInput);
+	List<BoardDto> selectNoticeBoard(@Param("boardSection") String boardSection, @Param("boardDto") BoardDto boardDto);
+	
+	int selectBoardTotal(String boardSection);
 	
 	void insertBoard(BoardDto boardDto);
 	

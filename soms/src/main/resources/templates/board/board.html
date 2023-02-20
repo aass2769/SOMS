@@ -15,8 +15,8 @@
 			<div class="position-fixed bg-white" style="width:78.8%">
 				<!-- 페이지 본문의 제목 -->
 				<div>
-					<h1 th:if="${boardList.get(0).getBoardSection()} == '전사'" class="pt-4 px-4 text-start">전사 게시판</h1>
-					<h1 th:unless="${boardList.get(0).getBoardSection()} == '전사'" class="pt-4 px-4 text-start">부서 게시판
+					<h1 th:if="${boardSection == '전사'} " class="pt-4 px-4 text-start">전사 게시판</h1>
+					<h1 th:unless="${boardSection == '전사'} " class="pt-4 px-4 text-start">부서 게시판
 					</h1>
 				</div>
 				<!-- 본문의 제목과 내용을 구분하는 선 -->
@@ -25,22 +25,35 @@
 			<!-- 본문의 내용 위치를 잡기위해 만든 상담 공백 -->
 			<div style="height:5rem;"></div>
 			<div class="page_list_container">
-				<div th:text="|총게시물 ${#lists.size(boardList)}건|">
-					총게시물?건
-				</div>
 				<div>
-					현재페이지 1/?
+					<div>
+						<form method="get" th:action="@{/board/boardList}">
+							<input type="hidden" name="boardSection" th:value="${boardSection}">
+							<input type="hidden" name="viewPage" th:value="1">
+							<input type="hidden" name="pageLimit" th:value="${pageLimit}">
+							<button type="submit">목록보기</button>
+						</form>
+					</div>
 				</div>
-				<div>
-					페이지당 목록
-					<select name="page_list" class="page_list">
-						<option value="10">10</option>
-						<option value="20">20</option>
-						<option value="30">30</option>
-					</select>
-				</div>
-				<div>
-					<button>변경</button>
+				<div class="board_right_info">
+					<div th:text="|총게시물 ${total}건|">
+						총게시물?건
+					</div>
+					<div>
+						현재페이지 1/?
+					</div>
+					<form method="get" th:action="@{/board/boardList}">
+						<div>
+							페이지당 목록
+							<select name="pageLimit" class="pageLimit">
+								<option value="10" th:selected="${pageLimit == 10}">10</option>
+								<option value="20" th:selected="${pageLimit == 20}">20</option>
+								<option value="30" th:selected="${pageLimit == 30}">30</option>
+							</select>
+							<input type="hidden" name="boardSection" th:value="${boardSection}">
+							<button>변경</button>
+						</div>
+					</form>
 				</div>
 			</div>
 			<div>
@@ -67,8 +80,8 @@
 							<td th:text="${noticeBoard.boardViews}" class="notice_board_tbody_views">1</td>
 						</tr>
 					</th:bloak>
-					<tr th:each="selectList : ${boardList}" class="board_tbody_tr">
-						<td th:text="${boardList.size - selectListStat.index}" class="board_tbody_no"></td>
+					<tr th:if="${boardList.size > 0}" th:each="selectList : ${boardList}" class="board_tbody_tr">
+						<td th:text="${startRowNo - selectListStat.index}" class="board_tbody_no"></td>
 						<td class="board_tbody_title"><a class="board_content_link" th:text="${selectList.boardTitle}"
 								th:href="@{/board/boardRead(boardNo=${selectList.boardNo})}"></a></td>
 						<td th:text="${selectList.employeeTeam}" class="board_tbody_team">부서</td>
@@ -78,37 +91,54 @@
 						<td th:text="${selectList.boardViews}" class="board_tbody_views">1</td>
 					</tr>
 				</table>
+				<table th:if="${boardList.size == 0}">
+					<tr class="board_tbody_tr_no">
+						<td class="boardList_no">
+							등록된 게시글이 없습니다.
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div class="board_totalPage_container">
+				<div th:each="totalPage : ${#numbers.sequence(1,totalPage)}">
+					<div>
+						<button type="button" class="totalPage_button"><a class="totalPage_a"
+								th:href="@{/board/boardList(viewPage = ${totalPage}, boardSection=${boardSection}, pageLimit=${pageLimit})}"
+								th:text="${totalPage}"></a></button>
+					</div>
+				</div>
 			</div>
 			<form method="get" th:action="@{/board/boardList}">
 				<div class="board_search">
 
-					<div>
+					<div class="board_search_selectList">
 						<select name="selectList" class="page_list">
 							<option value="제목">제목</option>
 							<option value="내용">내용</option>
 							<option value="작성자">작성자</option>
 						</select>
 					</div>
-					<div>
+					<div class="board_search_searchInput">
 						<input name="searchInput" type="text" value="" placeholder="입력해주세요">
-						<input name="boardSection" th:value="${boardList.get(0).getBoardSection}" type="hidden">
+						<input name="boardSection" th:value="${boardSection}" type="hidden">
 						<input name="boardTitle" value="" type="hidden">
 						<input name="boardContent" value="" type="hidden">
 						<input name="employeeName" value="" type="hidden">
+						<input type="hidden" name="pageLimit" th:value="${pageLimit}">
+						<input type="hidden" name="nullCheck" th:value="${nullCheck}">
 					</div>
-					<div>
-						<button type="submit">검색</button>
+					<div class="board_search_button">
+						<button class="search_button" type="submit">검색</button>
 					</div>
-					<div>
-						<button><a
-								th:href="@{/board/boardWrite(boardSection=${boardList.get(0).getBoardSection()})}">글쓰기</a></button>
+					<div class="board_search_write_button">
+						<button class="board_write_button"><a class="board_write_a"
+								th:href="@{/board/boardWrite(boardSection=${boardSection})}">글쓰기</a></button>
 					</div>
-
-
 				</div>
 			</form>
 		</div>
 	</section>
 </body>
+
 
 </html>

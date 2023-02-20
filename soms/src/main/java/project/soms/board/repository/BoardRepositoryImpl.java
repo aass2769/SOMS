@@ -17,17 +17,24 @@ public class BoardRepositoryImpl implements BoardRepository{
 	private final BoardMapper boardMapper;
 	
 	@Override
-	public List<BoardDto> selectBoard(String boardSection, String selectList, String searchInput) {
+	public List<BoardDto> selectBoard(String boardSection, BoardDto boardDto) {
 		
-		List<BoardDto> boardList = boardMapper.selectBoard(boardSection, selectList, searchInput);
+		List<BoardDto> boardList = boardMapper.selectBoard(boardSection, boardDto);
 		return boardList;
 	}
 
 	@Override
-	public List<BoardDto> selectNoticeBoard(String boardSection, String selectList, String searchInput) {
+	public List<BoardDto> selectNoticeBoard(String boardSection, BoardDto boardDto) {
 		
-		List<BoardDto> noticeBoardList = boardMapper.selectNoticeBoard(boardSection, selectList, searchInput);
+		List<BoardDto> noticeBoardList = boardMapper.selectNoticeBoard(boardSection, boardDto);
 		return noticeBoardList;
+	}
+	
+	@Override
+	public int selectBoardTotal(String boardSection) {
+		
+		int total = boardMapper.selectBoardTotal(boardSection);
+		return total;
 	}
 	
 	@Override
@@ -74,6 +81,8 @@ public class BoardRepositoryImpl implements BoardRepository{
 		boardMapper.writeComment(commentContent, employeeDto, boardNo, commentDate);
 		
 	}
+
+
 
 
 
