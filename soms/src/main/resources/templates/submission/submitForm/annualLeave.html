@@ -113,7 +113,7 @@
             <p class="m-0 ms-3" style="font-size: 0.9rem; width:3rem;">시간 : </p>
             <input type="text" name="annualLeaveTime" class="ms-1 border-0 border-bottom text-center" style="font-size: 0.7rem; outline:none; width:6rem;"
                    th:field="*{annualLeaveTime}" th:errorclass="border-danger">
-            <small class="text-danger" style="font-size: 0.7rem" th:text="${#fields.hasErrors('annualLeaveTime') ? #fields.errors('annualLeaveTime') : ''}"></small>
+            <small class="text-dark" style="font-size: 0.7rem" th:text="${#fields.hasErrors('annualLeaveTime') ? #fields.errors('annualLeaveTime') : ''}"></small>
 
           </div>
         </div>
