@@ -21,7 +21,6 @@ import project.soms.board.dto.CommentDto;
 import project.soms.board.service.BoardService;
 import project.soms.employee.dto.EmployeeDto;
 
-@Slf4j
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("board")
