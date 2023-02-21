@@ -62,6 +62,7 @@ public class BoardController {
 		noticeBoardList = boardService.selectNoticeBoard(boardSection, boardDto);
 		
 		model.addAttribute("total", total);
+		model.addAttribute("viewPage", boardDto.getViewPage());
 		model.addAttribute("totalPage", totalPage);
 		model.addAttribute("startRowNo", startRowNo);
 		model.addAttribute("boardList" , boardList);

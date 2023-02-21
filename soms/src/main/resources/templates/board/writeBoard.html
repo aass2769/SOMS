@@ -10,7 +10,7 @@
 
 <body>
 	<section class="Article">
-		<div style="width:90%; margin-left: 5%">
+		<div style="width:90%; height: 100%; margin-left: 5%">
 
 			<div class="position-fixed bg-white" style="width:78.8%">
 				<!-- 페이지 본문의 제목 -->
@@ -23,19 +23,17 @@
 			<!-- 본문의 내용 위치를 잡기위해 만든 상담 공백 -->
 			<div style="height:5rem;"></div>
 
-
+			<!--게시판 수정하기. employNo가 있으면-->
 			<div class="write_container">
 				<form id="form" method="post" th:if="${not #strings.isEmpty(readBoardDto.employeeNo)}" th:action="@{/board/boardUpdate}">
 					<div>
-						<input type="checkbox" name="boardAnnouncement" value="공지있음"> 공지 선택
+						<input type="checkbox" name="boardAnnouncement" value="공지있음">
 					</div>
 					<div class="write_title_div">
-						<input th:if="${not #strings.isEmpty(readBoardDto.boardTitle)}" th:value="${readBoardDto.boardTitle}" name="boardTitle" id="boardTitle" class="write_title" type="text" placeholder="제목을 입력하세요" value="">
-						<input th:unless="${not #strings.isEmpty(readBoardDto.boardTitle)}" name="boardTitle" id="boardTitle" class="write_title" type="text" placeholder="제목을 입력하세요" value="">
+						<input th:value="${readBoardDto.boardTitle}" name="boardTitle" id="boardTitle" class="write_title" type="text" placeholder="제목을 입력하세요" value="">
 					</div>
 					<div class="write_content_div">
-						<textarea th:if="${not #strings.isEmpty(readBoardDto.boardContent)}" th:text="${readBoardDto.boardContent}"  name="boardContent" id="boardContent" class="write_content" placeholder="내용을 입력하세요"></textarea>
-						<textarea th:unless="${not #strings.isEmpty(readBoardDto.boardContent)}" name="boardContent" id="boardContent" class="write_content" placeholder="내용을 입력하세요"></textarea>
+						<textarea th:text="${readBoardDto.boardContent}"  name="boardContent" id="boardContent" class="write_content" placeholder="내용을 입력하세요"></textarea>
 						<input name="boardSection" type="hidden" th:value="${boardSection}">
 						<input name="employeeNo" type="hidden" th:value="${employee.getEmployeeNo()}">
 						<input name="boardDate" type="hidden" th:value="${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd HH:mm:ss')}">
@@ -47,17 +45,19 @@
 				</form>
 				
 				
+				<!--게시판 글쓰기. employNo가 없으면-->
 				<form id="form" method="post" th:unless="${not #strings.isEmpty(readBoardDto.employeeNo)}" th:action="@{/board/boardWrite}">
-					<div>
-						<input type="checkbox" name="boardAnnouncement" value="공지있음"> 공지 선택
+					<div class="write_team_div">
+						<div class="write_team"><h2 class="write_team_h2" th:text="${boardSection + '게시판 / 글 작성'}">게시판</h2></div>
 					</div>
 					<div class="write_title_div">
-						<input th:if="${not #strings.isEmpty(readBoardDto.boardTitle)}" th:value="${readBoardDto.boardTitle}" name="boardTitle" id="boardTitle" class="write_title" type="text" placeholder="제목을 입력하세요" value="">
-						<input th:unless="${not #strings.isEmpty(readBoardDto.boardTitle)}" name="boardTitle" id="boardTitle" class="write_title" type="text" placeholder="제목을 입력하세요" value="">
+						<div class="write_announcement_div">
+							<input type="checkbox" name="boardAnnouncement" value="공지있음" class="write_announcement"> 공지 선택
+						</div>
+						<input name="boardTitle" id="boardTitle" class="write_title" type="text" placeholder="제목을 입력하세요" value="">
 					</div>
 					<div class="write_content_div">
-						<textarea th:if="${not #strings.isEmpty(readBoardDto.boardContent)}" th:text="${readBoardDto.boardContent}"  name="boardContent" id="boardContent" class="write_content" placeholder="내용을 입력하세요"></textarea>
-						<textarea th:unless="${not #strings.isEmpty(readBoardDto.boardContent)}" name="boardContent" id="boardContent" class="write_content" placeholder="내용을 입력하세요"></textarea>
+						<textarea name="boardContent" id="boardContent" class="write_content" placeholder="내용을 입력하세요"></textarea>
 						<input name="boardSection" type="hidden" th:value="${boardSection}">
 						<input name="employeeNo" type="hidden" th:value="${employee.getEmployeeNo()}">
 						<input name="boardDate" type="hidden" th:value="${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd HH:mm:ss')}">

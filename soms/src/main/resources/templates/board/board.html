@@ -31,27 +31,27 @@
 							<input type="hidden" name="boardSection" th:value="${boardSection}">
 							<input type="hidden" name="viewPage" th:value="1">
 							<input type="hidden" name="pageLimit" th:value="${pageLimit}">
-							<button type="submit">목록보기</button>
+							<button class="board_show_list" type="submit">목록보기</button>
 						</form>
 					</div>
 				</div>
 				<div class="board_right_info">
-					<div th:text="|총게시물 ${total}건|">
+					<div th:text="|총게시물 ${total}건|" class="board_right_info_totalList">
 						총게시물?건
 					</div>
-					<div>
+					<div class="board_right_info_viewPage" th:text="|현재페이지 ${viewPage}/${totalPage}|">
 						현재페이지 1/?
 					</div>
 					<form method="get" th:action="@{/board/boardList}">
 						<div>
-							페이지당 목록
+							<span class="board_pageLimit">페이지당 목록</span>
 							<select name="pageLimit" class="pageLimit">
 								<option value="10" th:selected="${pageLimit == 10}">10</option>
 								<option value="20" th:selected="${pageLimit == 20}">20</option>
 								<option value="30" th:selected="${pageLimit == 30}">30</option>
 							</select>
 							<input type="hidden" name="boardSection" th:value="${boardSection}">
-							<button>변경</button>
+							<button class="pageLimit_button">변경</button>
 						</div>
 					</form>
 				</div>
@@ -70,7 +70,7 @@
 					<th:bloak th:if="${noticeBoardList.size > 0}">
 						<tr th:each="noticeBoard : ${noticeBoardList}" class="board_tbody_tr">
 							<td th:text="'공지'" class="notice_board_tbody_no"></td>
-							<td class="notice_board_tbody_title"><a class="board_content_link"
+							<td class="notice_board_tbody_title"><a class="notice_board_content_link"
 									th:text="${noticeBoard.boardTitle}"
 									th:href="@{/board/boardRead(boardNo=${noticeBoard.boardNo})}"></a></td>
 							<td th:text="${noticeBoard.employeeTeam}" class="notice_board_tbody_team">부서</td>
@@ -112,14 +112,14 @@
 				<div class="board_search">
 
 					<div class="board_search_selectList">
-						<select name="selectList" class="page_list">
+						<select name="selectList" class="board_selectList">
 							<option value="제목">제목</option>
 							<option value="내용">내용</option>
 							<option value="작성자">작성자</option>
 						</select>
 					</div>
 					<div class="board_search_searchInput">
-						<input name="searchInput" type="text" value="" placeholder="입력해주세요">
+						<input name="searchInput" type="text" value="" placeholder="입력해주세요" class="board_searchInput">
 						<input name="boardSection" th:value="${boardSection}" type="hidden">
 						<input name="boardTitle" value="" type="hidden">
 						<input name="boardContent" value="" type="hidden">

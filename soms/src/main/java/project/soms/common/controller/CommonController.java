@@ -1,7 +1,9 @@
 package project.soms.common.controller;
 
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -12,12 +14,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import lombok.RequiredArgsConstructor;
 import project.soms.common.dto.CommonDto;
 import project.soms.common.service.CommonService;
+import project.soms.mypage.repository.AttendanceRepository;
 
 @Controller
 @RequiredArgsConstructor
 public class CommonController {
 	
 	private final CommonService commonService;
+	private final AttendanceRepository attendanceRepository;
 	
 	// 검색 메서드
 	@GetMapping("common")
@@ -48,14 +52,34 @@ public class CommonController {
 		}
 
 		//각 팀과 팀에 속한 인원의 직급, 이름, 사번을 가지고옴.
+	
 		for (int i = 1; i <= teams.length; i++) {
 			List<CommonDto> teamEmployeeList = commonService.commonList(teams[i-1]);
+			
+			for (CommonDto employeeList : teamEmployeeList) {				
+				Optional<String> bool = Optional.ofNullable(attendanceRepository.goToWorkCheck(employeeList.getEmployeeNo()));
+				if(bool.isPresent()) {
+					employeeList.setEmployeeAttendance(1);
+				}else {
+					employeeList.setEmployeeAttendance(0);	
+				}
+			}
 			
 			model.addAttribute("team" + i, teamEmployeeList);
 		}
 		
+		
 		//임원들의 리스트를 가지고옴. 공통, 경영 지원, 개발 연구, 영업 임원들이 있음.
 		List<CommonDto> executiveList = commonService.executiveList(teams);
+		
+		for (CommonDto employeeList : executiveList) {				
+			Optional<String> bool = Optional.ofNullable(attendanceRepository.goToWorkCheck(employeeList.getEmployeeNo()));
+			if(bool.isPresent()) {
+				employeeList.setEmployeeAttendance(1);
+			}else {
+				employeeList.setEmployeeAttendance(0);	
+			}
+		}
 		
 		model.addAttribute("team0", executiveList);
 	}
