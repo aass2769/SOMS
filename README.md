@@ -23,7 +23,7 @@ Sun Operation management Solution 사이트
 - 박호민 - 페이지 디자인 가이드, 사내 이메일 기능 구현
 
 ### 🛠개발환경
-- <img src="https://img.shields.io/badge/windows 10-0078D6?style=flat&logo=Windows Chrome&logoColor=white"/><img src="https://img.shields.io/badge/macOS-000000?style=flat&logo=macOS&logoColor=white"/>
+- <img src="https://img.shields.io/badge/windows 10-0078D6?style=flat&logo=Windows Chrome&logoColor=white"/> <img src="https://img.shields.io/badge/macOS-000000?style=flat&logo=macOS&logoColor=white"/>
 - <img src="https://img.shields.io/badge/Google Chrome-4285F4?style=flat&logo=Google Chrome&logoColor=white"/>
 - <img src="https://img.shields.io/badge/java11-222324?style=flat&logoColor=white"/>
 - <img src="https://img.shields.io/badge/JDK 11-2C2255?style=flat&logoColor=white"/>
