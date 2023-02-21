@@ -112,8 +112,8 @@
 
             <p class="m-0 ms-3" style="font-size: 0.9rem; width:3rem;">시간 : </p>
             <input type="text" name="annualLeaveTime" class="ms-1 border-0 border-bottom text-center" style="font-size: 0.7rem; outline:none; width:6rem;"
-                   th:field="*{annualLeaveTime}" th:errorclass="border-danger"
-                   th:placeholder="${#fields.hasErrors('annualLeaveTime') ? #fields.errors('annualLeaveTime') : ''}">
+                   th:field="*{annualLeaveTime}" th:errorclass="border-danger">
+            <small class="text-danger" style="font-size: 0.7rem" th:text="${#fields.hasErrors('annualLeaveTime') ? #fields.errors('annualLeaveTime') : ''}"></small>
 
           </div>
         </div>
@@ -122,7 +122,7 @@
         <div style="height:20rem; display:flex; justify-content: center; align-items: center;" class="border border-2"
              th:classappend="${#fields.hasErrors('annualLeaveContent') ? 'border-danger' : ''}">
           <textarea class="w-100 h-100 border-0 p-3" id="annualLeaveContent" name="annualLeaveContent"
-                    th:field="*{annualLeaveContent}" th:placeholder="${#fields.hasErrors('annualLeaveContent') ? #fields.errors('annualLeaveContent') : ''}"
+                    th:field="*{annualLeaveContent}" th:placeholder="${#fields.hasErrors('annualLeaveContent') ? #fields.hasErrors('annualLeaveContent') : ''}"
                     style="outline: none; resize: none; font-size: 0.7rem;"></textarea>
         </div>
 

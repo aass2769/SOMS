@@ -217,6 +217,11 @@ public class SubmissionSubmitController {
     //결재자 관계및 결재 라인 검증
     List<ApproverDto> approverDto = employeeService.approverCheck(result, request, employeeNo);
 
+    //연차일 때는 시간이 0이 되도록
+    if (annualLeaveInsertForm.getAnnualLeaveSection().equals("연차") && annualLeaveInsertForm.getAnnualLeaveTime() > 0) {
+      result.rejectValue("annualLeaveTime", "notMatchSectionAndTime", new Object[]{}, null);
+    }
+
     //들어온 Dto 값들에 오류가 없는지 검증
     if (result.hasErrors()) {
       //오류 내역 로그
