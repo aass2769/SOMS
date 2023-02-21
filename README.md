@@ -6,16 +6,23 @@ Sun Operation management Solution 사이트
 
 ## 🗓개발기간
 2023 . 02 . 01 . ~ 2023 . 02 . 03 .  
-:heartpulse: 요구사항정의서 작성 및 프로젝트 설계 전반 작업  
-:heartpulse: GitRepository 생성 및 계정 연결  
-:heartpulse: 페이지 디자인 규격화 및 와이어 프레임 제작 완료  
-:heartpulse: 기능별 업무 분장 및 기능 정의 완료  
-:heartpulse: DB 설계 및 테이블 명세서 작성 완료  
+:point_right: 요구사항정의서 작성 및 프로젝트 설계 전반 작업  
+:point_right: GitRepository 생성 및 계정 연결  
+:point_right: 페이지 디자인 규격화 및 와이어 프레임 제작 완료  
+:point_right: 기능별 업무 분장 및 기능 정의 완료  
+:point_right: DB 설계 및 테이블 명세서 작성 완료  
 
-2023 . 02 . 04 . ~ 2023 . 02 . 07 .  
+2023 . 02 . 04 . ~ 2023 . 02 . 07 . 
+:point_right: 와이어 프레임 적용 / 화면 구성 완료  
+:point_right: 디자인 규격 검사 및 수정  
+
 2023 . 02 . 08 . ~ 2023 . 02 . 21 .  
+:point_right: 기능 구현 완료 (이메일 제외)  
+:point_right: 구현 중 필요에 따라 요구사항 변경  
 2023 . 02 . 22 . ~ 2023 . 03 . 03 .  
-
+:point_right:aws 호스팅 후 테스트 진행
+:point_right: 오류 파악 및 수정
+:point_right: 기능 미비 부분 확인 후 개선  
 ### 👪멤버구성
 - 연태양 - 진행 총괄 및 요구사항 분석, 작업 설계, 간편 전산 결재 시스템 기능
 - 정우민 - GIT 관리 및 게시판(CRUD) 기능 및 화면 담당, 공통UI 기능 및 화면 담당.
