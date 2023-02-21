@@ -1,2 +1,3 @@
-# SOMS
-![1](https://user-images.githubusercontent.com/120467991/220275807-7c5c92ac-86d5-488b-b0f0-80fe69212d7d.png)
+# SOMS ![soms](https://user-images.githubusercontent.com/120467991/220276150-08eda126-4612-4a74-b44b-7a7cb3090d16.png)
+
+
