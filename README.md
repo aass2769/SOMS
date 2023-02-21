@@ -12,7 +12,7 @@ Sun Operation management Solution 사이트
 :point_right: 기능별 업무 분장 및 기능 정의 완료  
 :point_right: DB 설계 및 테이블 명세서 작성 완료    
 
-2023 . 02 . 04 . ~ 2023 . 02 . 07 . 
+2023 . 02 . 04 . ~ 2023 . 02 . 07 .   
 :point_right: 와이어 프레임 적용 / 화면 구성 완료  
 :point_right: 디자인 규격 검사 및 수정  
 
@@ -41,6 +41,25 @@ Sun Operation management Solution 사이트
 - Database: <img src="https://img.shields.io/badge/MySQL 8.0.31-4479A1?style=flat&logo=MySQL&logoColor=white"/>
 <img src="https://img.shields.io/badge/HeidiSQL-1B72BE?style=flat&logoColor=white"/> <img src="https://img.shields.io/badge/MySQLWorkbench-02458D?style=flat&logoColor=white"/>
 - 협업툴: <img src="https://img.shields.io/badge/GitHub-181717?style=flat&logo=GitHub&logoColor=white"/> <img src="https://img.shields.io/badge/Sourcetree-0052CC?style=flat&logo=Sourcetree&logoColor=white"/> <img src="https://img.shields.io/badge/Slack-4A154B?style=flat&logo=Slack&logoColor=white"/> <img src="https://img.shields.io/badge/Google Sheets-34A853?style=flat&logo=Google Sheets&logoColor=white"/> 
+
+### 🛠기대효과
+- 전산 결재 상신 및 결재, 반려 간편화
+- 사내 자체 이메일 서비스 구축및 자체 메일 관리
+- 임직원 현재 출퇴근 여부 및 근태 시간 자동 연산, 초과 근로 시간 관리
+- 상당 공지 고정 여부 및 부서 구분으로 게시판 관리
+
+### 💎개발 방식
+1) 계획 및 조사, 기능별 작업 분장 및 관리 업무 할당
+
+- 중요 포인트
+    - 참여 인원과 작업 난이도를 중점으로 조사
+    - 요구하는 기술 스택에 개발환경이 맞춰질 수 있는지 파악
+- 내용
+    - 여러 모델 조사 진행 후 각 모델 별 장점 수집
+    - 팀원 전체 의견을 반영하여 투표로 선정
+    - 기능별로 구분하여 전체 작업 할당
+    - 디자인 가이드, 깃, 테이블 명세서, 기타 서식 등의 몇 가지 항목에 대해 각각 관리 업무 할당
+    - 협업 도구 선정 및 사용 습관화
 
 ### 💎주요기능
 #### 사용자
