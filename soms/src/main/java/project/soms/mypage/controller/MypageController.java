@@ -196,7 +196,7 @@ public class MypageController {
 	// 계정 생성 페이지
 	@GetMapping("mypage.register")
 	public String mypageRegister(Model model, HttpServletRequest req) {
-		EmployeeDto employee = (EmployeeDto) req.getSession().getAttribute("employee");
+		EmployeeDto employee = (EmployeeDto) req.getSession().getAttribute("LOGIN_EMPLOYEE");
 		model.addAttribute("employee", employee);
 		
 		// 회원가입에 사용될 매니지 list
@@ -204,14 +204,14 @@ public class MypageController {
 		Collections.reverse(manages);
 		model.addAttribute("manages", manages);
 		
-		// 출근 했는지 안했는지에 필요한 값
-		Optional<String> bool = Optional.ofNullable(attendanceRepository.goToWorkCheck(employee.getEmployeeNo()));
+		// 현재 날과 년도를 구분 후 출퇴근 버튼에 사용
+		Date now = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		Integer nowYear = Integer.parseInt(sdf.format(now).substring(0, 4));
+		String nowDate = sdf.format(now);
 		
-		if(bool.isPresent()) {
-			model.addAttribute("attendance", 1);
-		}else {
-			model.addAttribute("attendance", 2);
-		}
+		// 출퇴근 버튼에 관련된 메서드
+		myAttendance(model,nowDate, employee.getEmployeeNo(), req);
 
 		nomalList(model,req);		
 		
