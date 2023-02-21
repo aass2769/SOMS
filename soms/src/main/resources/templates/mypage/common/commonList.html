@@ -355,7 +355,7 @@
 						type: "post",
 						data: {employeeNo: newinput},
 						success:function(employeePrivacy){
-							console.log(employeePrivacy);
+							
 							$('#adminModalTitle').text(employeePrivacy[1]+"님의 정보")
 							$('#employeeUpdateAdminModal').modal('show');
 							$('#admininputUpdateNo').val(employeePrivacy[0]);

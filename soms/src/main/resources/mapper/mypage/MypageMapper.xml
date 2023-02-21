@@ -65,6 +65,22 @@
 		group by submission_pri, annual_leave_section, annual_leave_start, annual_leave_end, annual_leave_time
 	</select>
 	
+
+	<select id="getEmployeeOvertime" resultType="project.soms.mypage.dto.OvertimeDto">
+		select
+		submission_pri,
+		min(case(proposer_employee_no) when #{employeeNo} then proposer_employee_no else null end) as proposer_employee_no,
+		min(case(submission_status) when '반려' then 0 when '대기' then 1 else 2 end) as submission_status,
+		max(case(approver_employee_no) when #{employeeNo} then approver_employee_no else null end) as approver_employee_no,
+		b.overtime_start_date, b.overtime_end_date, b.overtime_start_time, b.overtime_end_time
+		from submission as a
+		join overtime as b on a.overtime_no = b.overtime_no
+		where <![CDATA[ a.overtime_no is not null and b.overtime_start_date <= #{day} and  b.overtime_end_date >= #{day} ]]>
+		group by submission_pri, submission_subject, submission_datetime, b.overtime_start_date, b.overtime_end_date, b.overtime_start_time, b.overtime_end_time
+		order by submission_datetime desc
+		limit 1;
+	</select>
+	
 	
 	
 </mapper>

@@ -22,6 +22,7 @@ import project.soms.employee.dto.EmployeeDto;
 import project.soms.mypage.dto.AnnualLeaveDto;
 import project.soms.mypage.dto.AttendanceCheckDto;
 import project.soms.mypage.dto.ManageDto;
+import project.soms.mypage.dto.OvertimeDto;
 import project.soms.mypage.repository.AttendanceRepository;
 import project.soms.mypage.repository.MypageRepository;
 import project.soms.mypage.repository.mapper.MypageMapper;
@@ -42,12 +43,14 @@ public class MypageController {
 	
 	@GetMapping("mypage")
 	public String mypage(Model model, HttpServletRequest req, String attendanceSelectDate, String searchemployeeno) {
-		
+		// 세션에 담긴 사원 객체
 		EmployeeDto employee = (EmployeeDto) req.getSession().getAttribute("LOGIN_EMPLOYEE");
+		// 세션에 담긴 사원 객체의 사번
 		long employeeNo = employee.getEmployeeNo();
-				
+		// 모델에 사원 객체 추가
 		model.addAttribute("employee", employee);
 		
+		// 개인정보란에 사용될 직급의 이름 및 모델에 추가
 		String manageName = mypageMapper.getManage(employee.getManageNo());
 		model.addAttribute("manageName", manageName);
 		
@@ -55,15 +58,6 @@ public class MypageController {
 		List<ManageDto> manages = mypageMapper.getManages();
 		Collections.reverse(manages);
 		model.addAttribute("manages", manages);
-		
-		// 출근 했는지 안했는지에 필요한 값
-		Optional<String> bool = Optional.ofNullable(attendanceRepository.goToWorkCheck(employeeNo));
-		
-		if(bool.isPresent()) {
-			model.addAttribute("attendance", 1);
-		}else {
-			model.addAttribute("attendance", 2);
-		}
 
 		// Select에 보여줄 6개월간의 달
 		List<String> attendanceAtSixMonths = attendanceServiceImpl.getAttendanceAtSixMonths();
@@ -81,13 +75,19 @@ public class MypageController {
 		String weekWorkingHours = attendanceServiceImpl.getWeekWorkTime(employeeNo);		
 		model.addAttribute("weekWorkingHours", weekWorkingHours);
 		
+		// common offcanvas 사용
 		nomalList(model,req);
 		
+		// 현재 날과 년도를 구분 후 출퇴근 버튼에 사용
 		Date now = new Date();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
-		Integer nowYear = Integer.parseInt(sdf.format(now));
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		Integer nowYear = Integer.parseInt(sdf.format(now).substring(0, 4));
+		String nowDate = sdf.format(now);
 		
+		// 출퇴근 버튼에 관련된 메서드
+		myAttendance(model,nowDate, employeeNo, req);
 		
+		// 연차 사용 리스트
 		List<AnnualLeaveDto> annualListConvert = mypageMapper.getEmployeeAnnualLeave(employeeNo, nowYear);
 		List<AnnualLeaveDto> annualList = new ArrayList<AnnualLeaveDto>();
 		Integer annualHaveDate = 0;
@@ -105,14 +105,13 @@ public class MypageController {
 			
 		}
 		
+		// 연차 계산
 		if(convertTime >= 8) {
-			annualHaveDate = convertTime / 8;
+			annualHaveDate = annualHaveDate + (convertTime / 8);
 		}
-		
 		
 		model.addAttribute("annualList", annualList);
 		model.addAttribute("annualHaveDate", annualHaveDate);
-		
 		
 		if(searchemployeeno == null) {
 			return "mypage/mypage";
@@ -123,12 +122,78 @@ public class MypageController {
 		
 	}
 	
+	//OvertimeDto(proposerEmployeeNo=20230201006, submissionStatus=2, approverEmployeeNo=null, overtimeStartDate=2023-02-20, overtimeEndDate=2023-02-22, overtimeStartTime=18, overtimeEndTime=20)
+
+	
+	public void myAttendance(Model model, String now, long employeeNo, HttpServletRequest req) {
+		// 출근 했는지 안했는지에 필요한 값
+		Optional<String> bool = Optional.ofNullable(attendanceRepository.goToWorkCheck(employeeNo));
+		
+		if(bool.isPresent()) {
+			model.addAttribute("attendance", 1); // 출근됨
+		}else {
+			model.addAttribute("attendance", 2); // 퇴근됨
+		}
+		
+		// 현재 날짜
+		String NowDate = now.substring(0, 10);
+		// 현재 시간
+		Integer NowHour = Integer.parseInt(now.substring(11, 13));
+		// 현재 분
+		Integer NowMin = Integer.parseInt(now.substring(14, 16));
+		// 퇴근 시간
+		Integer standardLeaveHour = 20;
+		// 출근 시간
+		Integer standardGoHour = 8;
+		Integer standardGoMin = 50;
+		
+		
+		// 예 21일 23시 -> 22일 3시까지
+		
+		// 연장근무 받아오기 null일 경우 연장근무가 없음
+		OvertimeDto overtime = mypageMapper.getEmployeeOvertime(employeeNo, NowDate);
+		
+		if (overtime != null) {
+			// 연장근로 시작 시간이 기본 출근시간 이전일 경우( 오전 연장근로 )
+			if (overtime.getOvertimeStartTime() <= standardGoHour) {
+				// 출근버튼 활성화 시간
+				standardGoHour = overtime.getOvertimeStartTime() - 1;
+			} else {
+				// 현재날짜와 연장근로 끝나는시간이 다를경우
+				if (!overtime.getOvertimeEndDate().equals(NowDate)) {
+					standardLeaveHour = overtime.getOvertimeEndTime() + 24;
+				}
+				standardLeaveHour = overtime.getOvertimeEndTime();
+			}
+			
+		}
+				
+		// (현재시간과 출근시간이 같으며 현재분이 출근분 보다 크고) or 현재 시간이 출근시간보다 클 경우
+		if(((NowHour == standardGoHour)&&(NowMin >= standardGoMin)) || NowHour > standardGoHour ) {
+			model.addAttribute("attendance", 2); // 출근 버튼 생성
+		}
+		
+		// 현재시간이 퇴근시간보다 높을 경우
+		if(NowHour >= standardLeaveHour) {
+			model.addAttribute("attendance", 0); // 버튼 삭제
+			// 퇴근이 안되어있을 경우
+			if(bool.isPresent()) {
+				attendanceServiceImpl.workcheck(req, 0); // 퇴근
+				System.out.println("퇴근");
+			}
+		}
+
+		
+	}
+	
+	// 내 정보 업데이트 
 	@PostMapping("mypage.infomation.update")
 	public String mypageInfomationUpdate(EmployeeDto employee) {
 		mypageRepository.mypageInfomationUpdate(employee);
 		return "mypage/AttendanceDummy";
 	}
 	
+	// 계정 생성 페이지
 	@GetMapping("mypage.register")
 	public String mypageRegister(Model model, HttpServletRequest req) {
 		EmployeeDto employee = (EmployeeDto) req.getSession().getAttribute("employee");
@@ -153,6 +218,7 @@ public class MypageController {
 		return "mypage/register";
 	}
 	
+	// 계정생성 전송
 	@PostMapping("mypage.register.submit")
 	public String mypageRegisterSubmit(EmployeeDto employee) {
 		
@@ -177,12 +243,14 @@ public class MypageController {
 		
 	}
 	
+	// 관리자가 사원조회로 사원정보를 업데이트
 	@PostMapping("mypage.admin.infomation.update")
 	public String mypageAdminInfomationUpdate(EmployeeDto employee) {
 		mypageRepository.mypageInfomationUpdate(employee);
 		return "mypage/AttendanceDummy";
 	}
 	
+	// ajax 사원조회로 사원의 정보를 확인 후 모달에 담을 때 쓰
 	@PostMapping("mypageModalsReplace")
 	@ResponseBody
 	public List<String> mypageModalsReplace(long employeeNo){

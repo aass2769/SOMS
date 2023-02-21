@@ -9,7 +9,7 @@ import project.soms.mypage.dto.WorkDto;
 
 public interface AttendanceService {
 	
-	void workcheck(HttpServletRequest req);
+	void workcheck(HttpServletRequest req, Integer value);
 	
 	void goToWork(WorkDto goToWorkDto);
 	
