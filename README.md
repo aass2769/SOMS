@@ -31,7 +31,7 @@ Sun Operation management Solution 사이트
 - Framework: <img src="https://img.shields.io/badge/sts4-2C2255?style=flat&logo=sts4 IDE&logoColor=green"/> <img src="https://img.shields.io/badge/IntelliJ IDEA-000000?style=flat&logo=IntelliJ IDEA&logoColor=white"/>
 - Database: <img src="https://img.shields.io/badge/MySQL 8.0.31-4479A1?style=flat&logo=MySQL&logoColor=white"/>
 <img src="https://img.shields.io/badge/HeidiSQL-1B72BE?style=flat&logoColor=white"/> <img src="https://img.shields.io/badge/MySQLWorkbench-02458D?style=flat&logoColor=white"/>
-- 협업툴: <img src="https://img.shields.io/badge/GitHub-181717?style=flat&logo=GitHub&logoColor=white"/> <img src="https://img.shields.io/badge/Sourcetree-0052CC?style=flat&logo=Sourcetree&logoColor=white"/> <img src="https://img.shields.io/badge/Slack-4A154B?style=flat&logo=Slack&logoColor=white"/> <img src="https://img.shields.io/badge/Trello-0052CC?style=flat&logo=Trello&logoColor=white"/> <img src="https://img.shields.io/badge/typed-2C5BB4?style=flat&logoColor=white"/>
+- 협업툴: <img src="https://img.shields.io/badge/GitHub-181717?style=flat&logo=GitHub&logoColor=white"/> <img src="https://img.shields.io/badge/Sourcetree-0052CC?style=flat&logo=Sourcetree&logoColor=white"/> <img src="https://img.shields.io/badge/Slack-4A154B?style=flat&logo=Slack&logoColor=white"/> <img src="https://img.shields.io/badge/Google Sheets-34A853?style=flat&logo=Google Sheets&logoColor=white"/> 
 
 ### 💎주요기능
 #### 사용자
