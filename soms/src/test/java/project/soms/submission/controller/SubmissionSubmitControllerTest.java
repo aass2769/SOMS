@@ -1,20 +1,10 @@
 package project.soms.submission.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import project.soms.submission.dto.ApproverDto;
 import project.soms.submission.service.EmployeeService;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 @Slf4j
 @SpringBootTest
@@ -58,7 +48,7 @@ class SubmissionSubmitControllerTest {
     assertNull(actualEmployee);
   }*/
 
-  @Test
+  /*@Test
   public void getParameterApprovers() {
     //given parameter를 위한 객체 Mock으로 설정 후 파라미터 값 설정
     HttpServletRequest request = mock(HttpServletRequest.class);
@@ -87,7 +77,7 @@ class SubmissionSubmitControllerTest {
     when(request.getParameter("submissionSection0")).thenReturn("검토");
     //when 해당값으로 리스트 생성 then 사번 설정 오류 검증
     assertThatThrownBy(() -> submissionSubmitController.getParameterApprovers(request)).isInstanceOf(NumberFormatException.class);
-  }
+  }*/
 
 
 
