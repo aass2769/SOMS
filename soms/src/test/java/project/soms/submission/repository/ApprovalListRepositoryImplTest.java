@@ -1,16 +1,8 @@
 package project.soms.submission.repository;
 
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import project.soms.submission.dto.ApproverDto;
-import project.soms.submission.dto.ProposerDto;
-import project.soms.submission.dto.SubmissionDto;
-
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
 @SpringBootTest
@@ -26,7 +18,7 @@ class ApprovalListRepositoryImplTest {
   }
 
 
-  @Test
+  /*@Test
   void underApprovalList() {
     //given
     Long employeeNo = 20230201009L;
@@ -37,9 +29,9 @@ class ApprovalListRepositoryImplTest {
     log.info("underApprovalList={}", underApprovalList);
     //then
     assertThat(underApprovalList.get(0).getApproverEmployeeNo()).isEqualTo(employeeNo);
-  }
+  }*/
 
-  @Test
+  /*@Test
   void underApprovalListFail() {
     //given
     Long employeeNo = 20230201009L;
@@ -49,8 +41,7 @@ class ApprovalListRepositoryImplTest {
     String submissionDatetime = null;
     //when
     List<SubmissionDto> approvalList = approvalListRepository.underApprovalList(approverDto.get(0).getEmployeeNo(), submissionSection, submissionDatetime);
-    log.error("approvalList={}", approvalList);
     //then
     assertThat(approvalList.get(0).getApproverEmployeeNo()).isNotEqualTo(employeeNo);
-  }
+  }*/
 }

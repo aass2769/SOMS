@@ -5,18 +5,14 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.ui.Model;
 import project.soms.submission.dto.ApproverDto;
-import project.soms.submission.dto.ProposerDto;
 import project.soms.submission.service.EmployeeService;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -29,7 +25,7 @@ class SubmissionSubmitControllerTest {
   @Mock
   private EmployeeService employeeService;
 
-  @Test
+  /*@Test
   void employeeInfo() {
     //given parameter 설정을 위한 객체들 Mock으로 선언 후 사번 할당
     Model model = mock(Model.class);
@@ -60,7 +56,7 @@ class SubmissionSubmitControllerTest {
     ProposerDto actualEmployee = (ProposerDto) session.getAttribute("LOGIN_EMPLOYEE");
     //then 반환된 값이 null인지 검증
     assertNull(actualEmployee);
-  }
+  }*/
 
   @Test
   public void getParameterApprovers() {

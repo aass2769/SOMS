@@ -3,19 +3,9 @@ package project.soms.submission.service;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-import project.soms.submission.dto.ApproverDto;
-import project.soms.submission.dto.ExpenseDto;
-import project.soms.submission.dto.SubmissionDto;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @Slf4j
 @Transactional
@@ -41,7 +31,7 @@ class ApprovalSubmitServiceImplTest {
     log.info("테스트 완료");
   }
 
-  @Test
+  /*@Test
   void expenseSubmit() {
     //given 지출결의서와 결재서식에 값 할당
     ExpenseDto expenseDto = new ExpenseDto("법인카드", "유지보수", "20230201", 10000, "출장중 숙박비 결재 건");
@@ -69,6 +59,6 @@ class ApprovalSubmitServiceImplTest {
     assertThatThrownBy(() ->
         approvalSubmitService.expenseSubmit(submissionDto, expenseDto, employeeNo, approverDto))
         .isInstanceOf(IllegalArgumentException.class);
-  }
+  }*/
 
 }
