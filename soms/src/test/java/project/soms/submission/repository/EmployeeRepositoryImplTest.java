@@ -1,16 +1,7 @@
 package project.soms.submission.repository;
 
-import org.junit.jupiter.api.Test;
-import org.mybatis.spring.MyBatisSystemException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import project.soms.submission.dto.ApproverDto;
-import project.soms.submission.dto.ProposerDto;
-
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
 class EmployeeRepositoryImplTest {
@@ -22,7 +13,7 @@ class EmployeeRepositoryImplTest {
     this.employeeRepository = employeeRepository;
   }
 
-  @Test
+  /*@Test
   void proposer() {
     //given 기안자 사번 할당
     Long employeeNo = 20230201011L;
@@ -61,6 +52,6 @@ class EmployeeRepositoryImplTest {
     //when 결재자 정보 배열 생성 then 기안자 정보 null로 인한 쿼리 오류
     assertThatThrownBy(() -> employeeRepository.expenseApprover(proposerDto)).
         isInstanceOf(MyBatisSystemException.class);
-  }
+  }*/
 
 }

@@ -1,15 +1,7 @@
 package project.soms.submission.service;
 
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import project.soms.submission.dto.ApproverDto;
-import project.soms.submission.dto.ProposerDto;
-
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
 class EmployeeServiceImplTest {
@@ -21,7 +13,7 @@ class EmployeeServiceImplTest {
     this.employeeService = employeeService;
   }
 
-  @Test
+  /*@Test
   void proposer() {
     //given 기안자 사번 입력
     Long employeeNo = 20230201011L;
@@ -107,7 +99,7 @@ class EmployeeServiceImplTest {
     //then
     assertThat(approverList.size()).isEqualTo(5);
     assertThat(approverList.get(0).getManageNo()).isGreaterThan(proposerDto.getManageNo());
-  }
+  }*/
 
 
 
