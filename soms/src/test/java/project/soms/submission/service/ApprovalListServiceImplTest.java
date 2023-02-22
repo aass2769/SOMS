@@ -1,6 +1,5 @@
 package project.soms.submission.service;
 
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -14,9 +13,9 @@ class ApprovalListServiceImplTest {
     this.approvalListService = approvalListService;
   }
 
-  @Test
+  /*@Test
   void underApprovalList() {
-  }
+  }*/
 
 
 }
