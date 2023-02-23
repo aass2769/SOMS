@@ -8,6 +8,7 @@
 		from employee A
 		LEFT JOIN manage B
 		ON A.manage_no = B.manage_no
+		ORDER BY A.manage_no desc
     </select>
 
 	<select id="commonSelect" resultType="project.soms.common.dto.CommonDto">
@@ -15,6 +16,7 @@
 		from employee as A
 		LEFT JOIN manage as B
 		ON A.manage_no = B.manage_no
-		WHERE A.employee_name like concat('%',#{employeeName},'%') and B.manage like concat('%',#{manage},'%') and A.employee_team like concat('%',#{employeeTeam},'%');	
+		WHERE A.employee_name like concat('%',#{employeeName},'%') and B.manage like concat('%',#{manage},'%') and A.employee_team like concat('%',#{employeeTeam},'%')
+		ORDER BY A.manage_no desc
 	</select>
 </mapper>

@@ -135,6 +135,7 @@
           });
           <!-- 서식 제목 클릭 시 상세 상세 폼 submit -->
           $('#detailForm' + i).on("click", function() {
+              $('#spinner').modal("show");
               $('#detailForm' + i).submit();
           });
       }

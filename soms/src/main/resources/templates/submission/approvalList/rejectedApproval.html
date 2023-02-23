@@ -159,11 +159,13 @@
           });
           <!-- 서식 제목 클릭 시 상세 상세 폼 submit -->
           $('#detailForm' + i).on("click", function() {
+              $('#spinner').modal("show");
               $('#detailForm' + i).submit();
           });
       }
       <!-- 반려모달 안에 삭제 버튼 클릭시 반려모달과 삭제모달을 교차 -->
       $('#deleteApproval').on("click", function() {
+          $('#spinner').modal("show");
           $('#rejectedModal').modal("hide");
           $('#deleteModal').modal("show");
       })

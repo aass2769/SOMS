@@ -18,11 +18,11 @@
       <div class = "Item">
         <a class="Item-Title" value = "1"><p>결재 작성</p></a>
         <div class = "Item-Menu" value = "1">
-          <a th:href="@{/submission/form/expense}">지출결의서</a>
-          <a th:href="@{/submission/form/overtime}">연장근로신청서</a>
-          <a th:href="@{/submission/form/annualLeave}">연차신청서</a>
-          <a th:href="@{/submission/form/businessTrip}">출장신청서</a>
-          <a th:href="@{/submission/form/incident}">시말서</a>
+          <a class="category" th:href="@{/submission/form/expense}">지출결의서</a>
+          <a class="category"  th:href="@{/submission/form/overtime}">연장근로신청서</a>
+          <a class="category"  th:href="@{/submission/form/annualLeave}">연차신청서</a>
+          <a class="category"  th:href="@{/submission/form/businessTrip}">출장신청서</a>
+          <a class="category"  th:href="@{/submission/form/incident}">시말서</a>
         </div>
       </div>
     </div>
@@ -30,7 +30,7 @@
     <!-- 결재 중인 내역을 응답해주는 url
     결재 리스트 위에 파라미터로 결재중을 나타내는 under 값을 추가-->
     <div class = Category-A>
-      <a th:href="@{/submission/approval/approvalList(approvalSection=under)}">결재 중
+      <a class="category"  th:href="@{/submission/approval/approvalList(approvalSection=under)}">결재 중
         <!-- 미확인건이 있을시 옆에 나타남 -->
         <span th:if="${#session.getAttribute('underApproval') > 0}" th:text="|미확인 : ${#session.getAttribute('underApproval')}건|" style="font-size: 0.6rem">
         </span>
@@ -40,7 +40,7 @@
     <!-- 결재 완료 내역을 응답해주는 url
     결재 리스트 위에 파라미터로 결재중을 나타내는 under 값을 추가-->
     <div class = Category-A>
-      <a th:href="@{/submission/approval/approvalList(approvalSection=complete)}">결재 완료
+      <a class="category"  th:href="@{/submission/approval/approvalList(approvalSection=complete)}">결재 완료
         <!-- 미확인건이 있을시 옆에 나타남 -->
         <span th:if="${#session.getAttribute('completeApproval') > 0}" th:text="|미확인 : ${#session.getAttribute('completeApproval')}건|" style="font-size: 0.6rem">
         </span>
@@ -50,7 +50,7 @@
     <!-- 결재 반려 내역을 응답해주는 url
     결재 리스트 위에 파라미터로 결재중을 나타내는 under 값을 추가-->
     <div class = Category-A>
-      <a th:href="@{/submission/approval/approvalList(approvalSection=reject)}">결재 반려
+      <a class="category"  th:href="@{/submission/approval/approvalList(approvalSection=reject)}">결재 반려
         <!-- 미확인건이 있을시 옆에 나타남 -->
         <span th:if="${#session.getAttribute('rejectApproval') > 0}" th:text="|미확인 : ${#session.getAttribute('rejectApproval')}건|" style="font-size: 0.6rem">
         </span>
@@ -60,6 +60,14 @@
 
    <!-- 드롭다운 기능 스크립트 입니다 -->
 	<script>
+      $('.category').on("click", function() {
+          $('#spinner').modal("show");
+      });
+
+      $('.iconItem').on("click", function() {
+          $('#spinner').modal("show");
+      });
+
 	    $('.Item-Title').click(function(){		
 	        let val = $(this).attr('value');
 	        let cas = $('.Item-Menu[value='+ val + ']');    

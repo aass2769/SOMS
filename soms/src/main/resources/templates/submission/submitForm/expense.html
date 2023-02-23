@@ -7,6 +7,7 @@
 <body>
 
 <section class="Article d-flex justify-content-center w-100 h-100">
+
   <!-- 폼 태그 설정 - action은 경로의 이름이 같아서 기입 생략 , 폼 안에 필드값 설정을 위해 오브젝트를 하나 선언 (결재 서식을 내용을 담는 폼) -->
   <form style="width:90%;" method="post" id="submitForm" th:action th:object="${expenseInsertForm}">
     <div>
@@ -152,6 +153,7 @@
   <script>
     $('#formSubmit').on("click", function() {
         if (confirm("결재 상신 하시겠습니까?")) {
+            $('#spinner').modal("show");
             $('#submitForm').submit();
         } else {}
     });

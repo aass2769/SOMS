@@ -47,7 +47,7 @@
           </select>
           <input type="text" th:value="null" name="employeeName" class="text_employee_name" style="width: 25%">
           <div style="width:5%"></div>
-          <button type="submit" name="check" value="1" class="submit_employee" style="width:10%">검색</button>
+          <button type="submit" name="check" value="1" id="commonSelect" class="submit_employee" style="width:10%">검색</button>
         </form>
       </div>
       <div id="selectedCommons">
@@ -345,6 +345,12 @@
       </div>
     </div>
   </div>
+
+  <script>
+    $('#commonSelect').on("click", function() {
+        $('#spinner').modal("show");
+    });
+  </script>
 
 </div>
 
