@@ -125,7 +125,7 @@
           <p id="employee_team_p">
             <button class="btn btn-primary" id="common_button" type="button" data-bs-toggle="collapse"
                     data-bs-target="#common_employee_container2" aria-expanded="false"
-                    aria-controls="common_employee_container2">
+                    aria-controls="common_employee_container1">
               경영 지원 - 재무 회계
             </button>
           </p>
@@ -136,9 +136,11 @@
                   <p></p>
                 </div>
                 <span class="td_common_manage_name">
-                  <input class="common_manage_name"
-                         th:value="${team.manage} + ' | ' + ${team.employeeName}" type="button">
-                  <input type="hidden" th:value="${team.employeeNo}">
+                  <input type="hidden" th:id="${'team2approverNo' + teamStat.index}" th:value="${team.employeeNo}">
+                  <input type="hidden" th:id="${'team2approverName' + teamStat.index}" th:value="${team.employeeName}">
+                  <button class="common_manage_name" th:id="${'team2approverKey' + teamStat.index}"
+                          th:text="${team.manage} + ' | ' + ${team.employeeName}" type="button"
+                          data-bs-toggle="modal" data-bs-target="#approverSelect"></button>
                 </span>
               </div>
             </div>
@@ -150,7 +152,7 @@
           <p id="employee_team_p">
             <button class="btn btn-primary" id="common_button" type="button" data-bs-toggle="collapse"
                     data-bs-target="#common_employee_container3" aria-expanded="false"
-                    aria-controls="common_employee_container3">
+                    aria-controls="common_employee_container1">
               경영 지원 - 정보 보안
             </button>
           </p>
@@ -161,9 +163,11 @@
                   <p></p>
                 </div>
                 <span class="td_common_manage_name">
-                  <input class="common_manage_name"
-                         th:value="${team.manage} + ' | ' + ${team.employeeName}" type="button">
-                  <input type="hidden" th:value="${team.employeeNo}">
+                  <input type="hidden" th:id="${'team3approverNo' + teamStat.index}" th:value="${team.employeeNo}">
+                  <input type="hidden" th:id="${'team3approverName' + teamStat.index}" th:value="${team.employeeName}">
+                  <button class="common_manage_name" th:id="${'team3approverKey' + teamStat.index}"
+                          th:text="${team.manage} + ' | ' + ${team.employeeName}" type="button"
+                          data-bs-toggle="modal" data-bs-target="#approverSelect"></button>
                 </span>
               </div>
             </div>
@@ -175,7 +179,7 @@
           <p id="employee_team_p">
             <button class="btn btn-primary" id="common_button" type="button" data-bs-toggle="collapse"
                     data-bs-target="#common_employee_container4" aria-expanded="false"
-                    aria-controls="common_employee_container4">
+                    aria-controls="common_employee_container1">
               경영 지원 - 구매
             </button>
           </p>
@@ -186,9 +190,11 @@
                   <p></p>
                 </div>
                 <span class="td_common_manage_name">
-                  <input class="common_manage_name"
-                         th:value="${team.manage} + ' | ' + ${team.employeeName}" type="button">
-                  <input type="hidden" th:value="${team.employeeNo}">
+                  <input type="hidden" th:id="${'team4approverNo' + teamStat.index}" th:value="${team.employeeNo}">
+                  <input type="hidden" th:id="${'team4approverName' + teamStat.index}" th:value="${team.employeeName}">
+                  <button class="common_manage_name" th:id="${'team4approverKey' + teamStat.index}"
+                          th:text="${team.manage} + ' | ' + ${team.employeeName}" type="button"
+                          data-bs-toggle="modal" data-bs-target="#approverSelect"></button>
                 </span>
               </div>
             </div>
@@ -200,8 +206,8 @@
           <p id="employee_team_p">
             <button class="btn btn-primary" id="common_button" type="button" data-bs-toggle="collapse"
                     data-bs-target="#common_employee_container5" aria-expanded="false"
-                    aria-controls="common_employee_container5">
-              개발 연구 - 개발 1팀
+                    aria-controls="common_employee_container1">
+              개발 연구 : 개발 1팀
             </button>
           </p>
           <div class="collapse" id="common_employee_container5">
@@ -211,9 +217,11 @@
                   <p></p>
                 </div>
                 <span class="td_common_manage_name">
-                  <input class="common_manage_name"
-                         th:value="${team.manage} + ' | ' + ${team.employeeName}" type="button">
-                  <input type="hidden" th:value="${team.employeeNo}">
+                  <input type="hidden" th:id="${'team5approverNo' + teamStat.index}" th:value="${team.employeeNo}">
+                  <input type="hidden" th:id="${'team5approverName' + teamStat.index}" th:value="${team.employeeName}">
+                  <button class="common_manage_name" th:id="${'team5approverKey' + teamStat.index}"
+                          th:text="${team.manage} + ' | ' + ${team.employeeName}" type="button"
+                          data-bs-toggle="modal" data-bs-target="#approverSelect"></button>
                 </span>
               </div>
             </div>
@@ -225,8 +233,8 @@
           <p id="employee_team_p">
             <button class="btn btn-primary" id="common_button" type="button" data-bs-toggle="collapse"
                     data-bs-target="#common_employee_container6" aria-expanded="false"
-                    aria-controls="common_employee_container6">
-              개발 연구 - 개발 2팀
+                    aria-controls="common_employee_container1">
+              개발 연구 : 개발 2팀
             </button>
           </p>
           <div class="collapse" id="common_employee_container6">
@@ -236,9 +244,11 @@
                   <p></p>
                 </div>
                 <span class="td_common_manage_name">
-                  <input class="common_manage_name"
-                         th:value="${team.manage} + ' | ' + ${team.employeeName}" type="button">
-                  <input type="hidden" th:value="${team.employeeNo}">
+                  <input type="hidden" th:id="${'team6approverNo' + teamStat.index}" th:value="${team.employeeNo}">
+                  <input type="hidden" th:id="${'team6approverName' + teamStat.index}" th:value="${team.employeeName}">
+                  <button class="common_manage_name" th:id="${'team6approverKey' + teamStat.index}"
+                          th:text="${team.manage} + ' | ' + ${team.employeeName}" type="button"
+                          data-bs-toggle="modal" data-bs-target="#approverSelect"></button>
                 </span>
               </div>
             </div>
@@ -250,8 +260,8 @@
           <p id="employee_team_p">
             <button class="btn btn-primary" id="common_button" type="button" data-bs-toggle="collapse"
                     data-bs-target="#common_employee_container7" aria-expanded="false"
-                    aria-controls="common_employee_container7">
-              개발 연구 - 연구팀
+                    aria-controls="common_employee_container1">
+              개발 연구 : 연구팀
             </button>
           </p>
           <div class="collapse" id="common_employee_container7">
@@ -261,9 +271,11 @@
                   <p></p>
                 </div>
                 <span class="td_common_manage_name">
-                  <input class="common_manage_name"
-                         th:value="${team.manage} + ' | ' + ${team.employeeName}" type="button">
-                  <input type="hidden" th:value="${team.employeeNo}">
+                  <input type="hidden" th:id="${'team7approverNo' + teamStat.index}" th:value="${team.employeeNo}">
+                  <input type="hidden" th:id="${'team7approverName' + teamStat.index}" th:value="${team.employeeName}">
+                  <button class="common_manage_name" th:id="${'team7approverKey' + teamStat.index}"
+                          th:text="${team.manage} + ' | ' + ${team.employeeName}" type="button"
+                          data-bs-toggle="modal" data-bs-target="#approverSelect"></button>
                 </span>
               </div>
             </div>
@@ -275,8 +287,8 @@
           <p id="employee_team_p">
             <button class="btn btn-primary" id="common_button" type="button" data-bs-toggle="collapse"
                     data-bs-target="#common_employee_container8" aria-expanded="false"
-                    aria-controls="common_employee_container8">
-              영업 - 홍보마케팅
+                    aria-controls="common_employee_container1">
+              영업 : 홍보마케팅
             </button>
           </p>
           <div class="collapse" id="common_employee_container8">
@@ -286,9 +298,11 @@
                   <p></p>
                 </div>
                 <span class="td_common_manage_name">
-                  <input class="common_manage_name"
-                         th:value="${team.manage} + ' | ' + ${team.employeeName}" type="button">
-                  <input type="hidden" th:value="${team.employeeNo}">
+                  <input type="hidden" th:id="${'team8approverNo' + teamStat.index}" th:value="${team.employeeNo}">
+                  <input type="hidden" th:id="${'team8approverName' + teamStat.index}" th:value="${team.employeeName}">
+                  <button class="common_manage_name" th:id="${'team8approverKey' + teamStat.index}"
+                          th:text="${team.manage} + ' | ' + ${team.employeeName}" type="button"
+                          data-bs-toggle="modal" data-bs-target="#approverSelect"></button>
                 </span>
               </div>
             </div>
@@ -300,8 +314,8 @@
           <p id="employee_team_p">
             <button class="btn btn-primary" id="common_button" type="button" data-bs-toggle="collapse"
                     data-bs-target="#common_employee_container9" aria-expanded="false"
-                    aria-controls="common_employee_container9">
-              영업 - 해외 사업
+                    aria-controls="common_employee_container1">
+              영업 : 해외 사업
             </button>
           </p>
           <div class="collapse" id="common_employee_container9">
@@ -311,9 +325,11 @@
                   <p></p>
                 </div>
                 <span class="td_common_manage_name">
-                  <button class="common_manage_name" th:value="${team.employeeNo}"
-                         th:text="${team.manage} + ' | ' + ${team.employeeName}" type="button"></button>
-                  <input type="hidden" th:value="${team.employeeNo}">
+                  <input type="hidden" th:id="${'team9approverNo' + teamStat.index}" th:value="${team.employeeNo}">
+                  <input type="hidden" th:id="${'team9approverName' + teamStat.index}" th:value="${team.employeeName}">
+                  <button class="common_manage_name" th:id="${'team9approverKey' + teamStat.index}"
+                          th:text="${team.manage} + ' | ' + ${team.employeeName}" type="button"
+                          data-bs-toggle="modal" data-bs-target="#approverSelect"></button>
                 </span>
               </div>
             </div>
