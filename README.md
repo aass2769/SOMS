@@ -99,3 +99,11 @@ soms 주소 : somsolution.com
 5 오류수정 
 
 - 테스트 단계에서 파악된 오류들을 기반으로 수정
+
+6 코드 디자인 및 변수, 객체 이름 규칙
+
+- 파일 및 함수, 변수 이름 : 카멜표기법 사용 (첫글자 under)
+- Class 이름 : 카멜표기법 사용 (첫글자 upper)
+- DB Table, Column : 스네이크 표기법 (전체 under)
+- 변수 선언 타입 : Primary key → Long / Int → Integer / Date,Datetime,Varchar,Char → String
+- 기능의 동작과 역할이 분명히 들어나도록 함수, 변수 선언 (단어 줄여서 사용 금지)
