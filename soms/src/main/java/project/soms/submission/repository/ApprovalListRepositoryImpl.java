@@ -67,21 +67,32 @@ public class ApprovalListRepositoryImpl implements ApprovalListRepository{
     List<SubmissionDto> completeApprovalList = new ArrayList<>();
 
     for(SubmissionDto approval : approvalList) {
-      //서식번호가 널이 아니것 / status가 0이면 반려건, 1이면 결재 중건, 2면 결재 완료건 / 열람가능 여부가 '가능'이거나 , 결재자 값이 null이고 열람가능 여부가 '기안'일 것
+      //서식번호가 널이 아니것 / status가 0이면 반려건, 1이면 결재 중건, 2면 결재 완료건 / 기안자 또는 결재자 기준 열람 가능 여부 확인
       if (approval.getSubmissionNo() != null && approval.getSubmissionStatus().equals("2") &&
-          (approval.getSubmissionShowable().equals("가능") || (approval.getSubmissionShowable().equals("기안") && approval.getApproverEmployeeNo() == null))) {
+          ((!approval.getProposerShowable().equals("불가") && approval.getProposerEmployeeNo() != null && approval.getApproverEmployeeNo() == null)
+              || (!approval.getApproverShowable().equals("불가") && approval.getApproverEmployeeNo() != null))) {
         //datetime으로 저장된 값을 date(yyyy-MM-dd)로 변환
         Date date = dateParse(approval.getSubmissionDatetime());
         String submissionDate = dateFormat.format(date);
         approval.setSubmissionDatetime(submissionDate);
+
+        //열람 가능 여부에 따라 이후에 삭제 기능이 변경됨
         List<SubmissionDto> submissionList = approvalListMapper.approverList(approval.getSubmissionPri());
+        if (!approval.getProposerShowable().equals("불가") && approval.getProposerEmployeeNo() != null && approval.getApproverEmployeeNo() == null) {
+          approval.setProposerShowable(approval.getProposerShowable());
+        } else if (!approval.getApproverShowable().equals("불가") && approval.getApproverEmployeeNo() != null) {
+          approval.setProposerShowable(approval.getApproverShowable());
+        }
 
         /**
          * 서식을 삭제할 때 열람가능여부 컬럼에 할당할 값을 설정
          * 최하위 결재자일 경우엔 기안이라는 값을 할당하려 기안자만 열람 가능상태로 남도록
+         * 기안자일 경우엔 '결재'라는 값을 할당하여 최하위 결재자만 열람 가능하도록
          */
-        if (submissionList.get(0).getApproverEmployeeNo().equals(approval.getApproverEmployeeNo())) {
+        if (submissionList.get(0).getApproverEmployeeNo().equals(approval.getApproverEmployeeNo()) && approval.getSubmissionShowable().equals("가능")) {
           approval.setDeleteCheck("기안");
+        } else if (submissionList.get(0).getProposerEmployeeNo().equals(approval.getProposerEmployeeNo()) && approval.getSubmissionShowable().equals("가능")) {
+          approval.setDeleteCheck("결재");
         } else {
           approval.setDeleteCheck("불가");
         }
@@ -100,20 +111,31 @@ public class ApprovalListRepositoryImpl implements ApprovalListRepository{
     List<SubmissionDto> rejectedApprovalList = new ArrayList<>();
 
     for(SubmissionDto approval : approvalList) {
-      //서식번호가 널이 아니것 / status가 0이면 반려건, 1이면 결재 중건, 2면 결재 완료건 / 열람가능 여부가 '가능'이거나 , 결재자 값이 null이고 열람가능 여부가 '기안'일 것
+      //서식번호가 널이 아니것 / status가 0이면 반려건, 1이면 결재 중건, 2면 결재 완료건 / 기안자 또는 결재자 기준 열람 가능 여부 확인
       if (approval.getSubmissionNo() != null && approval.getSubmissionStatus().equals("0") &&
-          (approval.getSubmissionShowable().equals("가능") || (approval.getSubmissionShowable().equals("기안") && approval.getApproverEmployeeNo() == null))) {
+          ((!approval.getProposerShowable().equals("불가") && approval.getProposerEmployeeNo() != null && approval.getApproverEmployeeNo() == null)
+              || (!approval.getApproverShowable().equals("불가") && approval.getApproverEmployeeNo() != null))) {
         //datetime으로 저장된 값을 date(yyyy-MM-dd)로 변환
         Date date = dateParse(approval.getSubmissionDatetime());
         String submissionDate = dateFormat.format(date);
         approval.setSubmissionDatetime(submissionDate);
+
+        //열람 가능 여부에 따라 이후에 삭제 기능이 변경됨
         List<SubmissionDto> submissionList = approvalListMapper.approverList(approval.getSubmissionPri());
+        if (!approval.getProposerShowable().equals("불가") && approval.getProposerEmployeeNo() != null && approval.getApproverEmployeeNo() == null) {
+          approval.setProposerShowable(approval.getProposerShowable());
+        } else if (!approval.getApproverShowable().equals("불가") && approval.getApproverEmployeeNo() != null) {
+          approval.setProposerShowable(approval.getApproverShowable());
+        }
         /**
          * 서식을 삭제할 때 열람가능여부 컬럼에 할당할 값을 설정
-         * 최하위 결재자일 경우엔 '기안'이라는 값을 할당하려 기안자만 열람 가능상태로 남도록
+         * 최하위 결재자일 경우엔 '기안'이라는 값을 할당하여 기안자만 열람 가능상태로 남도록
+         * 기안자일 경우엔 '결재'라는 값을 할당하여 최하위 결재자만 열람 가능하도록
          */
-        if (submissionList.get(0).getApproverEmployeeNo().equals(approval.getApproverEmployeeNo())) {
+        if (submissionList.get(0).getApproverEmployeeNo().equals(approval.getApproverEmployeeNo()) && approval.getSubmissionShowable().equals("가능")) {
           approval.setDeleteCheck("기안");
+        } else if (submissionList.get(0).getProposerEmployeeNo().equals(approval.getProposerEmployeeNo()) && approval.getSubmissionShowable().equals("가능")) {
+          approval.setDeleteCheck("결재");
         } else {
           approval.setDeleteCheck("불가");
         }

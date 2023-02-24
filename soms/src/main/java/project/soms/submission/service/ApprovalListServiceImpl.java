@@ -251,6 +251,8 @@ public class ApprovalListServiceImpl implements ApprovalListService{
      */
     if (saveProposer.equals("기안")) {
       approvalListRepository.deleteApproval(submissionNo, "기안");
+    } else if (saveProposer.equals("결재")){
+      approvalListRepository.deleteApproval(submissionNo, "결재");
     } else {
       approvalListRepository.deleteApproval(submissionNo, "불가");
     }

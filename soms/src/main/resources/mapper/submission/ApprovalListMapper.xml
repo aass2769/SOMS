@@ -5,18 +5,18 @@
 
     <select id="approvalList" resultType="project.soms.submission.dto.SubmissionDto">
         select min(case when proposer_employee_no = #{employeeNo} or approver_employee_no = #{employeeNo} then submission_no else null end) as submission_no,
-            submission_subject, submission_pri, submission_datetime,
-            min(case(submission_status) when '반려' then 0 when '대기' then 1 else 2 end) as submission_status,
-            min(case when submission_status = '대기' and approver_employee_no = #{employeeNo} then submission_status else null end) as approval_able,
-            max(case when submission_coment is null then 0 else submission_coment end)as submission_coment,
-            min(case when submission_open = '미열람' and approver_employee_no = #{employeeNo} then submission_open
-                when submission_open = '미열람' and proposer_employee_no = #{employeeNo} then '본인건' else '열람' end) as submission_open,
-            max(case(proposer_employee_no) when #{employeeNo} then proposer_employee_no else null end) as proposer_employee_no,
-            max(case(approver_employee_no) when #{employeeNo} then approver_employee_no else null end) as approver_employee_no,
-            min(case when submission_showable = '가능' and proposer_employee_no = #{employeeNo} then '가능' when submission_showable = '가능' and approver_employee_no = #{employeeNo}
-                then '가능' when submission_showable = '기안' and proposer_employee_no = #{employeeNo} then '기안' else '불가' end) as submission_showable,
-            max(case when expense_no is not null then 'expense' when overtime_no is not null then 'overtime' when annual_leave_no is not null then 'annualLeave'
-                when business_trip_no is not null then 'businessTrip' when incident_no is not null then 'incident' end) as submission_join_table
+        submission_subject, submission_pri, submission_datetime,
+        min(case(submission_status) when '반려' then 0 when '대기' then 1 else 2 end) as submission_status,
+        min(case when submission_status = '대기' and approver_employee_no = #{employeeNo} then submission_status else null end) as approval_able,
+        max(case when submission_coment is null then 0 else submission_coment end)as submission_coment,
+        min(case when submission_open = '미열람' and approver_employee_no = #{employeeNo} then submission_open
+        when submission_open = '미열람' and proposer_employee_no = #{employeeNo} then '본인건' else '열람' end) as submission_open,
+        max(case(proposer_employee_no) when #{employeeNo} then proposer_employee_no else null end) as proposer_employee_no,
+        max(case(approver_employee_no) when #{employeeNo} then approver_employee_no else null end) as approver_employee_no,
+        min(case when submission_showable = '가능' and proposer_employee_no = 20221006007 then '가능' when submission_showable = '기안' and proposer_employee_no = 20221006007 then '기안' else '불가' end) as proposer_showable,
+        min(case when submission_showable = '가능' and approver_employee_no = 20221006007 then '가능' when submission_showable = '결재' and approver_employee_no = 20221006007 then '결재' else '불가' end) as approver_showable,
+        max(case when expense_no is not null then 'expense' when overtime_no is not null then 'overtime' when annual_leave_no is not null then 'annualLeave'
+        when business_trip_no is not null then 'businessTrip' when incident_no is not null then 'incident' end) as submission_join_table
         from submission
         <where>
             <if test="submissionSection != '' and submissionSection.equals('expense')">
@@ -52,35 +52,35 @@
 
     <select id="expenseApprovalDetail" resultType="project.soms.submission.dto.form.ExpenseApprovalDetailForm">
         select a.submission_no, a.submission_pri, a.submission_section, a.submission_status, a.proposer_employee_no, a.approver_employee_no, b.* from submission as a
-            join expense as b on a.expense_no = b.expense_no
+                                                                                                                                                          join expense as b on a.expense_no = b.expense_no
         where a.submission_no = #{submissionNo} or a.submission_pri = #{submissionPri}
         order by a.proposer_employee_no desc, a.submission_no asc
     </select>
 
     <select id="overtimeApprovalDetail" resultType="project.soms.submission.dto.form.OvertimeApprovalDetailForm">
         select a.submission_no, a.submission_pri, a.submission_section, a.submission_status, a.proposer_employee_no, a.approver_employee_no, b.* from submission as a
-            join overtime as b on a.overtime_no = b.overtime_no
+                                                                                                                                                          join overtime as b on a.overtime_no = b.overtime_no
         where a.submission_no = #{submissionNo} or a.submission_pri = #{submissionPri}
         order by a.proposer_employee_no desc, a.submission_no asc
     </select>
 
     <select id="annualLeaveApprovalDetail" resultType="project.soms.submission.dto.form.AnnualLeaveApprovalDetailForm">
         select a.submission_no, a.submission_pri, a.submission_section, a.submission_status, a.proposer_employee_no, a.approver_employee_no, b.* from submission as a
-            join annual_leave as b on a.annual_leave_no = b.annual_leave_no
+                                                                                                                                                          join annual_leave as b on a.annual_leave_no = b.annual_leave_no
         where a.submission_no = #{submissionNo} or a.submission_pri = #{submissionPri}
         order by a.proposer_employee_no desc, a.submission_no asc
     </select>
 
     <select id="businessTripApprovalDetail" resultType="project.soms.submission.dto.form.BusinessTripApprovalDetailForm">
         select a.submission_no, a.submission_pri, a.submission_section, a.submission_status, a.proposer_employee_no, a.approver_employee_no, b.* from submission as a
-            join business_trip as b on a.business_trip_no = b.business_trip_no
+                                                                                                                                                          join business_trip as b on a.business_trip_no = b.business_trip_no
         where a.submission_no = #{submissionNo} or a.submission_pri = #{submissionPri}
         order by a.proposer_employee_no desc, a.submission_no asc
     </select>
 
     <select id="incidentApprovalDetail" resultType="project.soms.submission.dto.form.IncidentApprovalDetailForm">
         select a.submission_no, a.submission_pri, a.submission_section, a.submission_status, a.proposer_employee_no, a.approver_employee_no, b.* from submission as a
-            join incident as b on a.incident_no = b.incident_no
+                                                                                                                                                          join incident as b on a.incident_no = b.incident_no
         where a.submission_no = #{submissionNo} or a.submission_pri = #{submissionPri}
         order by a.proposer_employee_no desc, a.submission_no asc
     </select>

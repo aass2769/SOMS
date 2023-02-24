@@ -16,6 +16,8 @@ public class SubmissionDto {
   private String submissionComent;
   private String submissionOpen;
   private String submissionShowable;
+  private String proposerShowable;
+  private String approverShowable;
   private Long proposerEmployeeNo;
   private Long approverEmployeeNo;
   private String submissionJoinTable;
