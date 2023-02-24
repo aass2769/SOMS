@@ -47,7 +47,7 @@ public class ApprovalListRepositoryImpl implements ApprovalListRepository{
 
     for(SubmissionDto approval : approvalList) {
       //서식번호가 널이 아니것 / status가 0이면 반려건, 1이면 결재 중건, 2면 결재 완료건 / 열람가능 여부가 '가능'일 것
-      if (approval.getSubmissionNo() != null && approval.getSubmissionStatus().equals("1") && approval.getSubmissionShowable().equals("가능")) {
+      if (approval.getSubmissionNo() != null && approval.getSubmissionStatus().equals("1") && (approval.getProposerShowable().equals("가능") || approval.getApproverShowable().equals("가능"))) {
         //datetime으로 저장된 값을 date(yyyy-MM-dd)로 변환
         Date date = dateParse(approval.getSubmissionDatetime());
         String submissionDate = dateFormat.format(date);
