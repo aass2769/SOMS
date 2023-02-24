@@ -67,6 +67,7 @@
 						<td class="board_thead_date">날짜</td>
 						<td class="board_thead_views">조회</td>
 					</tr>
+					<!-- 공지 게시글 -->
 					<th:bloak th:if="${noticeBoardList.size > 0}">
 						<tr th:each="noticeBoard : ${noticeBoardList}" class="board_tbody_tr">
 							<td th:text="'공지'" class="notice_board_tbody_no"></td>
@@ -80,10 +81,11 @@
 							<td th:text="${noticeBoard.boardViews}" class="notice_board_tbody_views">1</td>
 						</tr>
 					</th:bloak>
+					<!-- 일반 게시글 -->
 					<tr th:if="${boardList.size > 0}" th:each="selectList : ${boardList}" class="board_tbody_tr">
 						<td th:text="${startRowNo - selectListStat.index}" class="board_tbody_no"></td>
 						<td class="board_tbody_title"><a class="board_content_link" th:text="${selectList.boardTitle}"
-								th:href="@{/board/boardRead(boardNo=${selectList.boardNo})}"></a></td>
+								th:href="@{/board/boardRead(boardNo=${selectList.boardNo}, pageLimit=${pageLimit})}"></a></td>
 						<td th:text="${selectList.employeeTeam}" class="board_tbody_team">부서</td>
 						<td th:text="${selectList.manage}" class="board_tbody_manage">대리</td>
 						<td th:text="${selectList.employeeName}" class="board_tbody_name">희용</td>
@@ -132,7 +134,7 @@
 					</div>
 					<div class="board_search_write_button">
 						<button class="board_write_button"><a class="board_write_a"
-								th:href="@{/board/boardWrite(boardSection=${boardSection})}">글쓰기</a></button>
+								th:href="@{/board/boardWrite(boardSection=${boardSection}, pageLimit=${pageLimit})}">글쓰기</a></button>
 					</div>
 				</div>
 			</form>

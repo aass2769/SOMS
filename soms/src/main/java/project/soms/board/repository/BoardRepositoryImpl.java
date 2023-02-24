@@ -82,9 +82,18 @@ public class BoardRepositoryImpl implements BoardRepository{
 		
 	}
 
+	@Override
+	public void deleteComment(CommentDto commentDto) {
 
+		boardMapper.deleteComment(commentDto);
+	}
 
-
+	@Override
+	public BoardDto readBoardMove(String boardSection, Integer boardNo) {
+		
+		BoardDto boardPage = boardMapper.readBoardMove(boardSection, boardNo);
+		return boardPage;
+	}
 
 	
 

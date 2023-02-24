@@ -130,7 +130,21 @@ public class BoardServiceImpl implements BoardService{
 		boardRepository.writeComment(commentContent, employeeDto, boardNo, commentDate);
 	}
 
-	
+	//댓글 delete 메서드
+	@Override
+	public void deleteComment(CommentDto commentDto) {
+		boardRepository.deleteComment(commentDto);
+		
+	}
+		
+	//게시판 이전글 다음글 메서드
+	@Override
+	public BoardDto readBoardMove(String boardSection, Integer boardNo){
+			
+		BoardDto boardPage = boardRepository.readBoardMove(boardSection, boardNo);
+			
+		return boardPage;
+	}
 
 	
 

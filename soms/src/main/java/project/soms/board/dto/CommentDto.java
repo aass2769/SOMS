@@ -11,4 +11,6 @@ public class CommentDto {
 	private String employeeTeam;
 	private String manage;
 	private Integer boardNo;
+	private Integer commentNo;
+	private long employeeNo;
 }

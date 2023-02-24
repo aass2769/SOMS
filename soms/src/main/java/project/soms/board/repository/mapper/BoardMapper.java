@@ -31,4 +31,8 @@ public interface BoardMapper {
 	List<CommentDto> selectComment(Integer boardNo);
 	
 	void writeComment(@Param("commentContent") String commentContent, @Param("employeeDto") EmployeeDto employeeDto, @Param("boardNo") Integer boardNo, @Param("commentDate") String commentDate);
+	
+	void deleteComment(CommentDto commentDto);
+	
+	BoardDto readBoardMove(@Param("boardSection") String boardSection, @Param("boardNo")Integer boardNo);
 }

@@ -16,6 +16,8 @@ public class BoardDto {
 	private String manage;
 	private String boardSection;
 	private Integer boardListSum;
+	private Integer beforeBoardNo;
+	private Integer afterBoardNo;
 	private Integer boardNumber;
 	// 검색 조건 (제목 or 작성자)
 	private String selectList = "";

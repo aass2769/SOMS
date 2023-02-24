@@ -27,4 +27,8 @@ public interface BoardRepository{
 	List<CommentDto> selectComment(Integer boardNo);
 	
 	void writeComment(String commentContent, EmployeeDto employeeDto, Integer boardNo, String commentDate);
+	
+	void deleteComment(CommentDto commentDto);
+	
+	BoardDto readBoardMove(String boardSection, Integer boardNo);
 }

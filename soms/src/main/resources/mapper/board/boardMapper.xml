@@ -89,7 +89,7 @@
     
     <!-- 댓글 SELECT 하는 쿼리-->
 	<select id="selectComment" resultType="project.soms.board.dto.CommentDto">
-		SELECT comment_content, comment_date, employee_name, manage, employee_team, A.employee_no, board_no
+		SELECT comment_content, comment_date, employee_name, manage, employee_team, A.employee_no, board_no, comment_no
 		FROM comment AS A
 		LEFT JOIN employee AS B
 		ON A.employee_no = B.employee_no
@@ -103,4 +103,22 @@
 		INSERT INTO comment(comment_content, comment_date, employee_no, board_no)
 		VALUES(#{commentContent}, #{commentDate}, #{employeeDto.employeeNo}, #{boardNo});
     </insert>
+    
+    <!-- 댓글 DELETE 하는 쿼리 -->
+    <delete id="deleteComment">
+		DELETE FROM comment
+		WHERE board_no = #{boardNo} and comment_no = #{commentNo}
+    </delete>
+    
+     <!-- 다음글과 이전글 SELECT 하는 쿼리-->
+	<select id="readBoardMove" resultType="project.soms.board.dto.BoardDto">
+		SELECT (case when board_no = #{boardNo} then board_no else null end) as board_no,
+		(case when (LAG(board_no) OVER(ORDER BY board_no DESC)) is not null then (LAG(board_no) OVER(ORDER BY board_no DESC)) else 0 end) as beforeBoardNo,
+	   (case when (LEAD(board_no) OVER(ORDER BY board_no DESC)) is not null then (LEAD(board_no) OVER(ORDER BY board_no DESC)) else 0 end) as afterBoardNo
+		FROM board
+		WHERE board_section = #{boardSection}
+		AND board_announcement = '공지없음'
+		ORDER BY board_no DESC
+		limit 1;
+    </select>
 </mapper>

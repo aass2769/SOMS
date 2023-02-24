@@ -392,3 +392,12 @@
 	text-decoration-line: none;
 	color: white;
 }
+
+.comment_delete_button{
+	display:inline-block;
+	background-color: #F8F8F8;
+	color: #EA471B;
+	border: none;
+} 
+
+.comment_delete_button:after{display: inline-block; content: "\00d7"; font-size:25px;}

@@ -31,13 +31,21 @@
 						<div class="read_top_button_left">
 							<div class="top_list_button_div">
 								<button type="button" class="top_list_button"><a class="toa_list_a"
-										th:href="@{/board/boardList(boardSection = ${readBoardDto.boardSection})}">목록</a></button>
+										th:href="@{/board/boardList(boardSection = ${readBoardDto.boardSection} ,pageLimit=${pageLimit})}">목록</a></button>
 							</div>
 							<div class="top_previous_button_div">
-								<button type="button" class="top_previous_button">이전글</button>
+								<form method="get" th:action="@{/board/moveBoardRead}">
+									<input type="hidden" name="boardSection" th:value="${readBoardDto.boardSection}">
+									<input type="hidden" name="boardNo" th:value="${readBoardDto.boardNo}">
+									<button type="submit" name="moveButton" th:value="before" class="top_previous_button">이전글</button>
+								</form>
 							</div>
 							<div class="top_next_button_div">
-								<button type="button" class="top_next_button">다음글</button>
+								<form method="get" th:action="@{/board/moveBoardRead}">
+									<input type="hidden" name="boardSection" th:value="${readBoardDto.boardSection}">
+									<input type="hidden" name="boardNo" th:value="${readBoardDto.boardNo}">
+									<button type="submit" name="moveButton" th:value="after" class="top_next_button">다음글</button>
+								</form>
 							</div>
 						</div>
 						<div class="read_top_button_right">
@@ -89,6 +97,14 @@
 						</div>
 						<div class="comment_write_date" th:text="${comment.commentDate}">
 							2023-02-15
+						</div>
+						<div
+							th:if="${session.LOGIN_EMPLOYEE.employeeNo} == ${readBoardDto.employeeNo} or ${session.LOGIN_EMPLOYEE.employeeNo} == ${comment.employeeNo}">
+							<form method="post" th:action="@{/board/commentDelete}">
+								<input type="hidden" name="boardNo" th:value="${comment.boardNo}">
+								<input type="hidden" name="commentNo" th:value="${comment.commentNo}">
+								<button class="comment_delete_button" type="submit"></button>
+							</form>
 						</div>
 					</div>
 					<div th:text="${comment.commentContent}">

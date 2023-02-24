@@ -1,7 +1,6 @@
 package project.soms.board.controller;
 
 import java.util.ArrayList;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,10 +11,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import project.soms.board.dto.BoardDto;
 import project.soms.board.dto.CommentDto;
 import project.soms.board.service.BoardService;
@@ -73,16 +72,17 @@ public class BoardController {
 
 	//게시판 작성 페이지 불러오는 메서드
 	@GetMapping("boardWrite")
-	public String writeBoard(Model model, String boardSection, HttpServletRequest request) {
+	public String writeBoard(Model model, BoardDto boardDto, HttpServletRequest request) {
 		
 		BoardDto readBoardDto = new BoardDto();
-		
+		String boardSection = boardDto.getBoardSection();
+		Integer pageLimit = boardDto.getPageLimit();
 		if(request.getParameter("boardNo") != null) {
 			Integer boardNo = Integer.parseInt(request.getParameter("boardNo"));
 			//게시글 상세내용 불러오는 메서드
 			readBoardDto = boardService.readBoard(boardNo);
 		}
-		
+		model.addAttribute("pageLimit", pageLimit);
 		model.addAttribute("readBoardDto", readBoardDto);
 		model.addAttribute("employee", loginEmployee(request));
 		model.addAttribute("boardSection", boardSection);
@@ -95,6 +95,7 @@ public class BoardController {
 	@PostMapping("boardWrite")
 	public String writeBoard(Model model, String boardSection, BoardDto boardDto, HttpServletRequest request, RedirectAttributes redirectAttributes, BoardDto readBoardDto) {
 
+		int pageLimit = boardDto.getPageLimit();
 		if(boardDto.getBoardAnnouncement() == null) {
 			boardDto.setBoardAnnouncement("공지없음");
 		}
@@ -103,21 +104,26 @@ public class BoardController {
 		
 		//boardList 메서드로 redirect 할 때 boardSection값을 보내줌.
 		redirectAttributes.addAttribute("boardSection", boardSection);
+		redirectAttributes.addAttribute("pageLimit", pageLimit);
 		return "redirect:/board/boardList";
 	}
 	
 	//응답이 틀리면 http 메서드 오류가 발생할 수 있음 (클라이언트오류 405ERROR)
 	//게시판 수정 메서드
 	@PostMapping("boardUpdate")
-	public String updateBoard(Model model, BoardDto readBoardDto, RedirectAttributes redirect) {
+	public String updateBoard(Model model, HttpServletRequest request , BoardDto readBoardDto, RedirectAttributes redirect) {
 		
+		int pageLimit = Integer.parseInt(request.getParameter("pageLimut"));
+		String boardSection = request.getParameter("boardSection");
 		if(readBoardDto.getBoardAnnouncement() == null) {
 			readBoardDto.setBoardAnnouncement("공지없음");
 		}
-		
+		System.out.println(boardSection);
 		boardService.updateBoard(readBoardDto);
 
+		redirect.addAttribute("pageLimit",pageLimit);
 		redirect.addAttribute("boardNo",readBoardDto.getBoardNo());
+		redirect.addAttribute("boardSection", "boardSection");
 		
 		return "redirect:/board/boardRead";
 	}
@@ -141,8 +147,10 @@ public class BoardController {
 		boardService.updateViews(boardNo);		//조회 수 update
 		BoardDto readBoardDto = boardService.readBoard(boardNo);	//게시글 상세내용
 		List<CommentDto> commentList = boardService.selectComment(boardNo);	//댓글
-		
+		Integer pageLimit = Integer.parseInt(request.getParameter("pageLimit"));
+		System.out.println(Integer.parseInt(request.getParameter("pageLimit")));
 		//add model
+		model.addAttribute("pageLimit", pageLimit);
 		model.addAttribute("employee", loginEmployee(request)); // 세션
 		model.addAttribute("readBoardDto", readBoardDto);
 		model.addAttribute("commentList", commentList);
@@ -170,6 +178,33 @@ public class BoardController {
 		
 		redirectAttributes.addAttribute("boardSection", boardSection);
 		return "redirect:/board/boardList";
+	}
+	
+	//댓글 삭제 메서드
+	@PostMapping("commentDelete")
+	public String deleteComment(CommentDto commentDto, RedirectAttributes redirectAttributes) {
+		
+		boardService.deleteComment(commentDto);
+		Integer boardNo = commentDto.getBoardNo();
+
+		redirectAttributes.addAttribute("boardNo", boardNo);
+		return "redirect:/board/boardRead";
+	}
+	
+	//게시판 다음글 메서드
+	@GetMapping("moveBoardRead")
+	public String readBoardMove(String boardSection, Integer boardNo ,HttpServletRequest request, RedirectAttributes redirectAttributes) {
+		System.out.println(request.getParameter("boardNo"));
+		BoardDto boardPage = boardService.readBoardMove(boardSection, boardNo);
+		
+		String moveButton = request.getParameter("moveButton");
+		if("before".equals(moveButton)) {
+			redirectAttributes.addAttribute("boardNo", boardPage.getBeforeBoardNo());
+		} else {
+			redirectAttributes.addAttribute("boardNo", boardPage.getAfterBoardNo());
+		}
+		
+		return "redirect:/board/boardRead";
 	}
 	
 }

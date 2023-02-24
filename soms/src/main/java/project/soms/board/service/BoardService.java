@@ -36,4 +36,10 @@ public interface BoardService {
 	
 	//댓글 insert 메서드
 	void writeComment(String commentContent, EmployeeDto employeeDtom, Integer boardNo);
+	
+	//댓글 delete 메서드
+	void deleteComment(CommentDto commentDto);
+	
+	//게시글 다음글 이전글 메서드
+	BoardDto readBoardMove(String boardSection, Integer boardNo);
 }
