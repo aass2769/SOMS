@@ -88,7 +88,6 @@
     <select id="approverList" resultType="project.soms.submission.dto.SubmissionDto">
         select submission_no, submission_pri, submission_section, submission_status, proposer_employee_no, approver_employee_no from submission
         where submission_pri = #{submissionPri}
-        order by proposer_employee_no desc, submission_no desc
     </select>
 
     <update id="approve">
