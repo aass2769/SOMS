@@ -1,6 +1,8 @@
 package project.soms.email.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import project.soms.email.dto.EmailDto;
 import project.soms.email.repository.EmailRepository;
@@ -8,7 +10,6 @@ import project.soms.employee.dto.EmployeeDto;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -34,15 +35,22 @@ public class EmailServiceImpl implements EmailService {
   }
 
   @Override
-  public void moveToTrash(HttpServletRequest request) {
+  public void emailUpdateSeen(HttpServletRequest request, Long emailNo) {
+    String folderName = request.getParameter("folderName");
+    emailRepository.emailUpdateSeen(getEmployee(request).getEmployeeId(), emailPw, folderName, emailNo);
+  }
+
+  @Override
+  public void moveToTrash(HttpServletRequest request, List<Long> emailNoList) {
 
     String folderName = request.getParameter("folderName");
-    List<Long> emailNoList = Collections.singletonList(Long.valueOf(request.getParameter("emailNoList")));
+    emailRepository.moveToTrash(getEmployee(request).getEmployeeId(), emailPw, folderName, emailNoList);
 
-    for (Long emailNo : emailNoList) {
-      emailRepository.moveToTrash(getEmployee(request).getEmployeeId(), emailPw, folderName, emailNo);
-    }
+  }
 
+  @Override
+  public ResponseEntity<ByteArrayResource> downloadAttachment(String emailFileName) {
+    return emailRepository.downloadAttachment(emailFileName);
   }
 
   private EmployeeDto getEmployee(HttpServletRequest request) {

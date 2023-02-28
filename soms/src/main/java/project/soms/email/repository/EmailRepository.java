@@ -1,5 +1,7 @@
 package project.soms.email.repository;
 
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.ResponseEntity;
 import project.soms.email.dto.EmailDto;
 
 import java.util.List;
@@ -12,10 +14,14 @@ public interface EmailRepository {
    * 해당 폴더 이름으로 조건 설정
    * 폴더 이름 = 'inbox', 'sent', 'junk item' 등등
    */
-  List<EmailDto> emailList(String employeeId, String employeePw, String mailFolder);
+  List<EmailDto> emailList(String employeeId, String employeePw, String folderName);
 
   EmailDto emailDetail(Long emailNo);
 
-  void moveToTrash(String employeeId, String employeePw, String mailFolder, Long emailNo);
+  void emailUpdateSeen(String employeeId, String employeePw, String folderName, Long emailNo);
+
+  void moveToTrash(String employeeId, String employeePw, String folderName, List<Long> emailNoList);
+
+  ResponseEntity<ByteArrayResource> downloadAttachment(String emailFileName);
 
 }

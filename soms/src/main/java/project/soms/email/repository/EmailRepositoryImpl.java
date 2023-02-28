@@ -3,8 +3,13 @@ package project.soms.email.repository;
 import com.sun.org.apache.xml.internal.security.exceptions.Base64DecodingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.boot.autoconfigure.mail.MailProperties;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Repository;
 import project.soms.email.dto.EmailDto;
@@ -12,6 +17,7 @@ import software.amazon.awssdk.utils.StringUtils;
 
 import javax.mail.*;
 import javax.mail.search.MessageNumberTerm;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -42,7 +48,7 @@ public class EmailRepositoryImpl implements EmailRepository{
 
   //이메일 내역
   @Override
-  public List<EmailDto> emailList(String employeeId, String employeePw, String emailFolderName) {
+  public List<EmailDto> emailList(String employeeId, String employeePw, String folderName) {
     //현재 map에 저장된 값 초기화
     emailMap.clear();
 
@@ -62,17 +68,16 @@ public class EmailRepositoryImpl implements EmailRepository{
        * imap 주소
        * 임직원 계정 (임직원 Id + 도메인), 임직원 비밀번호(공통값으로 설정)
        */
-      store.connect("imap.mail.us-east-q.awsapps.com", employeeId + "@somsolution.awsapps.com", employeePw);
+      store.connect("imap.mail.us-east-1.awsapps.com", "admin@somsolution.awsapps.com", employeePw);
 
       //폴더이름으로 불러올 폴더 설정
-      Folder emailFolder = store.getFolder(emailFolderName);
+      Folder emailFolder = store.getFolder(folderName);
       emailFolder.open(Folder.READ_ONLY);
 
       //폴더 안에 메세지 수량만큼 반복
       for (int i = 1; i <= emailFolder.getMessageCount(); i++) {
         //폴더 안에 내용을 메세기 객체로 불러옴
         Message message = emailFolder.getMessage(i);
-
         //EmailDto 클래스에 해당 값 주입
         EmailDto email = new EmailDto();
         email.setEmailNo(Long.valueOf(message.getMessageNumber()));
@@ -164,9 +169,12 @@ public class EmailRepositoryImpl implements EmailRepository{
     return emailMap.get(emailNo);
   }
 
-  //이메일 삭제시 휴지통으로 이동
   @Override
-  public void moveToTrash(String employeeId, String employeePw, String mailFolder, Long emailNo) {
+  public void emailUpdateSeen(String employeeId, String employeePw, String folderName, Long emailNo) {
+    /**
+     * 일단 테스트를 위해 계정 절대값 설정
+     */
+    employeeId = "admin";
 
     //설정 객체 생성 후 필요 값 할당
     Properties properties = new Properties();
@@ -176,23 +184,59 @@ public class EmailRepositoryImpl implements EmailRepository{
     Session emailSession = Session.getInstance(properties);
 
     try {
-      Store store = emailSession.getStore("aws-wm");
-      store.connect("email.us-east-1.amazonaws.com", employeeId + "@example.com", employeePw);
+      Store store = emailSession.getStore();
+      store.connect("imap.mail.us-east-1.awsapps.com", employeeId + "@somsolution.awsapps.com", employeePw);
 
-      Folder emailFolder = store.getFolder(mailFolder);
+      Folder emailFolder = store.getFolder(folderName);
       emailFolder.open(Folder.READ_WRITE);
 
-      // 이메일을 찾기 위해 검색 조건 설정
-      MessageNumberTerm searchTerm = new MessageNumberTerm(Math.toIntExact(emailNo));
-      Message[] foundMessages = emailFolder.search(searchTerm);
+      Message message = emailFolder.getMessage(Math.toIntExact(emailNo));
 
-      if (foundMessages.length == 0) {
-        log.warn("이메일을 찾을 수 없음");
-      } else {
-        for (Message message : foundMessages) {
-          // 이메일을 삭제하면 휴지통으로 이동됨
-          message.setFlag(Flags.Flag.DELETED, true);
-          log.warn("이메일 휴지통으로 이동 완료");
+      Flags flags = message.getFlags();
+
+      flags.add(Flags.Flag.SEEN);
+
+      message.setFlags(flags, true);
+
+    } catch (NoSuchProviderException e) {
+      throw new RuntimeException(e);
+    } catch (MessagingException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  //이메일 삭제시 휴지통으로 이동
+  @Override
+  public void moveToTrash(String employeeId, String employeePw, String folderName, List<Long> emailNoList) {
+
+    //설정 객체 생성 후 필요 값 할당
+    Properties properties = new Properties();
+    //메일 선언을 imap으로
+    properties.put("mail.store.protocol", "imaps");
+    //해당 설정을 이메일 세션에 저장
+    Session emailSession = Session.getInstance(properties);
+
+    try {
+      Store store = emailSession.getStore();
+      store.connect("imap.mail.us-east-1.awsapps.com", "admin" + "@somsolution.awsapps.com", employeePw);
+
+      Folder emailFolder = store.getFolder(folderName);
+      emailFolder.open(Folder.READ_WRITE);
+
+      for (Long emailNo : emailNoList) {
+
+        // 이메일을 찾기 위해 검색 조건 설정
+        MessageNumberTerm searchTerm = new MessageNumberTerm(Math.toIntExact(emailNo));
+        Message[] foundMessages = emailFolder.search(searchTerm);
+
+        if (foundMessages.length == 0) {
+          log.warn("이메일을 찾을 수 없음");
+        } else {
+          for (Message message : foundMessages) {
+            // 이메일을 삭제하면 휴지통으로 이동됨
+            message.setFlag(Flags.Flag.DELETED, true);
+            log.warn("이메일 휴지통으로 이동 완료");
+          }
         }
       }
 
@@ -202,6 +246,26 @@ public class EmailRepositoryImpl implements EmailRepository{
       log.error("error={}", e);
       e.printStackTrace();
     }
+  }
+
+  @Override
+  public ResponseEntity<ByteArrayResource> downloadAttachment(String emailFileName) {
+    try {
+      File file = new File("src/main/resources/static/files/" + emailFileName);
+      byte[] data = FileUtils.readFileToByteArray(file);
+      ByteArrayResource resource = new ByteArrayResource(data);
+
+      return ResponseEntity.ok()
+          .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + file.getName())
+          .contentType(MediaType.APPLICATION_OCTET_STREAM)
+          .contentLength(file.length())
+          .body(resource);
+
+    } catch (IOException e) {
+      log.error("error={}", e);
+      throw new RuntimeException(e);
+    }
+
   }
 
   /**

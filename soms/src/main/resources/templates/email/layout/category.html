@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>결재 페이지 카테고리</title>
+</head>
+<body>
+  <!-- 결재 서식 관련 페이지 카테고리 -->
+  <ul class = "Categorys" th:fragment="categorys">
+    
+    <div class="Category-Title">
+      <i class="fa-solid fa-bars"></i>
+      <p class="ps-2">이메일</p>
+    </div>
+
+    <div class = Category-A>
+      <a class="category"  th:href="@{/email/emailList(folderName='INBOX')}">받은 메일함</a>
+    </div>
+
+    <div class = Category-A>
+      <a class="category"  th:href="@{/email/emailList(folderName='Sent Items')}">보낸 메일함</a>
+    </div>
+
+    <div class = Category-A>
+      <a class="category"  th:href="@{/email/emailList(folderName='Trash')}">휴지통</a>
+    </div>
+
+
+
+   <!-- 드롭다운 기능 스크립트 입니다 -->
+	<script>
+      $('.category').on("click", function() {
+          $('#spinner').modal("show");
+      });
+
+	    $('.Item-Title').click(function(){		
+	        let val = $(this).attr('value');
+	        let cas = $('.Item-Menu[value='+ val + ']');    
+	            if(cas.is(':visible')){
+	                cas.hide('fast');
+	            }else{
+	                cas.show('fast');
+	            }
+	    })
+	</script>
+  </ul>
+
+</body>
+</html>
