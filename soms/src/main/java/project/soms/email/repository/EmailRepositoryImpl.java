@@ -224,6 +224,9 @@ public class EmailRepositoryImpl implements EmailRepository{
       Folder emailFolder = store.getFolder(folderName);
       emailFolder.open(Folder.READ_WRITE);
 
+      Folder trashFolder = store.getFolder("Trash");
+      trashFolder.open(Folder.READ_WRITE);
+
       for (Long emailNo : emailNoList) {
 
         // 이메일을 찾기 위해 검색 조건 설정
@@ -234,7 +237,9 @@ public class EmailRepositoryImpl implements EmailRepository{
           log.warn("이메일을 찾을 수 없음");
         } else {
           for (Message message : foundMessages) {
-            // 이메일을 삭제하면 휴지통으로 이동됨
+            // 휴지통으로 이메일을 복사
+            emailFolder.copyMessages(new Message[] {message}, trashFolder);
+            // 기존 메일함에서 메일을 삭제
             message.setFlag(Flags.Flag.DELETED, true);
             log.warn("이메일 휴지통으로 이동 완료");
           }
