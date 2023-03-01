@@ -1,0 +1,1 @@
+mail.somsolution.com	A	단순	-	192.1.1.1
