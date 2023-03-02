@@ -80,11 +80,11 @@ public class AttendanceServiceImpl implements AttendanceService{
 				if (times.getAttendanceLeavetotime() == 0) {
 					GoToTime = 0;
 					LeaveToTime = 0;
-					
 				}else {
 					GoToTime = times.getAttendanceGototime();
 					LeaveToTime = times.getAttendanceLeavetotime();
 				}
+				
 				DayWorkingHours = LeaveToTime - GoToTime;
 				weekWorkingHours += DayWorkingHours;
 			}
