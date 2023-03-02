@@ -8,8 +8,10 @@
 		select a.employee_no, a.employee_id, a.employee_pw, a.employee_name, a.employee_phone, a.employee_email, a.employee_addr, a.employee_team, a.employee_admin, a.manage_no, b.manage
 		from employee as a
 		join manage as b
-		where a.manage_no = b.manage_no
-		and a.employee_id = #{id} and a.employee_pw = #{pw};
+		where a.manage_no = b.manage_no 
+		and a.employee_leave is null
+		and a.employee_id = #{id} 
+		and a.employee_pw = #{pw}
 	</select>
 	
 </mapper>
