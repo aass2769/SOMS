@@ -158,7 +158,7 @@ public class AttendanceServiceImpl implements AttendanceService{
 		}
 		
 		// 전날에 퇴근안찍고 갔을 경우
-		if(attendanceRecent.getAttendanceGotodate() != today) {
+		if(!attendanceRecent.getAttendanceGotodate().equals(today)) {
 			if(attendanceRecent.getAttendanceLeavetotime() == 0 && attendanceRecent.getAttendanceGototime() != 0) {
 				AttendanceDto attendanceDto = new AttendanceDto(leavetime, employeeNo);
 				attendanceRepository.attendanceUpdate(attendanceDto);
