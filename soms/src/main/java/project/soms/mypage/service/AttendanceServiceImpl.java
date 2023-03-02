@@ -77,7 +77,7 @@ public class AttendanceServiceImpl implements AttendanceService{
 			
 			if(times != null) {				
 				
-				if (times.getAttendanceLeavetotime() == null) {
+				if (times.getAttendanceLeavetotime() == 0) {
 					GoToTime = 0;
 					LeaveToTime = 0;
 					
