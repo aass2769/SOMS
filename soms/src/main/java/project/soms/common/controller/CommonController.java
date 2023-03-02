@@ -57,7 +57,7 @@ public class CommonController {
 			List<CommonDto> teamEmployeeList = commonService.commonList(teams[i-1]);
 			
 			for (CommonDto employeeList : teamEmployeeList) {				
-				Optional<String> bool = Optional.ofNullable(attendanceRepository.goToWorkCheck(employeeList.getEmployeeNo()));
+				Optional<String> bool = Optional.ofNullable(attendanceRepository.attendanceCheck(employeeList.getEmployeeNo()));
 				if(bool.isPresent()) {
 					employeeList.setEmployeeAttendance(1);
 				}else {
@@ -73,7 +73,7 @@ public class CommonController {
 		List<CommonDto> executiveList = commonService.executiveList(teams);
 		
 		for (CommonDto employeeList : executiveList) {				
-			Optional<String> bool = Optional.ofNullable(attendanceRepository.goToWorkCheck(employeeList.getEmployeeNo()));
+			Optional<String> bool = Optional.ofNullable(attendanceRepository.attendanceCheck(employeeList.getEmployeeNo()));
 			if(bool.isPresent()) {
 				employeeList.setEmployeeAttendance(1);
 			}else {

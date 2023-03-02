@@ -9,5 +9,6 @@ import project.soms.employee.dto.EmployeeDto;
 @Mapper
 @Repository
 public interface LoginMapper {
-	EmployeeDto LoginCheck(@Param("id") String id, @Param("pw") String pw);
+	// 로그인 체크 후 사원의 정보를 가져온다.
+	EmployeeDto login(@Param("id") String id, @Param("pw") String pw);
 }

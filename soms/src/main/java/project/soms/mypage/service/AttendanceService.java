@@ -1,29 +1,20 @@
 package project.soms.mypage.service;
 
+import java.io.IOException;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-import project.soms.mypage.dto.AttendanceCheckDto;
-import project.soms.mypage.dto.WorkDto;
+import org.springframework.ui.Model;
 
 public interface AttendanceService {
 	
-	void workcheck(HttpServletRequest req, Integer value);
+	public String getAttendanceSelectDate(String AttendanceSelectDate);
 	
-	void goToWork(WorkDto goToWorkDto);
+	public List<String> getAttendanceSixMonth();
 	
-	void leaveToWork(WorkDto leaveToWorkDto);
+	public String calAttendance(long employeeNo);
 	
-	long getAttendanceNum(long employeeNo);
+	public void getTodayAttendanceExistence(long employeeNo, Model model, HttpServletResponse res)throws IOException;
 	
-	List<AttendanceCheckDto> attendanceCheck(long employeeNo,String ym);
-	
-	String getAttendanceDate(String attendanceDate);
-	
-	List<String> getAttendanceAtSixMonths();
-	
-	AttendanceCheckDto getWorkTime(long employeeNo, String workDate);
-	
-	String getWeekWorkTime(long employeeNo);
 }

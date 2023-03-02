@@ -4,42 +4,38 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.stereotype.Repository;
 
 import project.soms.employee.dto.EmployeeDto;
 import project.soms.mypage.dto.AnnualLeaveDto;
-import project.soms.mypage.dto.ManageDto;
+import project.soms.mypage.dto.ManageListDto;
 import project.soms.mypage.dto.OvertimeDto;
 
-@Repository
 @Mapper
 public interface MypageMapper {
-	
-	// 직급 가져오기 
-	public String getManage(long manageNo);
-	
-	// 직급 가져오기 List
-	public List<ManageDto> getManages();
-	
-	// 내정보 업데이트
+	// 개인정보 수정
 	public void mypageInfomationUpdate(EmployeeDto employee);
-
-	// 어드민의 정보를 가져온다
-	public long getManageNo(long employeeAdmin);
-
-	// 사번과 아이디를 가진 사원이 있는지 찾는다
-	public Integer getEmployeeCheck(EmployeeDto employee);
 	
-	// 회원가입 인설트
-	public void register(EmployeeDto employee);
+	// 회원가입 및 개인정보용 직급 리스트
+	public List<ManageListDto> mypageRegisterManageList();
 	
-	// ajax로 key값을받아 사원을 조회히 DTO로 받아온다
-	public EmployeeDto searchModalEmployeePrivacy(long employeeNo);
+	// 매니지 넘버 가져오기
+	public Integer getEmployeeManageNo(long employeeNo);
 	
-	// 연차조회
+	// 회원가입
+	public void mypageRegisterInsert(EmployeeDto employee);
+	
+	// 회원가입 중복 체크
+	public Integer mypageRegisterUniqueCheck(EmployeeDto employee);
+	
+	// Modal용 사번으로 사원정보 가져오기 
+	public EmployeeDto mypageEmployeeSearch(long employeeNo);
+	
+	// 연차 List
 	public List<AnnualLeaveDto> getEmployeeAnnualLeave(@Param("employeeNo") long employeeNo, @Param("year") Integer year);
 	
-	// 연장근로 조회
-	public OvertimeDto getEmployeeOvertime(@Param("employeeNo") long employeeNo, @Param("day") String now);
+	// 연장근무
+	public OvertimeDto getEmployeeOvertime(@Param("employeeNo")long employeeNo, @Param("NowDate") String NowDate);
 	
+	// 회원 삭제
+	public void mypageDelete(long employeeNo);
 }

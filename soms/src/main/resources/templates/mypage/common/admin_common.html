@@ -1,6 +1,4 @@
 <!DOCTYPE html>
-<!-- 매인 레이아웃 파일은 인클루드 받아 해당 파라미터 위치에 들어가야 하는 태그 명을 넣어 페이지를 완성합니다.
-페이지의 title과 본문이 작성된 section태그를 레이아웃 파라미터에 넣어 페이지를 완성합니다. -->
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
@@ -11,66 +9,16 @@
 </head>
 <body>
 
+<div th:fragment="adminCommon">
 
-<div th:fragment="commonListUpdate">
-
-		<div class="offcanvas offcanvas-end" data-bs-backdrop="false" th:classappend="${commonSelect} ? 'show' : '' "
-			tabindex="-1" id="offcanvasRightUpdate" aria-labelledby="offcanvasRightLabel" style="width: 560px;">
+		<div class="offcanvas offcanvas-end" data-bs-backdrop="false" th:classappend="${adminommon} ? 'show' : '' "
+			tabindex="-1" id="AdminOffcanvas" aria-labelledby="offcanvasRightLabel" style="width: 560px;">
 			<div class="offcanvas-header">
-				<h4 class="offcanvas-title" id="offcanvasRightLabel" style="color: #D8542E; font-weight: bold;">사번 조회 - 사원정보 업데이트
+				<h4 class="offcanvas-title" id="offcanvasRightLabel" style="color: #D8542E; font-weight: bold;">사원 조회 - 관리자
 				</h4>
 				<button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
 			</div>
 			<div class="offcanvas-body">
-				
-				<!-- 부서 or 직급 or 이름을 검색하는 부분입니다.-->
-				<div class="common_form">
-					<form method="get" th:action>
-						<select name="employeeTeam" class="select_employeeTeam">
-							<option disabled selected>부서선택</option>
-							<option value="임원">임원</option>
-							<option value="경영 지원-경영 관리">경영 지원-경영 관리</option>
-							<option value="경영 지원-재무 회계">경영 지원-재무 회계</option>
-							<option value="경영 지원-정보 보안">경영 지원-정보 보안</option>
-							<option value="경영 지원-구매">경영 지원-구매</option>
-							<option value="개발 연구-개발 1팀">개발 연구-개발 1팀</option>
-							<option value="개발 연구-개발 2팀">개발 연구-개발 2팀</option>
-							<option value="개발-연구 연구팀">개발-연구 연구팀</option>
-							<option value="영업-홍보 마케팅">영업-홍보 마케팅</option>
-							<option value="영업-해외 사업">영업-해외 사업</option>
-						</select>
-						<select name="manage" class="selectManage">
-							<option disabled selected>직급</option>
-							<option value="인턴">인턴</option>
-							<option value="사원">사원</option>
-							<option value="주임">주임</option>
-							<option value="대리">대리</option>
-							<option value="과장">과장</option>
-							<option value="차장">차장</option>
-							<option value="부장">부장</option>
-							<option value="이사">이사</option>
-							<option value="상무">상무</option>
-							<option value="전무">전무</option>
-							<option value="관리자">관리자</option>
-							<option value="부사장">부사장</option>
-							<option value="사장">사장</option>
-						</select>
-						<input type="text" name="employeeName" class="text_employee_name">
-						<button type="submit" class="submit_employee">검색</button>
-					</form>
-				</div>
-
-
-				<!--부서, 직급, 이름 선택 후 검색 했을 때 출력되는 부분-->
-				<th:block th:each="select : ${commonSelect}">
-					<div class="select_list">
-						<button class="select_list_button" id = "select_list_button"
-							th:text="${select.employeeTeam} + ' / ' + ${select.manage} + ' ' + ${select.employeeName}"
-							th:value="${select.employeeNo}">
-						</button>
-					</div>
-				</th:block>
-
 
 				<div>
 					<!--임원-->
@@ -89,7 +37,7 @@
 										<p></p>
 									</div>
 									<span class="td_common_manage_name">
-										<button class="common_manage_name" id="common_manage_name" th:value="${team.employeeNo}" value2 = "3"
+										<button class="common_manage_name"   th:value="${team.employeeNo}" value2 = "3"
 											th:text="${team.manage} + ' | ' + ${team.employeeName}"></button>
 									</span>
 								</div>
@@ -113,7 +61,7 @@
 										<p></p>
 									</div>
 									<span class="td_common_manage_name">
-										<button class="common_manage_name" id="common_manage_name" th:value="${team.employeeNo}" value2 = "3"
+										<button class="common_manage_name"   th:value="${team.employeeNo}" value2 = "3"
 											th:text="${team.manage} + ' | ' + ${team.employeeName}"></button>
 									</span>
 								</div>
@@ -137,7 +85,7 @@
 										<p></p>
 									</div>
 									<span class="td_common_manage_name">
-										<button class="common_manage_name" id="common_manage_name" th:value="${team.employeeNo}" value2 = "3"
+										<button class="common_manage_name"  th:value="${team.employeeNo}" value2 = "3"
 											th:text="${team.manage} + ' | ' + ${team.employeeName}"></button>
 									</span>
 								</div>
@@ -161,7 +109,7 @@
 										<p></p>
 									</div>
 									<span class="td_common_manage_name">
-										<button class="common_manage_name" id="common_manage_name" th:value="${team.employeeNo}" value2 = "3"
+										<button class="common_manage_name"   th:value="${team.employeeNo}" value2 = "3"
 											th:text="${team.manage} + ' | ' + ${team.employeeName}"></button>
 									</span>
 								</div>
@@ -185,7 +133,7 @@
 										<p></p>
 									</div>
 									<span class="td_common_manage_name">
-										<button class="common_manage_name" id="common_manage_name" th:value="${team.employeeNo}" value2 = "3"
+										<button class="common_manage_name"   th:value="${team.employeeNo}" value2 = "3"
 											th:text="${team.manage} + ' | ' + ${team.employeeName}"></button>
 									</span>
 								</div>
@@ -209,7 +157,7 @@
 										<p></p>
 									</div>
 									<span class="td_common_manage_name">
-										<button class="common_manage_name" id="common_manage_name" th:value="${team.employeeNo}" value2 = "3"
+										<button class="common_manage_name"   th:value="${team.employeeNo}" value2 = "3"
 											th:text="${team.manage} + ' | ' + ${team.employeeName}"></button>
 									</span>
 								</div>
@@ -233,7 +181,7 @@
 										<p></p>
 									</div>
 									<span class="td_common_manage_name">
-										<button class="common_manage_name" id="common_manage_name" th:value="${team.employeeNo}" value2 = "3"
+										<button class="common_manage_name"   th:value="${team.employeeNo}" value2 = "3"
 											th:text="${team.manage} + ' | ' + ${team.employeeName}"></button>
 									</span>
 								</div>
@@ -257,7 +205,7 @@
 										<p></p>
 									</div>
 									<span class="td_common_manage_name">
-										<button class="common_manage_name" id="common_manage_name" th:value="${team.employeeNo}" value2 = "3"
+										<button class="common_manage_name"   th:value="${team.employeeNo}" value2 = "3"
 											th:text="${team.manage} + ' | ' + ${team.employeeName}"></button>
 									</span>
 								</div>
@@ -269,7 +217,7 @@
 					<div>
 						<p id="employee_team_p">
 							<button class="btn btn-primary" id="common_button" type="button" data-bs-toggle="collapse"
-								data-bs-target="#common_employee_container8" aria-expanded="false"
+								data-bs-target="#common_employee_container8" aria-expanded="false" 
 								aria-controls="common_employee_container8">
 								영업 - 홍보마케팅
 							</button>
@@ -281,7 +229,7 @@
 										<p></p>
 									</div>
 									<span class="td_common_manage_name">
-										<button class="common_manage_name" id="common_manage_name" th:value="${team.employeeNo}" value2 = "3"
+										<button class="common_manage_name"  th:value="${team.employeeNo}" value2 = "3"
 											th:text="${team.manage} + ' | ' + ${team.employeeName}"></button>
 									</span>
 								</div>
@@ -305,7 +253,7 @@
 										<p></p>
 									</div>
 									<span class="td_common_manage_name">
-										<button class="common_manage_name" id="common_manage_name" th:value="${team.employeeNo}" value2 = "3"
+										<button class="common_manage_name" th:value="${team.employeeNo}" value2 = "3"
 											th:text="${team.manage} + ' | ' + ${team.employeeName}"></button>
 									</span>
 								</div>
@@ -316,12 +264,12 @@
 			</div>
 			<script>
 				
-
 				//근무중이면 초록색, 근무중이아니면 붉은색
 				$(function () {
 					$('.attendance_check').css('background-color', 'red');
 					$('.attendance_check').css('border', 'red');
 				});
+				
 			</script>
 </div>
 </body>

@@ -1,55 +1,68 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-        
+       
 <mapper namespace="project.soms.mypage.repository.mapper.MypageMapper">
 	
-	
-	<select id="getManage" resultType="String">
-		select manage from manage
-		where manage_no = #{manageNo}
-	</select>
-	
-	<select id="getManages" resultType="project.soms.mypage.dto.ManageDto">
-		select manage, manage_no from manage;
-	</select>
-	
 	<update id="mypageInfomationUpdate">
-		update employee
-		set 
-		employee_no = #{employeeNo},
-		employee_id = #{employeeId},
+		update employee set 
 		employee_pw = #{employeePw},
-		employee_name = #{employeeName},
 		employee_phone = #{employeePhone},
 		employee_addr = #{employeeAddr},
-		employee_team = #{employeeTeam},
-		employee_admin = #{employeeAdmin},
-		employee_email = #{employeeEmail},
-		manage_no = #{manageNo}
+		employee_email = #{employeeEmail}
+		
+		<if test="employeeId != null">
+			,employee_no = #{employeeNo},
+			employee_id = #{employeeId},
+			employee_name = #{employeeName},
+			employee_team = #{employeeTeam},
+			manage_no = #{manageNo}
+		</if>
+		
+		<if test="employeeAdmin > 0">
+			,employee_admin = #{employeeAdmin}
+		</if>
+		
 		
 		where employee_no = #{employeeNo}
 	</update>
 	
-	<select id="getManageNo" resultType="long">
+	<select id="mypageRegisterManageList" resultType="project.soms.mypage.dto.ManageListDto">
+		select manage, manage_no from manage
+	</select>
+	
+	<select id="getEmployeeManageNo" resultType="Integer">
 		select manage_no from employee
-		where employee_no = #{emoloyeeAdmin}
-	</select>
-	
-	<select id="getEmployeeCheck" resultType="Integer">
-		select count(*) from employee
 		where employee_no = #{employeeNo}
-		and employee_id = #{employeeId}
 	</select>
 	
-	<insert id="register" keyProperty="employeeNo"  keyColumn="employee_no">
-		insert into employee(employee_no, employee_id, employee_pw, employee_name,  employee_phone, employee_email,  employee_addr,  employee_team,  employee_admin, manage_no) 
-		values(#{employeeNo}, #{employeeId}, '1234', #{employeeName}, #{employeePhone}, #{employeeEmail}, #{employeeAddr}, #{employeeTeam}, #{employeeAdmin}, #{manageNo});
+	<insert id="mypageRegisterInsert">
+		insert into employee(employee_no, employee_id, employee_pw, employee_name,  employee_phone,
+								employee_email,  employee_addr,  employee_team, manage_no
+								<if test="employeeAdmin != 0">
+									,employee_admin
+								</if>
+								) 
+		values(#{employeeNo}, #{employeeId}, '1234', #{employeeName}, #{employeePhone}, 
+								#{employeeEmail}, #{employeeAddr}, #{employeeTeam}, #{manageNo}
+								<if test="employeeAdmin != 0">
+									,#{employeeAdmin}
+								</if>
+								) 
 	</insert>
 	
-	<select id="searchModalEmployeePrivacy" resultType="project.soms.employee.dto.EmployeeDto">
-		select * from employee
-		where employee_no = #{employeeNo}
+	<select id="mypageRegisterUniqueCheck" resultType="Integer">
+		select count(*) from employee
+		where employee_id = #{employeeId}
+		or employee_no = #{employeeNo}
+	</select>
+	
+	<select id="mypageEmployeeSearch" resultType="project.soms.employee.dto.EmployeeDto">
+		select a.employee_no, a.employee_id, a.employee_pw, a.employee_name, a.employee_phone, a.employee_email, a.employee_addr, a.employee_team, a.employee_admin, a.manage_no, b.manage
+		from employee as a
+		join manage as b
+		where a.manage_no = b.manage_no
+		and a.employee_no = #{employeeNo}
 	</select>
 	
 	<select id="getEmployeeAnnualLeave" resultType="project.soms.mypage.dto.AnnualLeaveDto">
@@ -65,7 +78,6 @@
 		group by submission_pri, annual_leave_section, annual_leave_start, annual_leave_end, annual_leave_time
 	</select>
 	
-
 	<select id="getEmployeeOvertime" resultType="project.soms.mypage.dto.OvertimeDto">
 		select
 		submission_pri,
@@ -75,12 +87,17 @@
 		b.overtime_start_date, b.overtime_end_date, b.overtime_start_time, b.overtime_end_time
 		from submission as a
 		join overtime as b on a.overtime_no = b.overtime_no
-		where <![CDATA[ a.overtime_no is not null and b.overtime_start_date <= #{day} and  b.overtime_end_date >= #{day} ]]>
+		where <![CDATA[ a.overtime_no is not null and b.overtime_start_date <= #{NowDate} and  b.overtime_end_date >= #{NowDate} ]]>
 		group by submission_pri, submission_subject, submission_datetime, b.overtime_start_date, b.overtime_end_date, b.overtime_start_time, b.overtime_end_time
 		order by submission_datetime desc
 		limit 1;
 	</select>
 	
+	<delete id="mypageDelete">
+		update employee
+		set employee_leave = 'ok'
+		where employee_no = #{employeeNo}
+	</delete>
 	
 	
 </mapper>

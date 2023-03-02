@@ -1,5 +1,6 @@
 package project.soms.mypage.service;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -7,122 +8,55 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 import lombok.RequiredArgsConstructor;
-import project.soms.employee.dto.EmployeeDto;
-import project.soms.mypage.dto.AttendanceCheckDto;
-import project.soms.mypage.dto.WorkDto;
+import project.soms.mypage.dto.AttendanceDto;
+import project.soms.mypage.dto.OvertimeDto;
 import project.soms.mypage.repository.AttendanceRepository;
+import project.soms.mypage.repository.MypageRepository;
 
 @Service
 @RequiredArgsConstructor
 public class AttendanceServiceImpl implements AttendanceService{
-
-	private final AttendanceRepository attendanceRepository ;
 	
-	@Override // 출퇴근을 했는지 안했는지 확인 후 각각 맞는 메서드로 넘김
-	public void workcheck(HttpServletRequest req, Integer value) {
-		// 세션의 사원값 가져오기
-		EmployeeDto employee = (EmployeeDto) req.getSession().getAttribute("LOGIN_EMPLOYEE");
-		long employeeNo = employee.getEmployeeNo();
-		
-		// goToWorkCheck = 출근을 했을경우 값이 있고 없을경우엔 값이 없다 이걸로 체크
-		Optional<String> bool = Optional.ofNullable(attendanceRepository.goToWorkCheck(employeeNo));
+	private final AttendanceRepository attendanceRepository;
 	
-		// 출퇴근 관련 시간 계산
-		Date now = new Date();
-		
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		String nowDate = sdf.format(now);
-		 
-		sdf = new SimpleDateFormat("HH");
-		Integer nowHour = Integer.parseInt(sdf.format(now));
-		
-		sdf = new SimpleDateFormat("mm");
-		int nowMinute = Integer.parseInt(sdf.format(now));
-		
-		if(nowMinute > 30) {
-			nowHour+=1;
-		}
-		
-		// bool 값이 없을경우 퇴근으로 있을경우 출근 메서드를 진행
-		if(bool.isPresent()) {
-			long attendanceNo = getAttendanceNum(employeeNo);
-			WorkDto leaveToWorkDto = new WorkDto(employeeNo, nowHour, attendanceNo);
-			leaveToWork(leaveToWorkDto);
-		}else {
-			if(value == 1) {
-				WorkDto goToWorkDto = new WorkDto(employeeNo, nowDate, nowHour);
-				goToWork(goToWorkDto);
-			}
-		}
-		
-	}
-
-	@Override	// 출근 진행 메서드
-	public void goToWork(WorkDto goToWorkDto) {
-		attendanceRepository.goToWork(goToWorkDto);
-	}
-
-	@Override	// 해당 사번으 가장 최근 출근 프라이머리키를 조회
-	public long getAttendanceNum(long employeeNo) {
-		return attendanceRepository.getAttendanceNum(employeeNo);
-	}
+	private final MypageRepository mypageRepository;
 	
-	@Override	// 퇴근 진행 메서드
-	public void leaveToWork(WorkDto leaveToWorkDto) {
-		attendanceRepository.leaveToWork(leaveToWorkDto);
-	}
-	
-	@Override // 이날에 
-	public List<AttendanceCheckDto> attendanceCheck(long employeeNo,String ym) {
-		return attendanceRepository.attendanceCheck(employeeNo, ym);
-	}
-	
-	@Override
-	public String getAttendanceDate(String attendanceDate) {
-				
-		if(attendanceDate == null) {
+	@Override	// 값이 있을 경우 그대로, 없을경우 이번년도 달을 반환
+	public String getAttendanceSelectDate(String AttendanceSelectDate) {
+		if(AttendanceSelectDate == null) {
 			Date now = new Date();
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
 			return sdf.format(now);
 		}else {
-			return attendanceDate;
+			return AttendanceSelectDate;
 		}
-		
 	}
 	
-	@Override
-	public List<String> getAttendanceAtSixMonths(){
+	@Override	// 6개월간의 List
+	public List<String> getAttendanceSixMonth(){
 		
-		LocalDate localNow;
-		String localNow_Text;
-		List<String> attendanceAtSixMonths = new ArrayList<>();
+		List<String> attendanceSixMonth = new ArrayList<>();
 		
 		for(int i = 0; i < 6; i++) {
-			localNow = LocalDate.now().minusMonths(i);
-			localNow_Text = localNow.toString().substring(0,7);
-			attendanceAtSixMonths.add(localNow_Text);
+			LocalDate localNow = LocalDate.now().minusMonths(i);
+			String localNow_Text = localNow.toString().substring(0,7);
+			attendanceSixMonth.add(localNow_Text);
 		}
 		
-		Collections.reverse(attendanceAtSixMonths);
+		Collections.reverse(attendanceSixMonth);
 		
-		return attendanceAtSixMonths;
-		
+		return attendanceSixMonth;
 	}
-	
-	@Override
-	public AttendanceCheckDto getWorkTime(long employeeNo, String workDate) {
-		return attendanceRepository.getWorkTime( employeeNo, workDate);
-	}
-	
-	@Override
-	public String getWeekWorkTime(long employeeNo) {
+
+	@Override //주간근로 계산
+	public String calAttendance(long employeeNo) {
 		
 		Integer DayWorkingHours = 0;
 		
@@ -139,10 +73,9 @@ public class AttendanceServiceImpl implements AttendanceService{
 			cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY + i);
 			String Today = format.format(cal.getTime());
 			
-			AttendanceCheckDto times = getWorkTime(employeeNo, Today);
+			AttendanceDto times = attendanceRepository.calAttendance(employeeNo, Today);
 			
 			if(times != null) {				
-				
 				
 				if (times.getAttendanceLeavetotime() == null) {
 					GoToTime = 0;
@@ -159,8 +92,74 @@ public class AttendanceServiceImpl implements AttendanceService{
 		
 		return weekWorkingHours.toString();
 	}
-	
-	
-	
 
+	@Override	// 출퇴근 버튼 관리
+	public void getTodayAttendanceExistence(long employeeNo, Model model,HttpServletResponse res) throws IOException {
+		Date now = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		String today = sdf.format(now).substring(0,10);
+		
+		// 값이 0일 경우 오늘 퇴근 안함,0 이상일경우 오늘 출퇴근 완료
+		Integer existence = attendanceRepository.getTodayAttendanceExistence(employeeNo, today);
+		
+		if(existence>0) {
+			model.addAttribute("attendanceExistence", "true");
+		}else {
+			model.addAttribute("attendanceExistence", "false");
+		}
+		
+		int gotime = 9;
+		int leavetime = 18;
+		
+		int nowtime = Integer.parseInt(sdf.format(now).substring(11, 13));
+		
+		int nowminute = Integer.parseInt(sdf.format(now).substring(14, 16));
+
+		// 당일 연장근무가 있을 경우 연장근무로 끝나는시간을 변경
+		OvertimeDto overtime = mypageRepository.getEmployeeOvertime(employeeNo, today);
+		
+		Integer attendance = 3;
+		
+		if(overtime != null) {
+			if(overtime.getOvertimeStartTime()<gotime) {
+				gotime = overtime.getOvertimeStartTime();
+			}else {
+				leavetime = overtime.getOvertimeEndTime();
+			}
+		}
+		
+		
+		if((nowtime==(gotime-1))&&(nowminute>=50) || (nowtime>=gotime)) {
+			
+			String attendnaceCheck = attendanceRepository.attendanceCheck(employeeNo);
+			
+			if(attendnaceCheck == null) {
+				attendance = 2;
+			}else {
+				attendance = 1;
+			}
+		}
+		
+		AttendanceDto attendanceRecent = attendanceRepository.getAttendanceRecent(employeeNo);
+		
+		if(attendanceRecent == null) {
+			Integer a = 0;
+			attendanceRecent = new AttendanceDto("null", a, a);
+		}
+		
+		if(nowtime >= leavetime) {
+			attendance = 3;
+			
+			if(attendanceRecent.getAttendanceLeavetotime() == 0 && attendanceRecent.getAttendanceGototime() != 0) {
+				AttendanceDto attendanceDto = new AttendanceDto(leavetime, employeeNo);
+				attendanceRepository.attendanceUpdate(attendanceDto);
+				attendance = 4;
+			}
+		}
+		
+		model.addAttribute("attendance", attendance);
+		
+	}
+		
+		
 }

@@ -1,0 +1,187 @@
+ <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"> 
+	
+	<div th:fragment="infomation">
+		
+		<!-- Modal [개인 정보] -->
+	    <div class="modal fade" id="emoloyeeInfomationModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="false">
+			<div class="modal-dialog">
+				
+		    	<div class="modal-content">
+					<!-- 모달 헤더 -->
+		      		<div class="modal-header">
+		        		<h5 class="modal-title">내 정보</h5>
+		        		<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		      		</div>
+		      		
+		      		<!-- 모달 바디 -->
+		      		<div class="modal-body" style="padding-bottom: 0;">
+				 		<div class="mb-3 row">
+				    	<div class="col-sm-10 w-100">
+						
+						<form action="/mypage/infomation/update" method="post" id = "InfomationForm" >
+						
+							<div class = "d-flex mb-2">	
+							
+								<!-- 이름 -->
+								<input type="text" class="form-control w-25" placeholder="성명" name="employeeName"
+								th:value="${employee.getEmployeeName}" id = "InfomationName" maxlength="5" readonly>
+									
+								<!-- 사번 -->
+							  	<input type="text" class="form-control w-50 ms-2" placeholder="사번" name="employeeNo"
+							  	th:value="${employee.getEmployeeNo}" id = "InfomationNo" maxlength="11" readonly>
+							  		
+							  	<!--직급 이름-->
+								<input type="text" class="form-control w-25 ms-2" th:value="${employee.manage}" readonly>
+									
+								<!--직급 넘버-->
+								<input type="hidden" th:value="${employee.getManageNo}" name = "manageNo" >
+								
+							</div>
+								
+							<!-- 아이디 -->
+							<input type="text" class="form-control mb-2"  name="employeeId" th:value="${employee.getEmployeeId}" id = "InfomationId" maxlength="25" readonly>
+							  
+							<!-- 비밀번호 -->
+							<input type="password" class="form-control mb-2"  name="employeePw" placeholder="비밀번호" id = "InfomationPw" maxlength="50" readonly>
+							  
+							<!-- 연락처 -->
+							<input type="number " class="form-control mb-2" placeholder="연락처"  name="employeePhone" th:value="${employee.getEmployeePhone}" id = "InfomationPhone" 
+							 maxlength="13" readonly>
+							  
+							<!-- 이메일 -->
+							<input type="email" class="form-control mb-2" placeholder="이메일"  name="employeeEmail" th:value="${employee.getEmployeeEmail}" id = "InfomationEmail" 
+							maxlength="50" readonly>
+							  
+							<!-- 자택주소 -->
+							<input type="text" class="form-control mb-2" placeholder="자택주소"  name="employeeAddr" th:value="${employee.getEmployeeAddr}" id = "InfomationAddr" 
+							maxlength="50" readonly>
+							  
+							<div class = "d-flex mb-2">
+									  
+								<!-- 부서 -->
+								<input type="text" class="form-control w-50" placeholder="부서"  name="employeeTeam" th:value="${employee.getEmployeeTeam}" id = "InfomationTeam" readonly>
+									
+								<!-- 관리자 -->
+							  	<input type="text" class="form-control w-50 ms-2" placeholder="관리자"  name="employeeAdmin" id = "InfomationAdmin" readonly
+							  	th:value="${employee.getEmployeeAdmin} > 0 ?  ${employee.getEmployeeAdmin} : '없음' " maxlength="11">
+							</div>
+					  </form>
+					  
+				      <p style="margin: 0.5rem 0 0 0.3rem; font-size: 0.8rem;">비밀번호, 연락처, 이메일, 주소를 변경할 수 있습니다.</p>
+				      <p style="margin: 0.5rem 0 0 0.3rem; font-size: 0.8rem;">비밀번호는 영어 소문자/숫자 1개 이상 조합으로 8~16자리입니다.</p>
+				      <p style="margin: 0.5rem 0 0 0.3rem; font-size: 0.8rem;">연락처는 (010-xxxx-xxxx)로 입력해주세요.</p>
+				      
+				    </div>
+				  </div>
+		      </div>
+		      <div class="modal-footer">
+				<button id = "InfomationUpdateEnd" type="button" class="btn btn-primary" style="background-color: #EA471B;" disabled>수정완료</button>
+		        <button id = "InfomationUpdateStart" type="button" class="btn btn-primary" style="background-color: #EA471B;">수정하기</button>
+		      </div>
+		    </div>
+		  </div>
+		
+		<script>
+						
+			const checklist = ['Pw', 'Phone', 'Email', 'Addr'];
+			
+			// 수정하기 버튼을 누를 때
+			$('#InfomationUpdateStart').click(function(){
+
+				for(var i = 0; i < checklist.length; i++){
+					$('#Infomation'+ checklist[i]).attr('readonly', false);
+				}
+				
+				$('#InfomationUpdateStart').attr('disabled', true);		
+				$('#InfomationUpdateEnd').attr('disabled', false);
+				$('#InfomationPw').focus();
+				return
+			})
+			
+			// 수정완료 버튼을 누를 때
+			$('#InfomationUpdateEnd').click(function(){
+				
+				const pw_regex = /(?=.*\d)(?=.*[a-zA-ZS]).{8,16}/;
+				const pw_special_regex = /[~!@#\#$%<>^&*]/;
+				const phone_regex = /\d{3}-\d{4}-\d{4}/; 
+				
+				let checkcount = 0;
+				
+				for(var x = 0; x < checklist.length; x++){
+					if($('#Infomation'+ checklist[x]).val() != ''){
+						checkcount+= 1;
+					}
+				}
+				
+				if(checkcount!=checklist.length){
+					alert('누락된 정보가 있습니다.');
+					return
+				}
+				
+				if(!pw_regex.test($('#InfomationPw').val())){
+					alert('잘못된 비밀번호 입니다.');
+					return
+				}
+				
+				if(pw_special_regex.test($('#InfomationPw').val())){
+					alert('비밀번호에 특수문자를 사용할 수 없습니다.');
+					return
+				}
+				
+				if(!phone_regex.test($('#InfomationPhone').val())){
+					alert('잘못된 연락처 방식 입니다..');
+					return
+				}
+				
+				if( !$('#InfomationEmail').val().includes('@') || !$('#InfomationEmail').val().includes('.com') ){
+					alert("이메일 형식이 올바르지 않습니다.");
+					return
+				}
+				
+				if($('#InfomationAdmin').val() == '없음'){
+					$('#InfomationAdmin').val(0);
+				}
+				
+				if(confirm('정말로 수정하시겠습니까?')){
+					$('#emoloyeeInfomationModal').modal('hide');
+					$('#spinner').modal('show');
+					
+					$.ajax({
+							url: "/mypage/infomation/update",
+							type: "post",
+							data: {
+									employeeNo: $('#InfomationNo').val(),
+									employeePhone: $('#InfomationPhone').val(),
+									employeeEmail: $('#InfomationEmail').val(),
+									employeeAddr: $('#InfomationAddr').val(),
+									employeePw: $('#InfomationPw').val()
+							},
+						success:function(result){
+								if(result == 1){
+									alert("개인정보가 업데이트 되었습니다. 다시 로그인해주세요.");
+									location.href= '/login';
+									return
+								}
+								if(result == 2){
+									$('#spinner').modal('hide');
+									alert("서버에 전송 실패하였습니다.");
+									return
+								}
+								
+							},
+						error: function(){ 
+							alert("서버에 전송 실패하였습니다.");
+							$('#spinner').modal('hide');
+							;}
+						})
+				}
+				
+			})
+			
+		</script>
+		
+	</div>
+		
+	  
+</html>

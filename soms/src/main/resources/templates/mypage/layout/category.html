@@ -3,68 +3,105 @@
 <head>
   <meta charset="UTF-8">
   <title>Title</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
 </head>
 <body>
-<!-- 아래에 선언한 categorys를 main레이아웃에서 인클루드하여 레이아웃이 완성됩니다. 개별로 작성해야할 코드의 구분을 위하여 html파일을 구분하였습니다. -->
-  <ul class = "Categorys" th:fragment="categorys">
+	<!-- 아래에 선언한 categorys를 main레이아웃에서 인클루드하여 레이아웃이 완성됩니다. 개별로 작성해야할 코드의 구분을 위하여 html파일을 구분하였습니다. -->
+	<ul class = "Categorys" th:fragment="categorys">
 
-    <!-- 카테고리 제목입니다 -->
-    <div class = Category-Title>
-      <i class="fa-solid fa-bars"></i>
-      &nbsp;&nbsp;
-      <p>마이페이지</p>
-    </div>
+		<!-- 카테고리 제목입니다 -->
+   		<div class = Category-Title>
+      		<i class="fa-solid fa-bars"></i>
+     		 &nbsp;&nbsp;
+      		<p>마이페이지</p>
+    	</div>
   
-    <div class = Category-A>
-      <a href="mypage">근태 조회</a>
-    </div>
+    	<div class = 'Category-A'>
+      		<a href="/mypage" onclick="spinerOn()">근태 조회</a>
+    	</div>
     
-    <div class = Category-A >
-      <a href="#" data-bs-toggle="modal" data-bs-target="#employeeUpdateModal">내정보 </a>
-    </div>   
-    
-    <div class = Category-A th:if="${attendance == 1}">
-      <a href="#" id = "Attendance_Btn" value = "1" >퇴근하기</a>
-    </div>
-    
-    <div class = Category-A th:if="${attendance == 2}">
-      <a href="#" id = "Attendance_Btn" value = "2" >출근하기</a>
-    </div>
-    
-    <div class = Category-A>
-      <a href="#" id = "employeeSearch" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRightSearch"
-			aria-controls="offcanvasRight">사원 조회</a>
-    </div>
-    
-    
-    <div class = Category-A th:if="${employee.manageNo > 10}">
-      <a href="mypage.register" id = "employeeRegister" >계정생성</a>
-    </div>
- 
-	
-   	<!-- 드롭다운 기능 스크립트 입니다 -->
-	<script>
-	    $('.Item-Title').click(function(){		
-	        let val = $(this).attr('value');
-	        let cas = $('.Item-Menu[value='+ val + ']');    
-	            if(cas.is(':visible')){
-	                cas.hide('fast');
-	            }else{
-	                cas.show('fast');
-	            }
-	    })
-	</script>
-	
-	<script src="js/mypage/attendance.js" th:inline="javascript"></script>
-	
+    	<div class = 'Category-A' >
+      		<a href="#" data-bs-toggle="modal" data-bs-target="#emoloyeeInfomationModal">내정보 </a>
+    	</div>   
+    	
+	    <div class = 'Category-A' th:if="${attendanceExistence == 'false' && attendance == 2}">
+	      <a href="#" id = "Attendance_Btn" value="1">출근하기</a>
+	    </div>
+	    
+	    <div class = 'Category-A' th:if="${attendanceExistence == 'false' && attendance == 1}">
+	    	<a href="#" id = "Attendance_Btn" value = "2" >퇴근하기</a>
+	    </div>
+	    
+	    <div class = 'Category-A'>
+	      <a href="#" id = "employee_search" data-bs-toggle="offcanvas" data-bs-target="#SearchOffcanvas"
+				aria-controls="offcanvasRight">사원 조회</a>
+	    </div>
+	    
+	    
+	    <div class = 'Category-A' th:if="${employee.manageNo > 10}">
+	      <a href="/mypage/register" onclick="spinerOn()" >계정생성 </a>
+	    </div>
+	    
+	    <script>
+			
+			function spinerOn(){
+				$('#spinner').modal('show');
+			}
+			
+		</script>
+	    
+	    
+	    <script>
+			$('#Attendance_Btn').click(function(){
+				
+				let confirmText_go = '출근';
+				let confirmText_leave = '퇴근';
+				let confirmText = '';
+				
+				if($('#Attendance_Btn').attr('value') == 1){
+					confirmText = confirmText_go;
+				}
+				
+				if($('#Attendance_Btn').attr('value') == 1){
+					confirmText = confirmText_leave;
+				}
+				
+				if(confirm(confirmText + ' 하시겠습니까?')){
+					$('#spinner').modal('show');
+					$.ajax({
+						url:"/mypage/attendance",
+						type: "get",
+						success: function(result){
+							if(result == 1){
+								alert('출근이 완료되었습니다.');
+								$('#spinner').modal('show');
+								location.href="/mypage";
+								return
+							}
+							
+							if(result == 2){
+								alert('퇴근이 완료되었습니다.');
+								$('#spinner').modal('show');
+								location.href="/mypage";
+								return
+							}
+							
+							if(result == 3){
+								$('#spinner').modal('hide');
+								alert('서버에 전송 실패하였습니다.');
+							}
+						},
+					error: function(){ 
+						$('#spinner').modal('hide');
+						alert("서버에 전송 실패하였습니다.");
+					}
+					})
+					
+					
+				}
+				
+			})
+		</script>
 
-  </ul>
-
-
-
-	
-	
+	</ul>	
 </body>
 </html>

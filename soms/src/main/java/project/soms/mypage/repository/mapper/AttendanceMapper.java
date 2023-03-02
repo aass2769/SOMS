@@ -5,22 +5,28 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import project.soms.mypage.dto.AttendanceCheckDto;
-import project.soms.mypage.dto.WorkDto;
+import project.soms.mypage.dto.AttendanceDto;
 
 @Mapper
 public interface AttendanceMapper {
 	
-	// 출근인지 퇴근인지를 체크
-	String workcheck(long employeeNo);
-	// 출근 Insert
-	void goToWork(WorkDto goToWorkDto);
-	// 퇴근 update
-	void leaveToWork(WorkDto leaveToWorkDto);
-	// 퇴근할 메서드에서 조건으로 사용할 출근한 attendance primary  key
-	long getAttendanceNum(long employeeNo);
-	// 출근퇴근한 목록을 리스트로 가져온다
-	List<AttendanceCheckDto> attendanceCheck(@Param("employeeNo")long employeeNo, @Param("ym")String ym);
-	// 출퇴근한 목록을 최근 한개 져온다. 
-	AttendanceCheckDto getWorkTime(@Param("employeeNo")long employeeNo, @Param("workDate")String workDate);
+	// 출근 했는지 안했는지 체크
+	public String attendanceCheck(long employeeNo);
+	
+	// 출근
+	public void attendanceInsert(AttendanceDto attendanceDto);
+	
+	// 퇴근
+	public void attendanceUpdate(AttendanceDto attendanceDto);
+	
+	// 출퇴근 기록
+	public List<AttendanceDto> attendanceList(@Param("employeeNo") long employeeNo, @Param("selectDate") String selectDate);
+	
+	// 주간근로 계산
+	public AttendanceDto calAttendance(@Param("employeeNo") long employeeNo, @Param("today") String today);
+	
+	// 오늘 출퇴근 유무
+	public Integer getTodayAttendanceExistence(@Param("employeeNo") long employeeNo, @Param("today") String today);
+	
+	public AttendanceDto getAttendanceRecent(long employeeNo1);
 }

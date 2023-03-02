@@ -14,4 +14,5 @@ public class EmployeeDto {
 	private String employeeTeam;
 	private long employeeAdmin;
 	private long manageNo;
+	private String manage;
 }

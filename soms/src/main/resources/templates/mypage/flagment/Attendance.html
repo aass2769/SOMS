@@ -6,6 +6,9 @@
 
 <body>
 	<div th:fragment="attendance" class = "attendance">
+		
+		<link th:href="@{/css/mypage/flagment/Attendance.css}" rel="stylesheet">
+		
 		<div class = "attendance_flexbox">
 			
 			<h3>출퇴근 조회</h3>
@@ -13,8 +16,8 @@
 			<div style="display: flex;justify-content: flex-end;margin: 0 0.3rem 0.5rem 0;">
 			
 			<select style="border: none; font-size: 0.85rem;" class = "attendanceSelect">
-				<option th:each="attendanceSelectDate : ${attendanceAtSixMonths}" th:text ="${attendanceSelectDate}" 
-					th:value ="${attendanceSelectDate}" th:selected="${attendanceSelectDate == attendanceDate}"></option>
+				<option th:each="attendanceMonth : ${attendanceSixMonth}" th:text ="${attendanceMonth}" 
+					th:value ="${attendanceMonth}" th:selected="${attendanceMonth == attendanceSelectDate}"></option>
 			</select>
 			
 		</div>
@@ -32,19 +35,16 @@
 			</tr>
 
 		</table>
-		
-		<div style="margin: 0.5rem 0 0 0; display: flex;" >
-			<span style="font-size: 0.75rem; border-bottom: 0.05rem solid black;" 
-			th:text = "|주 근로 52시간중 총 ${weekWorkingHours}시간을 하셨습니다.|"></sapn>
-		</div>
-
+			<div style="margin: 0.5rem 0 0 0; display: flex;">
+			  <span style="font-size: 0.75rem; border-bottom: 0.05rem solid black;" th:if="${calAttendance lt 52}" th:text="|주 근로 52시간중 총 ${calAttendance}시간을 하셨습니다.|"></span>
+			  <span style="font-size: 0.75rem; border-bottom: 0.05rem solid black;" th:if="${calAttendance == 52}" th:text="|주 근로 52시간을 모두 하셨습니다.|"></span>
+			</div>
 		</div>
 		
 		<form style="display: none;" class = "attendanceSelectForm"
 		method = "get" action="mypage">
-			<input type="hidden" class ="attendanceSelectInput" name = "attendanceSelectDate">
+			<input type="hidden" class ="attendanceSelectInput" name = "AttendanceSelectDate">
 		</form>
-		
 		
 		<script>
 			
@@ -55,6 +55,7 @@
 			attendanceSelect.change(function(){
 				attendanceSelectInput.val(attendanceSelect.val());
 				attendanceSelectForm.submit();
+				$('#spinner').modal('show');
 			})
 			
 		</script>

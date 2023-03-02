@@ -4,51 +4,68 @@
         
 <mapper namespace="project.soms.mypage.repository.mapper.AttendanceMapper">
 	
-	<select id="workcheck" resultType="String">
-		select attendance_gototime from attendance
+	<select id="attendanceCheck" resultType="String">
+		select ifnull(attendance_gototime, "null") from attendance
 		where employee_no = #{employeeNo}
 		and attendance_leavetotime is null
 		order by attendance_no desc
 		limit 1
 	</select>
-
 	
-	<insert id="goToWork">
+	<select id="getAttendanceRecent" resultType="project.soms.mypage.dto.AttendanceDto">
+		SELECT attendance_gotodate, attendance_gototime, IFNULL(attendance_leavetotime, 0) AS attendance_leavetotime
+		FROM attendance
+		WHERE employee_no = #{employeeNo}
+		ORDER BY attendance_no DESC
+		LIMIT 1
+	</select>
+	
+	<insert id="attendanceInsert">
 		insert into attendance(attendance_gotodate, attendance_gototime, employee_no) 
-			values(#{nowDate}, #{nowHour}, #{employeeNo})
+			values(#{attendanceGotodate}, #{attendanceGototime}, #{attendanceEmployee})
 	</insert>
 	
-	<select id="getAttendanceNum" resultType="long">
-		select attendance_no from attendance
-		where employee_no = #{employeeNo}
-		order by attendance_no desc
-		limit 1;
-	</select>
-
-	<update id="leaveToWork">
-		update attendance
-		set attendance_leavetotime = #{nowHour}
-		where employee_no = #{employeeNo}
-		and attendance_no = #{attendanceNo}
-	</update>
+	<insert id="attendanceUpdate">
+		UPDATE attendance 
+		SET attendance_leavetotime = #{attendanceLeavetotime}
+		WHERE attendance_no = (
+		  SELECT sub.attendance_no 
+		  FROM (
+		    SELECT attendance_no 
+		    FROM attendance 
+		    WHERE employee_no = #{attendanceEmployee}
+		    ORDER BY attendance_no DESC 
+		    LIMIT 1
+		  ) AS sub );
+	</insert>
 	
-	<select id="attendanceCheck" resultType="project.soms.mypage.dto.AttendanceCheckDto">
-		select attendance_gotodate, attendance_gototime, attendance_leavetotime
+	<select id="attendanceList" resultType="project.soms.mypage.dto.AttendanceDto">
+		select attendance_gotodate, attendance_gototime,  
+		CASE WHEN attendance_leavetotime IS NULL THEN 0
+    	ELSE attendance_leavetotime
+    	END AS attendance_leavetotime
 		from attendance
 		where employee_no = #{employeeNo}
-		and attendance_gotodate like #{ym}"%"
+		and attendance_gotodate like #{selectDate}"%"
 		order by attendance_no desc
 	</select>
 	
-	<select id="getWorkTime" resultType="project.soms.mypage.dto.AttendanceCheckDto">
-		select attendance_gototime, attendance_leavetotime 
+	<select id="calAttendance" resultType="project.soms.mypage.dto.AttendanceDto">
+		select attendance_gototime,
+		CASE WHEN attendance_leavetotime IS NULL THEN 0
+    	ELSE attendance_leavetotime
+    	END AS attendance_leavetotime
 		from attendance
-		where attendance_gotodate like #{workDate}"%"
+		where attendance_gotodate like #{today}"%"
 		and employee_no = #{employeeNo}
 		limit 1
 	</select>
 	
-	
-
+	<select id="getTodayAttendanceExistence" resultType="Integer">
+		select Count(*) from attendance
+        where attendance_gotodate = #{today}
+        and employee_no = #{employeeNo}
+        and attendance_leavetotime is not null;
+	</select>
 	
 </mapper>

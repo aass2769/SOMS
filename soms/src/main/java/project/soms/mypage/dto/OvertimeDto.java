@@ -13,4 +13,9 @@ public class OvertimeDto {
 	
 	private Integer overtimeStartTime;
 	private Integer overtimeEndTime;
+	
+	public OvertimeDto(Integer overtimeStartTime, Integer overtimeEndTime) {
+		this.overtimeStartTime = overtimeStartTime;
+		this.overtimeEndTime = overtimeEndTime;
+	}
 }

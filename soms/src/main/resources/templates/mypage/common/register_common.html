@@ -1,6 +1,4 @@
 <!DOCTYPE html>
-<!-- 매인 레이아웃 파일은 인클루드 받아 해당 파라미터 위치에 들어가야 하는 태그 명을 넣어 페이지를 완성합니다.
-페이지의 title과 본문이 작성된 section태그를 레이아웃 파라미터에 넣어 페이지를 완성합니다. -->
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
@@ -11,13 +9,12 @@
 </head>
 <body>
 
+<div th:fragment="registerCommon">
 
-<div th:fragment="commonListSearch">
-
-		<div class="offcanvas offcanvas-end" data-bs-backdrop="false" th:classappend="${commonSelect} ? 'show' : '' "
-			tabindex="-1" id="offcanvasRightSearch" aria-labelledby="offcanvasRightLabel" style="width: 560px;">
+		<div class="offcanvas offcanvas-end" data-bs-backdrop="false" th:classappend="${registerCommonList} ? 'show' : '' "
+			tabindex="-1" id="RegisterOffcanvas" aria-labelledby="offcanvasRightLabel" style="width: 560px;">
 			<div class="offcanvas-header">
-				<h4 class="offcanvas-title" id="offcanvasRightLabel" style="color: #D8542E; font-weight: bold;">사번 조회 - 사원 조회
+				<h4 class="offcanvas-title" id="offcanvasRightLabel" style="color: #D8542E; font-weight: bold;">사번 조회 - 계정 생성
 				</h4>
 				<button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
 			</div>
@@ -26,6 +23,9 @@
 				<!-- 부서 or 직급 or 이름을 검색하는 부분입니다.-->
 				<div class="common_form">
 					<form method="get" th:action>
+						
+						<input type="hidden" value="registerCommonList" name ="OffcnavasDivider">
+						
 						<select name="employeeTeam" class="select_employeeTeam">
 							<option disabled selected>부서선택</option>
 							<option value="임원">임원</option>
@@ -56,17 +56,18 @@
 							<option value="사장">사장</option>
 						</select>
 						<input type="text" name="employeeName" class="text_employee_name">
-						<button type="submit" class="submit_employee">검색</button>
+						<input type="hidden" value="commonRegister" name = "updateoffcanvas">
+						<button type="submit" class="submit_employee" onclick="common_loding()">검색</button>
 					</form>
 				</div>
 
 
 				<!--부서, 직급, 이름 선택 후 검색 했을 때 출력되는 부분-->
-				<th:block th:each="select : ${commonSelect}">
+				<th:block th:each="select : ${registerCommonList}">
 					<div class="select_list">
-						<button class="select_list_button" id = "select_list_button"
+						<button class="select_list_button"
 							th:text="${select.employeeTeam} + ' / ' + ${select.manage} + ' ' + ${select.employeeName}"
-							th:value="${select.employeeNo}">
+							th:value="${select.employeeNo}" value2 = "1">
 						</button>
 					</div>
 				</th:block>
@@ -89,7 +90,7 @@
 										<p></p>
 									</div>
 									<span class="td_common_manage_name">
-										<button class="common_manage_name" id="common_manage_name" th:value="${team.employeeNo}" value2 = "1"
+										<button class="common_manage_name"   th:value="${team.employeeNo}" value2 = "1"
 											th:text="${team.manage} + ' | ' + ${team.employeeName}"></button>
 									</span>
 								</div>
@@ -113,7 +114,7 @@
 										<p></p>
 									</div>
 									<span class="td_common_manage_name">
-										<button class="common_manage_name" id="common_manage_name" th:value="${team.employeeNo}" value2 = "1"
+										<button class="common_manage_name"   th:value="${team.employeeNo}" value2 = "1"
 											th:text="${team.manage} + ' | ' + ${team.employeeName}"></button>
 									</span>
 								</div>
@@ -137,7 +138,7 @@
 										<p></p>
 									</div>
 									<span class="td_common_manage_name">
-										<button class="common_manage_name" id="common_manage_name" th:value="${team.employeeNo}" value2 = "1"
+										<button class="common_manage_name"  th:value="${team.employeeNo}" value2 = "1"
 											th:text="${team.manage} + ' | ' + ${team.employeeName}"></button>
 									</span>
 								</div>
@@ -161,7 +162,7 @@
 										<p></p>
 									</div>
 									<span class="td_common_manage_name">
-										<button class="common_manage_name" id="common_manage_name" th:value="${team.employeeNo}" value2 = "1"
+										<button class="common_manage_name"   th:value="${team.employeeNo}" value2 = "1"
 											th:text="${team.manage} + ' | ' + ${team.employeeName}"></button>
 									</span>
 								</div>
@@ -185,7 +186,7 @@
 										<p></p>
 									</div>
 									<span class="td_common_manage_name">
-										<button class="common_manage_name" id="common_manage_name" th:value="${team.employeeNo}" value2 = "1"
+										<button class="common_manage_name"   th:value="${team.employeeNo}" value2 = "1"
 											th:text="${team.manage} + ' | ' + ${team.employeeName}"></button>
 									</span>
 								</div>
@@ -209,7 +210,7 @@
 										<p></p>
 									</div>
 									<span class="td_common_manage_name">
-										<button class="common_manage_name" id="common_manage_name" th:value="${team.employeeNo}" value2 = "1"
+										<button class="common_manage_name"   th:value="${team.employeeNo}" value2 = "1"
 											th:text="${team.manage} + ' | ' + ${team.employeeName}"></button>
 									</span>
 								</div>
@@ -233,7 +234,7 @@
 										<p></p>
 									</div>
 									<span class="td_common_manage_name">
-										<button class="common_manage_name" id="common_manage_name" th:value="${team.employeeNo}" value2 = "1"
+										<button class="common_manage_name"   th:value="${team.employeeNo}" value2 = "1"
 											th:text="${team.manage} + ' | ' + ${team.employeeName}"></button>
 									</span>
 								</div>
@@ -257,7 +258,7 @@
 										<p></p>
 									</div>
 									<span class="td_common_manage_name">
-										<button class="common_manage_name" id="common_manage_name" th:value="${team.employeeNo}" value2 = "1"
+										<button class="common_manage_name"   th:value="${team.employeeNo}" value2 = "1"
 											th:text="${team.manage} + ' | ' + ${team.employeeName}"></button>
 									</span>
 								</div>
@@ -269,7 +270,7 @@
 					<div>
 						<p id="employee_team_p">
 							<button class="btn btn-primary" id="common_button" type="button" data-bs-toggle="collapse"
-								data-bs-target="#common_employee_container8" aria-expanded="false"
+								data-bs-target="#common_employee_container8" aria-expanded="false" 
 								aria-controls="common_employee_container8">
 								영업 - 홍보마케팅
 							</button>
@@ -281,7 +282,7 @@
 										<p></p>
 									</div>
 									<span class="td_common_manage_name">
-										<button class="common_manage_name" id="common_manage_name" th:value="${team.employeeNo}" value2 = "1"
+										<button class="common_manage_name"  th:value="${team.employeeNo}" value2 = "1"
 											th:text="${team.manage} + ' | ' + ${team.employeeName}"></button>
 									</span>
 								</div>
@@ -305,7 +306,7 @@
 										<p></p>
 									</div>
 									<span class="td_common_manage_name">
-										<button class="common_manage_name" id="common_manage_name" th:value="${team.employeeNo}" value2 = "1"
+										<button class="common_manage_name" th:value="${team.employeeNo}" value2 = "1"
 											th:text="${team.manage} + ' | ' + ${team.employeeName}"></button>
 									</span>
 								</div>
@@ -316,12 +317,110 @@
 			</div>
 			<script>
 				
-
+				var registerOffcanvas = document.getElementById('RegisterOffcanvas')
+				var searchOffcanvas = document.getElementById('SearchOffcanvas')
+				
+				registerOffcanvas.addEventListener('shown.bs.offcanvas', function () {
+					$('#SearchOffcanvas').offcanvas('hide');
+				})
+				
+				searchOffcanvas.addEventListener('shown.bs.offcanvas', function () {
+					$('#RegisterOffcanvas').offcanvas('hide');
+				})
+			</script>
+			<script>	
+				
+				//검색버튼 로딩
+				function common_loding(){
+					$('#spinner').modal('show');
+				}
+				
+				//버튼을 클릭 했을 시 값이 전달되는 함수입니다.
+				$(function () {
+					$(".common_manage_name").click(function () {
+						var newInput = $(this).val();
+						
+						if($(this).attr("value2") == 1){
+							$("#RegisterInsertAdmin").val(newInput);
+							return
+						}
+						if($(this).attr("value2") == 2){
+							SearchEmployeeReplace(newInput);
+							return
+						}
+						
+						if($(this).attr("value2") == 3){
+							if($('#InfomationAdminManage').val() == 13){
+								alert('최상위 관리자입니다.');
+								$('#InfomationAdminAdmin').val(0);
+							}else{
+								$('#InfomationAdminAdmin').val(newInput);
+							}					
+							return
+						}			
+					
+					});
+				});
+				
+				$(function () {
+					$(".select_list_button").on("click", function () {
+						var newInput = $(this).val();
+						
+						if($(this).attr("value2") == 1){
+							$("#RegisterInsertAdmin").val(newInput);
+							return
+						}
+						
+						if($(this).attr("value2") == 2){
+							SearchEmployeeReplace(newInput);
+							return
+						}
+						
+					});
+				});
+			</script>
+				
+			<script th:inline="javascript">
+				function SearchEmployeeReplace(newinput){
+					$.ajax({
+						url: "/mypage/search/replace",
+						type: "post",
+						data: {employeeNo: newinput},
+						success:function(employeePrivacy){
+							
+							$('#InfomationAdminTitle').text(employeePrivacy[1]+"님의 정보")
+							$('#InfomationAdminNo').val(employeePrivacy[0]);
+							$('#InfomationAdminName').val(employeePrivacy[1]);
+							$('#InfomationAdminId').val(employeePrivacy[2]);
+							$('#InfomationAdminEmail').val(employeePrivacy[4]);
+							$('#InfomationAdminPhone').val(employeePrivacy[5]);
+							$('#InfomationAdminAddr').val(employeePrivacy[6]);
+							$('#InfomationAdminAdmin').val(employeePrivacy[7]);
+							$('#InfomationAdminTeam').val(employeePrivacy[8]).prop("selected",true);
+							$('#InfomationAdminManage').val(employeePrivacy[9]).prop("selected",true);
+							$('#InfomationAdminPw').val('');
+							
+							
+							if(employeePrivacy[9] == 11 || employeePrivacy[9] == 13){
+								$('#InfomationAdminAdmin').val('없음');
+							}
+							
+							$('#emoloyeeInfomationAdminModal').modal('show');
+						},
+						error: function(){
+							alert("전송 오류입니다.");
+						}
+					})
+				}
+			</script>
+				
+			<script>
 				//근무중이면 초록색, 근무중이아니면 붉은색
 				$(function () {
 					$('.attendance_check').css('background-color', 'red');
 					$('.attendance_check').css('border', 'red');
 				});
+				
 			</script>
 </div>
 </body>

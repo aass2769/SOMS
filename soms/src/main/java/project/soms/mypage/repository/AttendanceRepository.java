@@ -5,37 +5,49 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import lombok.RequiredArgsConstructor;
-import project.soms.mypage.dto.AttendanceCheckDto;
-import project.soms.mypage.dto.WorkDto;
+import project.soms.mypage.dto.AttendanceDto;
 import project.soms.mypage.repository.mapper.AttendanceMapper;
 
 @Repository
 @RequiredArgsConstructor
 public class AttendanceRepository {
 	
-	private final AttendanceMapper attendanceMapper;
+	private final AttendanceMapper attendanceMapper; 
 	
-	public String goToWorkCheck(long employeeNo){
-		return attendanceMapper.workcheck(employeeNo);
+	// 출근했는지 안했는지 체크
+	public String attendanceCheck(long employeeNo) {
+		return attendanceMapper.attendanceCheck(employeeNo);
 	}
 	
-	public void goToWork(WorkDto goToWorkDto) {
-		attendanceMapper.goToWork(goToWorkDto);
+	// 출근
+	public void attendanceInsert(AttendanceDto attendanceDto) {
+		attendanceMapper.attendanceInsert(attendanceDto);
 	}
 	
-	public void leaveToWork(WorkDto leaveToWorkDto) {
-		attendanceMapper.leaveToWork(leaveToWorkDto);
+	// 퇴근
+	public void attendanceUpdate(AttendanceDto attendanceDto) {
+		attendanceMapper.attendanceUpdate(attendanceDto);
 	}
 	
-	public long getAttendanceNum(long employeeNo) {
-		return attendanceMapper.getAttendanceNum(employeeNo);
+	// 출퇴근 기록
+	public List<AttendanceDto> attendanceList(long employeeNo, String selectDate){
+		return attendanceMapper.attendanceList(employeeNo, selectDate);
 	}
 	
-	public List<AttendanceCheckDto> attendanceCheck(long employeeNo, String ym){
-		return attendanceMapper.attendanceCheck(employeeNo,ym);
+	// 주간근로 계산
+	public AttendanceDto calAttendance(long employeeNo, String today) {
+		return attendanceMapper.calAttendance(employeeNo, today);
 	}
 	
-	public AttendanceCheckDto getWorkTime(long employeeNo, String workDate) {
-		return attendanceMapper.getWorkTime(employeeNo, workDate);
+	// 오늘 출퇴근 유무
+	public Integer getTodayAttendanceExistence(long employeeNo, String today) {
+		return attendanceMapper.getTodayAttendanceExistence(employeeNo, today);
 	}
+	
+	// 최근 출퇴근 기록 첫번쨰 가져오기
+	public AttendanceDto getAttendanceRecent(long employeeNO) {
+		return attendanceMapper.getAttendanceRecent(employeeNO);
+	}
+	
+	
 }
