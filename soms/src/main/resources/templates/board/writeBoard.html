@@ -37,7 +37,7 @@
 							
 						</div>
 						<textarea th:text="${readBoardDto.boardContent}"  name="boardContent" id="boardContent" class="write_content" placeholder="내용을 입력하세요"></textarea>
-						<input name="boardSection" type="hidden" th:value="${boardSection}">
+						<input name="boardSection" type="hidden" th:value="${readBoardDto.boardSection}">
 						<input name="employeeNo" type="hidden" th:value="${employee.getEmployeeNo()}">
 						<input name="boardDate" type="hidden" th:value="${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd HH:mm:ss')}">
 						<input name="boardNo" type="hidden" th:if="${readBoardDto.boardNo != null}" th:value="${readBoardDto.boardNo}">

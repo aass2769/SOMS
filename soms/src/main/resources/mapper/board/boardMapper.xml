@@ -18,7 +18,7 @@
 			<if test="boardDto.selectList != '' and boardDto.selectList == '내용'">and A.board_content like concat('%',#{boardDto.searchInput},'%')</if>
 			<if test="boardDto.selectList != '' and boardDto.selectList == '작성자'">and B.employee_name like concat('%',#{boardDto.searchInput},'%')</if>
 		</where>
-		ORDER BY A.board_date DESC, A.board_no DESC
+		ORDER BY A.board_no DESC
 		LIMIT #{boardDto.pageLimit} OFFSET #{boardDto.pageOffset}
     </select>
     
@@ -37,7 +37,7 @@
 			<if test="boardDto.selectList != '' and boardDto.selectList == '내용'">and A.board_content like concat('%',#{boardDto.searchInput},'%')</if>
 			<if test="boardDto.selectList != '' and boardDto.selectList == '작성자'">and B.employee_name like concat('%',#{boardDto.searchInput},'%')</if>
 		</where>
-		ORDER BY A.board_date DESC, A.board_no DESC
+		ORDER BY A.board_no DESC
     </select>
     
        <!-- 총 게시물의 수를 SELECT하는 쿼리 -->

@@ -73,7 +73,7 @@
 							<td th:text="'공지'" class="notice_board_tbody_no"></td>
 							<td class="notice_board_tbody_title"><a class="notice_board_content_link"
 									th:text="${noticeBoard.boardTitle}"
-									th:href="@{/board/boardRead(boardNo=${noticeBoard.boardNo})}"></a></td>
+									th:href="@{/board/boardRead(boardNo=${noticeBoard.boardNo}, pageLimit=${pageLimit})}"></a></td>
 							<td th:text="${noticeBoard.employeeTeam}" class="notice_board_tbody_team">부서</td>
 							<td th:text="${noticeBoard.manage}" class="notice_board_tbody_manage">대리</td>
 							<td th:text="${noticeBoard.employeeName}" class="notice_board_tbody_name">희용</td>

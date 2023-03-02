@@ -76,11 +76,13 @@ public class BoardController {
 		
 		BoardDto readBoardDto = new BoardDto();
 		String boardSection = boardDto.getBoardSection();
+		System.out.println(boardSection);
 		Integer pageLimit = boardDto.getPageLimit();
 		if(request.getParameter("boardNo") != null) {
 			Integer boardNo = Integer.parseInt(request.getParameter("boardNo"));
 			//게시글 상세내용 불러오는 메서드
 			readBoardDto = boardService.readBoard(boardNo);
+			
 		}
 		model.addAttribute("pageLimit", pageLimit);
 		model.addAttribute("readBoardDto", readBoardDto);
@@ -113,12 +115,19 @@ public class BoardController {
 	@PostMapping("boardUpdate")
 	public String updateBoard(Model model, HttpServletRequest request , BoardDto readBoardDto, RedirectAttributes redirect) {
 		
-		int pageLimit = Integer.parseInt(request.getParameter("pageLimut"));
+		String page_limit = request.getParameter("pageLimut");
+		int pageLimit = 10;
+		if(page_limit != null) {
+			pageLimit = Integer.parseInt(page_limit);
+		}
+		
 		String boardSection = request.getParameter("boardSection");
 		if(readBoardDto.getBoardAnnouncement() == null) {
 			readBoardDto.setBoardAnnouncement("공지없음");
 		}
+		System.out.println(pageLimit);
 		System.out.println(boardSection);
+		System.out.println(readBoardDto.getBoardNo());
 		boardService.updateBoard(readBoardDto);
 
 		redirect.addAttribute("pageLimit",pageLimit);
@@ -147,8 +156,17 @@ public class BoardController {
 		boardService.updateViews(boardNo);		//조회 수 update
 		BoardDto readBoardDto = boardService.readBoard(boardNo);	//게시글 상세내용
 		List<CommentDto> commentList = boardService.selectComment(boardNo);	//댓글
-		Integer pageLimit = Integer.parseInt(request.getParameter("pageLimit"));
-		System.out.println(Integer.parseInt(request.getParameter("pageLimit")));
+		Integer pageLimit = Integer.parseInt(request.getParameter("pageLimit")); //페이지당 게시글 출력
+		
+		String page_No = request.getParameter("pageNo");
+		
+		int pageNo = 0;
+		
+		if(page_No != null) {
+			pageNo = Integer.parseInt(page_No);
+		}
+		
+		model.addAttribute("pageNo", pageNo);
 		//add model
 		model.addAttribute("pageLimit", pageLimit);
 		model.addAttribute("employee", loginEmployee(request)); // 세션
@@ -163,8 +181,10 @@ public class BoardController {
 	@PostMapping("commentWrite")
 	public String writeComment(HttpServletRequest request, String commentContent, Integer boardNo, RedirectAttributes redirectAttributes) {
 		
+		Integer pageLimit = Integer.parseInt(request.getParameter("pageLimit"));
 		EmployeeDto employeeDto = loginEmployee(request);
 		boardService.writeComment(commentContent, employeeDto, boardNo);
+		redirectAttributes.addAttribute("pageLimit", pageLimit);
 		redirectAttributes.addAttribute("boardNo", boardNo);
 		
 		return "redirect:/board/boardRead";
@@ -182,11 +202,13 @@ public class BoardController {
 	
 	//댓글 삭제 메서드
 	@PostMapping("commentDelete")
-	public String deleteComment(CommentDto commentDto, RedirectAttributes redirectAttributes) {
+	public String deleteComment(CommentDto commentDto, RedirectAttributes redirectAttributes, HttpServletRequest request) {
 		
 		boardService.deleteComment(commentDto);
+		Integer pageLimit = Integer.parseInt(request.getParameter("pageLimit"));
 		Integer boardNo = commentDto.getBoardNo();
 
+		redirectAttributes.addAttribute("pageLimit", pageLimit);
 		redirectAttributes.addAttribute("boardNo", boardNo);
 		return "redirect:/board/boardRead";
 	}
@@ -194,15 +216,37 @@ public class BoardController {
 	//게시판 다음글 메서드
 	@GetMapping("moveBoardRead")
 	public String readBoardMove(String boardSection, Integer boardNo ,HttpServletRequest request, RedirectAttributes redirectAttributes) {
-		System.out.println(request.getParameter("boardNo"));
+		
 		BoardDto boardPage = boardService.readBoardMove(boardSection, boardNo);
+		Integer pageLimit = Integer.parseInt(request.getParameter("pageLimit"));
 		
 		String moveButton = request.getParameter("moveButton");
-		if("before".equals(moveButton)) {
+
+		
+		/* 만약 이전글이고 이전글No가 0이아니면 redirect
+		 * 이전 글이고 이전글No가 0이면 게시글 No와 pageNo라는 값을 redirect. (pageNo는 0으로 dto에서 초기화되있음.)
+		 * 만약 다음글이고 다음글No가 0아아니면 redirect
+		 * 다음 글이고 다음글No가 0이면 게시글 No와 pageNo라는 값을 redirect*/
+		
+		int pageNo = 0;
+		
+		if("before".equals(moveButton) && boardPage.getBeforeBoardNo() != 0) {
 			redirectAttributes.addAttribute("boardNo", boardPage.getBeforeBoardNo());
-		} else {
+		} else if("before".equals(moveButton) && boardPage.getBeforeBoardNo() == 0){
+			redirectAttributes.addAttribute("boardNo", boardNo);
+			pageNo = 1;
+		} else if("after".equals(moveButton) && boardPage.getAfterBoardNo() != 0) {
 			redirectAttributes.addAttribute("boardNo", boardPage.getAfterBoardNo());
+		} else if("after".equals(moveButton) && boardPage.getAfterBoardNo() == 0) {
+			redirectAttributes.addAttribute("boardNo", boardNo);
+			pageNo = 2;
+			
+
 		}
+		
+		
+		redirectAttributes.addAttribute("pageNo", pageNo);
+		redirectAttributes.addAttribute("pageLimit", pageLimit);
 		
 		return "redirect:/board/boardRead";
 	}

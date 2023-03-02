@@ -37,21 +37,28 @@
 								<form method="get" th:action="@{/board/moveBoardRead}">
 									<input type="hidden" name="boardSection" th:value="${readBoardDto.boardSection}">
 									<input type="hidden" name="boardNo" th:value="${readBoardDto.boardNo}">
-									<button type="submit" name="moveButton" th:value="before" class="top_previous_button">이전글</button>
+									<input type="hidden" name="pageLimit" th:value="${pageLimit}">
+									<button type="submit" id="before" name="moveButton" th:value="before" class="top_previous_button">이전글</button>
 								</form>
 							</div>
 							<div class="top_next_button_div">
 								<form method="get" th:action="@{/board/moveBoardRead}">
 									<input type="hidden" name="boardSection" th:value="${readBoardDto.boardSection}">
 									<input type="hidden" name="boardNo" th:value="${readBoardDto.boardNo}">
-									<button type="submit" name="moveButton" th:value="after" class="top_next_button">다음글</button>
+									<input type="hidden" name="pageLimit" th:value="${pageLimit}">
+									<button type="submit" id="after" name="moveButton" th:value="after" class="top_next_button">다음글</button>
 								</form>
 							</div>
 						</div>
 						<div class="read_top_button_right">
 							<div th:if="${session.LOGIN_EMPLOYEE.employeeNo} == ${readBoardDto.employeeNo}">
-								<button type="button" class="top_update_button"><a class="top_update_a"
-										th:href="@{/board/boardWrite(boardNo = ${readBoardDto.boardNo})}">수정</a></button>
+								<form th:action="@{/board/boardWrite}" method="get">
+									<input type="hidden" name="boardNo" th:value="${readBoardDto.boardNo}">
+									<input type="hidden" name="boardSection" th:value="${readBoardDto.boardSection}">
+									<input type="hidden" name="employeeNo" th:value="${readBoardDto.employeeNo}">
+									<input type="hidden" name="pageLimit" th:value="${pageLimit}">
+									<button type="submit" class="top_update_button"><a class="top_update_a">수정</a></button>
+								</form>
 							</div>
 							<div th:if="${session.LOGIN_EMPLOYEE.employeeNo} == ${readBoardDto.employeeNo}" class="top_delete_button_div">
 								<form th:action="@{/board/boardDelete(boardNo = ${readBoardDto.boardNo}, boardSection = ${readBoardDto.boardSection})}" method="post">
@@ -62,12 +69,9 @@
 					</div>
 					<div class="read_top_info">
 						<div class="read_board_section_div">
-							<div class="read_board_section" th:text="${readBoardDto.boardSection}">
-							</div>
-							<th:block th:if="${readBoardDto.boardAnnouncement='공지있음'}" th:text="'<공지글>'">
-								</th>
-								<th:block th:unless="${readBoardDto.boardAnnouncement='공지있음'}" th:text="''">
-									</th>
+							<div class="read_board_section" th:text="${readBoardDto.boardSection}"></div>
+							<th:block th:if="${readBoardDto.boardAnnouncement == '공지있음'}" th:text="'<공지글>'"></th>
+							<th:block th:if="${readBoardDto.boardAnnouncement != '공지있음'}" th:text="''"></th>
 						</div>
 						<div class="read_board_title" th:text="${readBoardDto.boardTitle}">
 							테스트 1입니다
@@ -103,6 +107,7 @@
 							<form method="post" th:action="@{/board/commentDelete}">
 								<input type="hidden" name="boardNo" th:value="${comment.boardNo}">
 								<input type="hidden" name="commentNo" th:value="${comment.commentNo}">
+								<input type="hidden" name="pageLimit" th:value="${pageLimit}">
 								<button class="comment_delete_button" type="submit"></button>
 							</form>
 						</div>
@@ -120,6 +125,7 @@
 									placeholder="댓글을 적어주세요."></textarea>
 							</div>
 							<div class="button_comment_div">
+								<input type="hidden" name="pageLimit" th:value="${pageLimit}">
 								<button class="write_comment_button" type="button" onclick="data_submit()">등록</button>
 							</div>
 						</div>
@@ -142,8 +148,14 @@
 			document.getElementById('comment_submit').submit();
 		}
 	}
+</script>
+<script th:inline="javascript">
 	
-	if(noEmployeeNo == 0){
-		alert("");
+	var page_no = /*[[${pageNo}]]*/'';
+	
+	if((document.getElementById('before').value === 'before') && (page_no == 1)){
+		alert("이전 글이 없습니다.");
+	} else if((document.getElementById('after').value === 'after') && (page_no == 2)){
+		alert("다음 글이 없습니다.");
 	}
 </script>

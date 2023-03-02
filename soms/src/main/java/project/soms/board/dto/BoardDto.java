@@ -32,6 +32,6 @@ public class BoardDto {
 	private int pageOffset = 0;
 	//게시물의 시작번호.
 	private int startRowNo;
-
+	private int pageNo = 1;
 	
 }

@@ -8,6 +8,7 @@
 		from employee A
 		LEFT JOIN manage B
 		ON A.manage_no = B.manage_no
+		WHERE A.employee_leave is null
 		ORDER BY A.manage_no desc
     </select>
 
@@ -16,7 +17,7 @@
 		from employee as A
 		LEFT JOIN manage as B
 		ON A.manage_no = B.manage_no
-		WHERE A.employee_name like concat('%',#{employeeName},'%') and B.manage like concat('%',#{manage},'%') and A.employee_team like concat('%',#{employeeTeam},'%')
+		WHERE A.employee_name like concat('%',#{employeeName},'%') and B.manage like concat('%',#{manage},'%') and A.employee_team like concat('%',#{employeeTeam},'%') and A.employee_leave is null
 		ORDER BY A.manage_no desc
 	</select>
 </mapper>
