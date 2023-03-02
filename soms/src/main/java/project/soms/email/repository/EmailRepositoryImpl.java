@@ -128,6 +128,7 @@ public class EmailRepositoryImpl implements EmailRepository{
               String fileName = krStringParsing(bodyPart.getFileName());
               String extension = FilenameUtils.getExtension(fileName);
               String newFileName = UUID.randomUUID().toString() + "." + extension;
+              Files.createDirectories(Paths.get("src/main/resources/static/files"));
               Files.copy(is, Paths.get("src/main/resources/static/files/" + newFileName));
               is.close();
 
