@@ -147,13 +147,22 @@ public class AttendanceServiceImpl implements AttendanceService{
 			attendanceRecent = new AttendanceDto("null", a, a);
 		}
 		
+		// 시간이지나 자동퇴근
 		if(nowtime >= leavetime) {
 			attendance = 3;
-			
 			if(attendanceRecent.getAttendanceLeavetotime() == 0 && attendanceRecent.getAttendanceGototime() != 0) {
 				AttendanceDto attendanceDto = new AttendanceDto(leavetime, employeeNo);
 				attendanceRepository.attendanceUpdate(attendanceDto);
 				attendance = 4;
+			}
+		}
+		
+		// 전날에 퇴근안찍고 갔을 경우
+		if(attendanceRecent.getAttendanceGotodate() != today) {
+			if(attendanceRecent.getAttendanceLeavetotime() == 0 && attendanceRecent.getAttendanceGototime() != 0) {
+				AttendanceDto attendanceDto = new AttendanceDto(leavetime, employeeNo);
+				attendanceRepository.attendanceUpdate(attendanceDto);
+				attendance = 2;
 			}
 		}
 		
