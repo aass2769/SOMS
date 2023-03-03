@@ -89,9 +89,9 @@ public class ApprovalListRepositoryImpl implements ApprovalListRepository{
          * 최하위 결재자일 경우엔 기안이라는 값을 할당하려 기안자만 열람 가능상태로 남도록
          * 기안자일 경우엔 '결재'라는 값을 할당하여 최하위 결재자만 열람 가능하도록
          */
-        if (submissionList.get(0).getApproverEmployeeNo().equals(approval.getApproverEmployeeNo()) && approval.getSubmissionShowable().equals("가능")) {
+        if (submissionList.get(0).getApproverEmployeeNo().equals(approval.getApproverEmployeeNo()) && approval.getApproverShowable().equals("가능")) {
           approval.setDeleteCheck("기안");
-        } else if (submissionList.get(0).getProposerEmployeeNo().equals(approval.getProposerEmployeeNo()) && approval.getSubmissionShowable().equals("가능")) {
+        } else if (submissionList.get(0).getProposerEmployeeNo().equals(approval.getProposerEmployeeNo()) && approval.getProposerShowable().equals("가능")) {
           approval.setDeleteCheck("결재");
         } else {
           approval.setDeleteCheck("불가");
@@ -132,9 +132,9 @@ public class ApprovalListRepositoryImpl implements ApprovalListRepository{
          * 최하위 결재자일 경우엔 '기안'이라는 값을 할당하여 기안자만 열람 가능상태로 남도록
          * 기안자일 경우엔 '결재'라는 값을 할당하여 최하위 결재자만 열람 가능하도록
          */
-        if (submissionList.get(0).getApproverEmployeeNo().equals(approval.getApproverEmployeeNo()) && approval.getSubmissionShowable().equals("가능")) {
+        if (submissionList.get(0).getApproverEmployeeNo().equals(approval.getApproverEmployeeNo()) && approval.getApproverShowable().equals("가능")) {
           approval.setDeleteCheck("기안");
-        } else if (submissionList.get(0).getProposerEmployeeNo().equals(approval.getProposerEmployeeNo()) && approval.getSubmissionShowable().equals("가능")) {
+        } else if (submissionList.get(0).getProposerEmployeeNo().equals(approval.getProposerEmployeeNo()) && approval.getProposerShowable().equals("가능")) {
           approval.setDeleteCheck("결재");
         } else {
           approval.setDeleteCheck("불가");
