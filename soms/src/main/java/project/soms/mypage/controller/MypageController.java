@@ -124,7 +124,7 @@ public class MypageController {
 		if(employee.getManageNo() > adminNo) {
 			count = 1;
 		}else {
-			if(mypageRepository.mypageRegisterUniqueCheck(employee) > adminNo) {
+			if(mypageRepository.mypageRegisterUniqueCheck(employee) > 0) {
 				count = 2;
 			}else {
 				try {
