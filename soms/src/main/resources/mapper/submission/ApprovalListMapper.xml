@@ -13,8 +13,8 @@
         when submission_open = '미열람' and proposer_employee_no = #{employeeNo} then '본인건' else '열람' end) as submission_open,
         max(case(proposer_employee_no) when #{employeeNo} then proposer_employee_no else null end) as proposer_employee_no,
         max(case(approver_employee_no) when #{employeeNo} then approver_employee_no else null end) as approver_employee_no,
-        min(case when submission_showable = '가능' and proposer_employee_no = 20221006007 then '가능' when submission_showable = '기안' and proposer_employee_no = 20221006007 then '기안' else '불가' end) as proposer_showable,
-        min(case when submission_showable = '가능' and approver_employee_no = 20221006007 then '가능' when submission_showable = '결재' and approver_employee_no = 20221006007 then '결재' else '불가' end) as approver_showable,
+        min(case when submission_showable = '가능' and proposer_employee_no = #{employeeNo} then '가능' when submission_showable = '기안' and proposer_employee_no = #{employeeNo} then '기안' else '불가' end) as proposer_showable,
+        min(case when submission_showable = '가능' and approver_employee_no = #{employeeNo} then '가능' when submission_showable = '결재' and approver_employee_no = #{employeeNo} then '결재' else '불가' end) as approver_showable,
         max(case when expense_no is not null then 'expense' when overtime_no is not null then 'overtime' when annual_leave_no is not null then 'annualLeave'
         when business_trip_no is not null then 'businessTrip' when incident_no is not null then 'incident' end) as submission_join_table
         from submission
