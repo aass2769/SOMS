@@ -143,10 +143,10 @@
           <!-- 신청서 상신 및 취소 버튼 -->
           <div class="h-100 w-25 d-flex">
             <!-- 취소 버튼 클릭 시 결재 내역-결재중으로 이동 -->
-            <button class="btn btn-outline-dark border w-50 h-100 rounded-0 text-light"
-                    th:onclick="|location.href='@{/submission/form/underApproval}'|" style="background-color: #E86E1C">
+            <a class="btn btn-outline-dark border w-50 h-100 rounded-0 text-light p-3"
+               th:href="@{/submission/approval/approvalList(approvalSection=under)}" style="background-color: #E86E1C">
               취소
-            </button>
+            </a>
             <!-- 상신 버튼 클릭 시 controller에 @PostMapping submission/form/expense 로 요청 -->
             <button type="button" id="formSubmit" class="btn btn-outline-dark border w-50 h-100 rounded-0 text-light" style="background-color: #EA471B">
               상신

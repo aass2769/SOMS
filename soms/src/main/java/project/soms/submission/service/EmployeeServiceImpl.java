@@ -137,12 +137,20 @@ public class EmployeeServiceImpl implements EmployeeService{
       if (check) break;
     }
     //결재자 관계 선택이 올바르지 않거나 결재라인에 본인이 포함되면 오류 추가
-    for (int i = 1; i < approverDto.size(); i++) {
-      ProposerDto approverCheck1 = proposer(approverDto.get(i - 1).getEmployeeNo());
-      ProposerDto approverCheck2 = proposer(approverDto.get(i).getEmployeeNo());
+    for (int i = 0; i < approverDto.size(); i++) {
+      ProposerDto approverCheck1 = proposer(approverDto.get(i).getEmployeeNo());
+      ProposerDto approverCheck2 = new ProposerDto();
+      if (i + 1 < approverDto.size()) {
+        approverCheck2 = proposer(approverDto.get(i + 1).getEmployeeNo());
+      } else {
+        approverCheck2.setManageNo(approverCheck1.getManageNo() + 1);
+      }
+
       ProposerDto proposer = proposer(employeeNo);
       if (proposer.getEmployeeNo().equals(approverCheck1.getEmployeeNo()) || proposer.getEmployeeNo().equals(approverCheck2.getEmployeeNo())) {
         result.reject("approverIsNotProposer", new Object[]{}, null);
+      } else if (approverCheck1.getManageNo() < proposer.getManageNo()) {
+        result.reject("approverIsMiss", new Object[]{}, null);
       } else if (approverCheck1.getManageNo() > approverCheck2.getManageNo()) {
         result.reject("approverIsMiss", new Object[]{}, null);
       }
