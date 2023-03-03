@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ko" th:replace="~{sample/layout/mainLayout :: layout(~{::title}, ~{::article})}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>메일</title>
+</head>
+<body>
+    <article class="Article">
+		
+		<div>
+			<!--Title 부분-->
+			<div style="width:90%; margin-left: 5%">
+
+			  <div class="position-fixed bg-white" style="width:75%">
+			    <!-- 페이지 본문의 제목 -->
+			    <div>
+			      <h1 class="pt-4 px-4 text-start ">받은 메일 보관함</h1>
+			    </div>
+			    <!-- 본문의 제목과 내용을 구분하는 선 -->
+			    <hr style="border: solid 2px #EA471B; opacity: 1; margin:0;">
+			  </div>
+			  <!-- 본문의 내용 위치를 잡기위해 만든 상담 공백 -->
+			  <div style="height:5rem;"></div>
+			</div>
+			
+			<!--Contents-->
+			<form action="#" method="get" name="signup" id="signup">
+			<div class="SendMail_Container">
+				
+				<div class="SendMail_Recipient">
+					<label>받는사람</label><input type="text" name="Recipient" id="Recipient">
+					<div class="Check-Front" id="Recipient-Chk"></div>
+				</div>
+				<div class="SendMail_Title">
+					<label>제목</label><input type="text" id="SendSubject">
+				</div>
+				<div class="SendMail_AddFile">
+					<label for="file" id="addfile">첨부파일</label>
+					<input type="file">
+				</div>
+				<div>네비바</div>
+				<div class="SendMail_Content">
+					<textarea rows="5" cols="33" id="contentMessage"></textarea>
+				</div>
+				<div class="SendMail-Btn">
+					<button>미리보기</button><button>임시저장</button><button>보내기</button>
+				</div>
+			</div>
+		</div>
+		</form>
+			<script th:inline="javascript">	
+		     var mailJ = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+		   
+		          $('#Recipient').blur(function(){
+		                if(mailJ.test($('#Recipient').val())){
+		                    console.log("true");
+		                    $('#Recipient-Chk').text('');
+		                }else{
+		                    console.log("false");
+		                    $('#Recipient-Chk').text('이메일 형식이 맞지 안습니다.');
+		                    $('#Recipient-Chk').css('color', 'red');
+		                }
+		            });	
+		        
+		            $(document).ready(function() {
+		                $('#signup').submit(function() {
+		                    if ($('#SendSubject').val() == '') {
+		                             if(confirm('제목이 없습니다. 전송하시겠습니까?')){
+		                                //확인
+		                                $('#SendSubject').text("제목 없음");
+		                             }else{
+		                                //취소
+		                             }
+		                    }
+		                }); 
+		            });
+		            $(document).ready(function(){
+						$('#signup').submit(function(){
+							if($('#addfile').val()==null||$('contentMessage').val()==null){
+								if(!confirm('내용이 없습니다. 전송하시겠습니까?')){
+									
+								}	
+							}
+						});
+					});
+			</script>
+	</article>
+
+</body>
+</html>

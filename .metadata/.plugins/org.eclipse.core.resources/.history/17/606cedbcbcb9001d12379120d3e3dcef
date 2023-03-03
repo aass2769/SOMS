@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko" th:replace="~{email/layout/mainLayout :: layout(~{::title}, ~{::section})}" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>메일</title>
+</head>
+<body>
+<section class="Article">
+	<div>
+		<!--Title 부분-->
+		<div style="width:90%; margin-left: 5%">
+
+			<div class="position-fixed bg-white" style="width:75%">
+				<!-- 페이지 본문의 제목 -->
+				<div>
+					<h1 class="pt-4 px-4 text-start ">메일 전송 오류</h1>
+				</div>
+				<!-- 본문의 제목과 내용을 구분하는 선 -->
+				<hr style="border: solid 2px #EA471B; opacity: 1; margin:0;">
+			</div>
+			<!-- 본문의 내용 위치를 잡기위해 만든 상담 공백 -->
+			<div style="height:5rem;"></div>
+		</div>
+		
+	<div class="SendError">
+		<div><p>메일 전송에 실패했습니다.</p></div>
+	</div>
+		
+	<script th:inline="javascript">
+
+
+
+	</script>
+</section>
+</body>
+</html>
