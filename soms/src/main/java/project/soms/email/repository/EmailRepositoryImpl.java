@@ -11,23 +11,28 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Repository;
 import project.soms.email.dto.EmailDto;
+import project.soms.employee.dto.EmployeeDto;
 import software.amazon.awssdk.utils.StringUtils;
 
+import javax.activation.DataHandler;
+import javax.activation.FileDataSource;
 import javax.mail.*;
+import javax.mail.internet.*;
 import javax.mail.search.MessageNumberTerm;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static com.sun.org.apache.xml.internal.security.Init.init;
 
 @Slf4j
 @Repository
@@ -50,6 +55,12 @@ public class EmailRepositoryImpl implements EmailRepository{
   //이메일 내역
   @Override
   public List<EmailDto> emailList(String employeeId, String employeePw, String folderName) {
+    /**
+     * 일단 테스트를 위해 계정 절대값 설정
+     */
+    employeeId = "admin";
+
+
     //현재 map에 저장된 값 초기화
     emailMap.clear();
 
@@ -69,7 +80,7 @@ public class EmailRepositoryImpl implements EmailRepository{
        * imap 주소
        * 임직원 계정 (임직원 Id + 도메인), 임직원 비밀번호(공통값으로 설정)
        */
-      store.connect("imap.mail.us-east-1.awsapps.com", "admin@somsolution.awsapps.com", employeePw);
+      store.connect("imap.mail.us-east-1.awsapps.com", employeeId + "@somsolution.awsapps.com", employeePw);
 
       //폴더이름으로 불러올 폴더 설정
       Folder emailFolder = store.getFolder(folderName);
@@ -83,8 +94,24 @@ public class EmailRepositoryImpl implements EmailRepository{
         EmailDto email = new EmailDto();
         email.setEmailNo(Long.valueOf(message.getMessageNumber()));
         email.setEmailSubject(message.getSubject());
-        //한글 이름이 깨지지 않도록 parsing
-        email.setEmailFrom(krStringParsing(message.getFrom()[0].toString()));
+
+        int addressPoint1 = message.getFrom()[0].toString().indexOf("<");
+        int addressPoint2 = message.getFrom()[0].toString().indexOf(">");
+        String subString = "";
+        if (addressPoint1 >= 0) {
+          subString = message.getFrom()[0].toString().substring(addressPoint1 + 1, addressPoint2 - 1);
+          email.setEmailFrom(subString);
+        } else {
+          email.setEmailFrom(message.getFrom()[0].toString());
+        }
+
+        List<String> recipients = new ArrayList<>();
+        if (message.getAllRecipients().length > 0) {
+          for (int j = 0; j < message.getAllRecipients().length; j++) {
+            recipients.add(String.valueOf(message.getAllRecipients()[j]));
+          }
+        }
+        email.setEmailRecipient(recipients);
         //날짜를 simpleFormat으로 parsing
         email.setEmailSentDate(dateParsing(message.getSentDate()));
         //읽은 메일인지 아닌지 boolean값으로 저장 / true일때 읽은 상태
@@ -103,7 +130,7 @@ public class EmailRepositoryImpl implements EmailRepository{
 
           //메일 내용을 여러 Multipart 객체에
           Multipart multipart = (Multipart) content;
-          StringBuilder sb = new StringBuilder();
+          String sb = "";
 
           //EmailDto 에 파일 이름 리스트에 담기 위한 리스트를 선언
           List<String> attachmentFileName = new ArrayList<>();
@@ -116,8 +143,9 @@ public class EmailRepositoryImpl implements EmailRepository{
             BodyPart bodyPart = multipart.getBodyPart(j);
 
             //bodytype에 값들 중 'TEXT/PLAIN'으로 설정된 값은 String으로
-            if (bodyPart.getContentType().contains("TEXT/PLAIN")) {
-              sb.append(bodyPart.getContent());
+            if (bodyPart.getContentType().contains("text/plain;") || bodyPart.getContentType().contains("text/html")) {
+              String contents = (String) bodyPart.getContent();
+              sb += contents;
             }
 
             //bodytype에 값들 중 첨부파일 (ATTACHMENT) 있는지 확인
@@ -141,7 +169,7 @@ public class EmailRepositoryImpl implements EmailRepository{
             }
           }
           //EmailDto에 내용과 첨부파일 값 저장
-          email.setEmailContent(sb.toString());
+          email.setEmailContent(sb);
           email.setEmailAttachmentFileName(attachmentFileName);
           email.setEmailAttachment(attachment);
         }
@@ -209,8 +237,12 @@ public class EmailRepositoryImpl implements EmailRepository{
 
   //이메일 삭제시 휴지통으로 이동
   @Override
-  public void moveToTrash(String employeeId, String employeePw, String folderName, List<Long> emailNoList) {
+  public void moveToTrashOrJunk(String employeeId, String employeePw, String folderName, String moveFolder, List<Long> emailNoList) {
 
+    /**
+     * 일단 테스트를 위해 계정 절대값 설정
+     */
+    employeeId = "admin";
     //설정 객체 생성 후 필요 값 할당
     Properties properties = new Properties();
     //메일 선언을 imap으로
@@ -220,13 +252,22 @@ public class EmailRepositoryImpl implements EmailRepository{
 
     try {
       Store store = emailSession.getStore();
-      store.connect("imap.mail.us-east-1.awsapps.com", "admin" + "@somsolution.awsapps.com", employeePw);
+      store.connect("imap.mail.us-east-1.awsapps.com", employeeId + "@somsolution.awsapps.com", employeePw);
 
       Folder emailFolder = store.getFolder(folderName);
       emailFolder.open(Folder.READ_WRITE);
 
-      Folder trashFolder = store.getFolder("Trash");
-      trashFolder.open(Folder.READ_WRITE);
+
+      Folder moveFolderName = null;
+      if (moveFolder.equals("Trash")) {
+        log.info("휴지통 폴더 생성");
+        moveFolderName = store.getFolder("Trash");
+      } else if (moveFolder.equals("Junk E-mail")) {
+        log.info("스팸메일함 폴더 생성");
+        moveFolderName = store.getFolder("Junk E-mail");
+      }
+
+      moveFolderName.open(Folder.READ_WRITE);
 
       for (Long emailNo : emailNoList) {
 
@@ -239,10 +280,10 @@ public class EmailRepositoryImpl implements EmailRepository{
         } else {
           for (Message message : foundMessages) {
             // 휴지통으로 이메일을 복사
-            emailFolder.copyMessages(new Message[] {message}, trashFolder);
-            // 기존 메일함에서 메일을 삭제
+            emailFolder.copyMessages(new Message[] {message}, moveFolderName);
+            // 이메일을 삭제하면 휴지통으로 이동됨
             message.setFlag(Flags.Flag.DELETED, true);
-            log.warn("이메일 휴지통으로 이동 완료");
+            log.warn("이메일 이동 완료");
           }
         }
       }
@@ -254,6 +295,155 @@ public class EmailRepositoryImpl implements EmailRepository{
       e.printStackTrace();
     }
   }
+
+  @Override
+  public void emailSend(EmailDto emailDto, EmployeeDto employee, String employeePw) throws FileNotFoundException {
+    /**
+     * 테스트용 사용자
+     */
+    employee.setEmployeeId("znyvua05");
+
+    MimeMessage message = javaMailSender.createMimeMessage();
+
+    try {
+      MimeMessageHelper msg = new MimeMessageHelper(message, true, "utf-8");
+      InternetAddress[] address = new InternetAddress[emailDto.getEmailRecipient().size()];
+      int i = 0;
+      for (String addressList : emailDto.getEmailRecipient()) {
+        address[i] = new InternetAddress(addressList);
+        i += 1;
+      }
+      //InternetAddress fromAddress = new InternetAddress(employee.getEmployeeId() + "@somsolution.com");
+      msg.setFrom(employee.getEmployeeId() + "@somsolution.com", MimeUtility.encodeText(employee.getEmployeeName(), "utf-8", "B"));
+      msg.setTo(address);
+      msg.setSubject(emailDto.getEmailSubject());
+
+      MimeMultipart messageContent = new MimeMultipart("mixed");
+
+      MimeBodyPart textWarp = new MimeBodyPart();
+      textWarp.setContent(emailDto.getEmailContent(), "text/plain; charset=utf-8");
+      messageContent.addBodyPart(textWarp);
+
+      if (emailDto.getEmailAttachment().size() > 0) {
+        MimeBodyPart attachmentWarp = new MimeBodyPart();
+        for (String fileName : emailDto.getEmailAttachment()) {
+          FileDataSource files = new FileDataSource(fileName);
+          File file = new File(fileName);
+          if (file.exists()) {
+            attachmentWarp.setDataHandler(new DataHandler(files));
+            attachmentWarp.setFileName(MimeUtility.encodeText(files.getName()));
+            messageContent.addBodyPart(attachmentWarp);
+          } else {
+            log.error("파일 명칭 불량");
+            message.setContent(messageContent);
+            saveDraftEmail(message, employee.getEmployeeId(), employeePw);
+            throw new FileNotFoundException();
+          }
+        }
+      }
+
+      message.setContent(messageContent);
+
+      javaMailSender.send(message);
+
+    } catch (MessagingException e) {
+      throw new RuntimeException(e);
+    } catch (UnsupportedEncodingException e) {
+      throw new RuntimeException(e);
+    } catch (MailSendException e) {
+      saveDraftEmail(message, employee.getEmployeeId(), employeePw);
+      throw new RuntimeException(e);
+    }
+
+  }
+
+  private void saveDraftEmail(Message message, String employeeId, String employeePw) {
+
+    //설정 객체 생성 후 필요 값 할당
+    Properties properties = new Properties();
+    //메일 선언을 imap으로
+    properties.put("mail.store.protocol", "imaps");
+    //해당 설정을 이메일 세션에 저장
+    Session emailSession = Session.getInstance(properties);
+
+    try {
+      Store store = emailSession.getStore();
+      store.connect("imap.mail.us-east-1.awsapps.com", employeeId + "@somsolution.com", employeePw);
+
+      Folder emailFolder = store.getFolder("Drafts");
+      emailFolder.open(Folder.READ_WRITE);
+
+
+      //보관함에 저장
+      emailFolder.appendMessages(new Message[]{message});
+      message.setFlag(Flags.Flag.DELETED, true);
+      log.warn("임시보관함에 저장");
+
+      emailFolder.close(true);
+      store.close();
+    } catch (MessagingException ex) {
+      throw new RuntimeException(ex);
+    }
+
+  }
+
+  //이매일 영구삭제
+  @Override
+  public void deleteMessage(String employeeId, String employeePw, String folderName, List<Long> emailNoList) {
+
+    /**
+     * 일단 테스트를 위해 계정 절대값 설정
+     */
+    employeeId = "admin";
+
+    //설정 객체 생성 후 필요 값 할당
+    Properties properties = new Properties();
+    //메일 선언을 imap으로
+    properties.put("mail.store.protocol", "imaps");
+    //해당 설정을 이메일 세션에 저장
+    Session emailSession = Session.getInstance(properties);
+
+    try {
+      Store store = emailSession.getStore();
+      store.connect("imap.mail.us-east-1.awsapps.com", employeeId + "@somsolution.awsapps.com", employeePw);
+
+      Folder emailFolder = null;
+      if (folderName.equals("Trash")) {
+        log.info("휴지통 폴더 생성");
+        emailFolder = store.getFolder("Trash");
+      } else if (folderName.equals("Junk E-mail")) {
+        log.info("스팸메일함 폴더 생성");
+        emailFolder = store.getFolder("Junk E-mail");
+      }
+
+      emailFolder.open(Folder.READ_WRITE);
+
+      for (Long emailNo : emailNoList) {
+
+        // 이메일을 찾기 위해 검색 조건 설정
+        MessageNumberTerm searchTerm = new MessageNumberTerm(Math.toIntExact(emailNo));
+        Message[] foundMessages = emailFolder.search(searchTerm);
+
+        if (foundMessages.length == 0) {
+          log.warn("이메일을 찾을 수 없음");
+        } else {
+          for (Message message : foundMessages) {
+            // 이메일을 삭제하면 휴지통으로 이동됨
+            message.setFlag(Flags.Flag.DELETED, true);
+            log.info("이메일 영구삭제 완료");
+          }
+        }
+      }
+
+      emailFolder.close(true);
+      store.close();
+    } catch (MessagingException e) {
+      log.error("error={}", e);
+      e.printStackTrace();
+    }
+  }
+
+
 
   @Override
   public ResponseEntity<ByteArrayResource> downloadAttachment(String emailFileName) {
@@ -286,7 +476,7 @@ public class EmailRepositoryImpl implements EmailRepository{
 
   /**
    * 발신자 및 파일 이름등의 한글이 깨지지 않도록
-   * 한글이 base64의 패턴화 된걸 한들로 재변경
+   * 한글이 base64의 패턴화 된걸 한글로 재변경
    */
   private String krStringParsing(String krString) {
 
@@ -298,26 +488,25 @@ public class EmailRepositoryImpl implements EmailRepository{
     String charsetSub = "B";
 
     Pattern p = Pattern.compile(pattern);
-    Matcher matcher = p.matcher(krString);
+    if (krString != null) {
+      Matcher matcher = p.matcher(krString);
 
-    while (matcher.find()) {
-      charsetMain = matcher.group(1);
-      charsetSub = matcher.group(2);
-      try {
-        buffer.append(new String(Base64.decode(matcher.group(3)), charsetMain));
-      } catch (Base64DecodingException e) {
-        log.error("error={}", e);
-        throw new RuntimeException(e);
-      } catch (UnsupportedEncodingException e) {
-        log.error("error={}", e);
-        throw new RuntimeException(e);
+      while (matcher.find()) {
+        charsetMain = matcher.group(1);
+        charsetSub = matcher.group(2);
+        try {
+          init();
+          buffer.append(new String(Base64.decode(matcher.group(3)), charsetMain));
+        } catch (Base64DecodingException e) {
+          log.error("error={}", e);
+          throw new RuntimeException(e);
+        } catch (UnsupportedEncodingException e) {
+          log.error("error={}", e);
+          throw new RuntimeException(e);
+        }
       }
-    }
 
-    if (buffer.toString().isEmpty()) {
-      buffer.append(krString);
     }
-
     return buffer.toString();
   }
 }

@@ -10,6 +10,8 @@ public class EmailDto {
   private Long emailNo;
   private String emailSubject;
   private String emailFrom;
+
+  private List<String> emailRecipient;
   private String emailContent;
   private String emailSentDate;
   private boolean emailSeen;
@@ -17,10 +19,13 @@ public class EmailDto {
   private List<String> emailAttachmentFileName;
   private List<String> emailAttachment;
 
-  public EmailDto(Long emailNo, String emailSubject, String emailFrom, String emailContent, String emailSentDate, boolean emailSeen, boolean emailHasAttachment, List<String> emailAttachmentFileName, List<String> emailAttachment) {
+
+
+  public EmailDto(Long emailNo, String emailSubject, String emailFrom, List<String> emailRecipient, String emailContent, String emailSentDate, boolean emailSeen, boolean emailHasAttachment, List<String> emailAttachmentFileName, List<String> emailAttachment) {
     this.emailNo = emailNo;
     this.emailSubject = emailSubject;
     this.emailFrom = emailFrom;
+    this.emailRecipient = emailRecipient;
     this.emailContent = emailContent;
     this.emailSentDate = emailSentDate;
     this.emailSeen = emailSeen;

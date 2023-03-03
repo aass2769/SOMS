@@ -3,7 +3,9 @@ package project.soms.email.repository;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.ResponseEntity;
 import project.soms.email.dto.EmailDto;
+import project.soms.employee.dto.EmployeeDto;
 
+import java.io.FileNotFoundException;
 import java.util.List;
 
 public interface EmailRepository {
@@ -20,7 +22,11 @@ public interface EmailRepository {
 
   void emailUpdateSeen(String employeeId, String employeePw, String folderName, Long emailNo);
 
-  void moveToTrash(String employeeId, String employeePw, String folderName, List<Long> emailNoList);
+  void moveToTrashOrJunk(String employeeId, String employeePw, String folderName, String moveFolder, List<Long> emailNoList);
+
+  void emailSend(EmailDto emailDto, EmployeeDto employee, String employeePw) throws FileNotFoundException;
+
+  void deleteMessage(String employeeId, String employeePw, String moveFolder, List<Long> emailNoList);
 
   ResponseEntity<ByteArrayResource> downloadAttachment(String emailFileName);
 

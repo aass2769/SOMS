@@ -10,6 +10,7 @@ import project.soms.employee.dto.EmployeeDto;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.FileNotFoundException;
 import java.util.List;
 
 @Service
@@ -41,11 +42,30 @@ public class EmailServiceImpl implements EmailService {
   }
 
   @Override
-  public void moveToTrash(HttpServletRequest request, List<Long> emailNoList) {
+  public void moveToTrashOrJunk(HttpServletRequest request, List<Long> emailNoList) {
 
     String folderName = request.getParameter("folderName");
-    emailRepository.moveToTrash(getEmployee(request).getEmployeeId(), emailPw, folderName, emailNoList);
+    String moveFolder = request.getParameter("moveFolder");
 
+    emailRepository.moveToTrashOrJunk(getEmployee(request).getEmployeeId(), emailPw, folderName, moveFolder, emailNoList);
+
+  }
+
+  @Override
+  public void emailSend(EmailDto emailDto, EmployeeDto emoloyee) throws FileNotFoundException {
+    try {
+      emailRepository.emailSend(emailDto, emoloyee, emailPw);
+    } catch (FileNotFoundException e) {
+      throw new FileNotFoundException();
+    }
+  }
+
+  @Override
+  public void deleteMessage(HttpServletRequest request, List<Long> emailNoList) {
+
+    String folderName = request.getParameter("folderName");
+
+    emailRepository.deleteMessage(getEmployee(request).getEmployeeId(), emailPw, folderName, emailNoList);
   }
 
   @Override

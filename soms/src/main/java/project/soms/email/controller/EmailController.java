@@ -3,18 +3,18 @@ package project.soms.email.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailSendException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import project.soms.email.dto.EmailDto;
 import project.soms.email.service.EmailService;
 import project.soms.employee.dto.EmployeeDto;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -31,11 +31,9 @@ public class EmailController {
     return "email/getMailRepository";
   }
 
-  @GetMapping("readMail")
-  public String readmail(Model model) {
-    model.addAttribute("title", "제목");
-    model.addAttribute("article", "내용");
-    return "email/emailForm/readMail";
+  @GetMapping("sendForm")
+  public String readmail() {
+    return "email/emailForm/test";
   }
 
 
@@ -45,17 +43,9 @@ public class EmailController {
     model.addAttribute("emailList", emailList);
 
     String folderName = request.getParameter("folderName");
-    String location = "";
-    if (folderName.equals("INBOX")) {
-      location = "email/mailFolder/getMailRepository";
-    } else if (folderName.equals("Sent Items")) {
-      location = "email/mailFolder/sendMailRepository";
-    } else if (folderName.equals("Trash")) {
-      location = "email/mailFolder/wasteBasket";
-    } else if (folderName.equals("outBox")) {
-      location = "email/mailFolder/outBox";
-    }
-    return location;
+    model.addAttribute("folderName", folderName);
+
+    return "email/mailFolder/getMailRepository";
   }
 
   @GetMapping("emailDetail")
@@ -67,10 +57,43 @@ public class EmailController {
     return "email/emailForm/readMail";
   }
 
-  @PostMapping("moveToTrash")
-  public String moveToTrash(HttpServletRequest request, @RequestParam List<Long> emailNoList) {
-    emailService.moveToTrash(request, emailNoList);
+  @PostMapping("moveToTrashOrJunk")
+  public String moveToTrashOrJunk(HttpServletRequest request, @RequestParam List<Long> emailNoList) {
+    emailNoList.removeIf(emailNo -> emailNo.equals(0));
+    if (emailNoList.size() <= 0) {
+      return "redirect:" + request.getHeader("Referer");
+    }
+    if (request.getParameter("folderName").equals("Trash") || request.getParameter("folderName").equals("Junk E-mail")) {
+      emailService.deleteMessage(request, emailNoList);
+    } else {
+      emailService.moveToTrashOrJunk(request, emailNoList);
+    }
     return "email/mailFolder/wasteBasket";
+  }
+
+  @ResponseBody
+  @GetMapping("emailSend")
+  public String emailSend(HttpServletRequest request, EmailDto emailDto, @RequestParam("recipients") List<String> recipients, @RequestParam("fileName") List<String> fileName) {
+
+    emailDto.setEmailFrom("admin@somsolution.awsapps.com");
+    emailDto.setEmailRecipient(recipients);
+
+    List<String> fileNameList = new ArrayList<>();
+    if (fileName.size() > 0) {
+      for (String file : fileName) {
+        fileNameList.add(file);
+      }
+    }
+    emailDto.setEmailAttachment(fileNameList);
+    try {
+      emailService.emailSend(emailDto, getEmployee(request));
+    } catch (MailSendException e) {
+      return "test실패화면";
+    } catch (FileNotFoundException e) {
+      return "파일실패";
+    }
+
+    return "test";
   }
 
   @GetMapping("downloadAttachment")
