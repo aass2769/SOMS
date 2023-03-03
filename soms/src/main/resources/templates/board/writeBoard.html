@@ -28,6 +28,7 @@
 				<form id="form" method="post" th:if="${not #strings.isEmpty(readBoardDto.employeeNo)}" th:action="@{/board/boardUpdate}">
 					<div class="write_team_div">
 						<div class"write_team"><h2 class="write_team_h2" th:text="${boardSection + '게시판 / 글 작성'}">게시판</h2></div>	
+						<div><input type="checkbox" value="공지있음"> 공지</div>
 					</div>
 					<div class="write_title_div">
 						<input th:value="${readBoardDto.boardTitle}" name="boardTitle" id="boardTitle" class="write_title" type="text" placeholder="제목을 입력하세요" value="">
@@ -44,7 +45,7 @@
 						<input name="pageLimit" type="hidden" th:value="${pageLimit}">
 					</div>
 					<div class="write_button_div">
-						<button type="button" id="write_submit" onclick="data_submit()" class="write_button">수정</button>
+						<button type="button"  id="write_submit" onclick="data_submit(); spinerOn();" class="write_button">수정</button>
 					</div>
 				</form>
 				
@@ -53,6 +54,7 @@
 				<form id="form" method="post" th:unless="${not #strings.isEmpty(readBoardDto.employeeNo)}" th:action="@{/board/boardWrite}">
 					<div class="write_team_div">
 						<div class="write_team"><h2 class="write_team_h2" th:text="${boardSection + '게시판 / 글 작성'}">게시판</h2></div>
+						<div><input type="checkbox" value="공지있음"> 공지</div>
 					</div>
 					<div class="write_title_div">
 						
@@ -66,7 +68,7 @@
 						<input name="pageLimit" type="hidden" th:value="${pageLimit}">
 					</div>
 					<div class="write_button_div">
-						<button type="button" id="write_submit" onclick="data_submit()" class="write_button">등록</button>
+						<button type="button" id="write_submit" onclick="data_submit(); spinerOn();" class="write_button">등록</button>
 					</div>
 				</form>
 			</div>

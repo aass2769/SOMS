@@ -31,7 +31,7 @@
 							<input type="hidden" name="boardSection" th:value="${boardSection}">
 							<input type="hidden" name="viewPage" th:value="1">
 							<input type="hidden" name="pageLimit" th:value="${pageLimit}">
-							<button class="board_show_list" type="submit">목록보기</button>
+							<button onclick="spinerOn()" class="board_show_list" type="submit">목록보기</button>
 						</form>
 					</div>
 				</div>
@@ -51,7 +51,7 @@
 								<option value="30" th:selected="${pageLimit == 30}">30</option>
 							</select>
 							<input type="hidden" name="boardSection" th:value="${boardSection}">
-							<button class="pageLimit_button">변경</button>
+							<button onclick="spinerOn()" class="pageLimit_button">변경</button>
 						</div>
 					</form>
 				</div>
@@ -73,7 +73,8 @@
 							<td th:text="'공지'" class="notice_board_tbody_no"></td>
 							<td class="notice_board_tbody_title"><a class="notice_board_content_link"
 									th:text="${noticeBoard.boardTitle}"
-									th:href="@{/board/boardRead(boardNo=${noticeBoard.boardNo}, pageLimit=${pageLimit})}"></a></td>
+									th:href="@{/board/boardRead(boardNo=${noticeBoard.boardNo}, pageLimit=${pageLimit})}"
+									onclick="spinerOn()"></a></td>
 							<td th:text="${noticeBoard.employeeTeam}" class="notice_board_tbody_team">부서</td>
 							<td th:text="${noticeBoard.manage}" class="notice_board_tbody_manage">대리</td>
 							<td th:text="${noticeBoard.employeeName}" class="notice_board_tbody_name">희용</td>
@@ -104,7 +105,7 @@
 			<div class="board_totalPage_container">
 				<div th:if="${totalPage != 0}" th:each="totalPage : ${#numbers.sequence(1,totalPage)}">
 					<div>
-						<button type="button" class="totalPage_button"><a class="totalPage_a"
+						<button type="button" class="totalPage_button"><a class="totalPage_a" onclick="spinerOn()"
 								th:href="@{/board/boardList(viewPage = ${totalPage}, boardSection=${boardSection}, pageLimit=${pageLimit})}"
 								th:text="${totalPage}"></a></button>
 					</div>
@@ -130,10 +131,10 @@
 						<input type="hidden" name="nullCheck" th:value="${nullCheck}">
 					</div>
 					<div class="board_search_button">
-						<button class="search_button" type="submit">검색</button>
+						<button onclick="spinerOn()" class="search_button" type="submit">검색</button>
 					</div>
 					<div class="board_search_write_button">
-						<button class="board_write_button"><a class="board_write_a"
+						<button class="board_write_button"><a onclick="spinerOn()" class="board_write_a"
 								th:href="@{/board/boardWrite(boardSection=${boardSection}, pageLimit=${pageLimit})}">글쓰기</a></button>
 					</div>
 				</div>

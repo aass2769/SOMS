@@ -54,11 +54,13 @@ public class BoardController {
 		//공지 없는 리스트
 		List<BoardDto> boardList = new ArrayList<>();
 		boardList =	boardService.selectBoard(boardSection, boardDto);
+		System.out.println(boardList.size());
 		
 		//공지 있는 리스트
 		List<BoardDto> noticeBoardList = new ArrayList<>();
 		noticeBoardList = boardService.selectNoticeBoard(boardSection, boardDto);
-		
+		System.out.println(noticeBoardList.size());
+
 		model.addAttribute("total", total);
 		model.addAttribute("viewPage", boardDto.getViewPage());
 		model.addAttribute("totalPage", totalPage);
@@ -76,7 +78,6 @@ public class BoardController {
 		
 		BoardDto readBoardDto = new BoardDto();
 		String boardSection = boardDto.getBoardSection();
-		System.out.println(boardSection);
 		Integer pageLimit = boardDto.getPageLimit();
 		if(request.getParameter("boardNo") != null) {
 			Integer boardNo = Integer.parseInt(request.getParameter("boardNo"));
@@ -125,9 +126,7 @@ public class BoardController {
 		if(readBoardDto.getBoardAnnouncement() == null) {
 			readBoardDto.setBoardAnnouncement("공지없음");
 		}
-		System.out.println(pageLimit);
-		System.out.println(boardSection);
-		System.out.println(readBoardDto.getBoardNo());
+
 		boardService.updateBoard(readBoardDto);
 
 		redirect.addAttribute("pageLimit",pageLimit);

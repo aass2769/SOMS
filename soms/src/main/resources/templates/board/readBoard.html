@@ -30,7 +30,7 @@
 					<div class="read_top_container">
 						<div class="read_top_button_left">
 							<div class="top_list_button_div">
-								<button type="button" class="top_list_button"><a class="toa_list_a"
+								<button type="button" onclick="spinerOn()" class="top_list_button"><a class="toa_list_a"
 										th:href="@{/board/boardList(boardSection = ${readBoardDto.boardSection} ,pageLimit=${pageLimit})}">목록</a></button>
 							</div>
 							<div class="top_previous_button_div">
@@ -38,7 +38,7 @@
 									<input type="hidden" name="boardSection" th:value="${readBoardDto.boardSection}">
 									<input type="hidden" name="boardNo" th:value="${readBoardDto.boardNo}">
 									<input type="hidden" name="pageLimit" th:value="${pageLimit}">
-									<button type="submit" id="before" name="moveButton" th:value="before" class="top_previous_button">이전글</button>
+									<button onclick="spinerOn()" type="submit" id="before" name="moveButton" th:value="before" class="top_previous_button">이전글</button>
 								</form>
 							</div>
 							<div class="top_next_button_div">
@@ -46,7 +46,7 @@
 									<input type="hidden" name="boardSection" th:value="${readBoardDto.boardSection}">
 									<input type="hidden" name="boardNo" th:value="${readBoardDto.boardNo}">
 									<input type="hidden" name="pageLimit" th:value="${pageLimit}">
-									<button type="submit" id="after" name="moveButton" th:value="after" class="top_next_button">다음글</button>
+									<button onclick="spinerOn()" type="submit" id="after" name="moveButton" th:value="after" class="top_next_button">다음글</button>
 								</form>
 							</div>
 						</div>
@@ -57,12 +57,12 @@
 									<input type="hidden" name="boardSection" th:value="${readBoardDto.boardSection}">
 									<input type="hidden" name="employeeNo" th:value="${readBoardDto.employeeNo}">
 									<input type="hidden" name="pageLimit" th:value="${pageLimit}">
-									<button type="submit" class="top_update_button"><a class="top_update_a">수정</a></button>
+									<button type="submit" class="top_update_button"><a onclick="spinerOn()" class="top_update_a">수정</a></button>
 								</form>
 							</div>
 							<div th:if="${session.LOGIN_EMPLOYEE.employeeNo} == ${readBoardDto.employeeNo}" class="top_delete_button_div">
 								<form th:action="@{/board/boardDelete(boardNo = ${readBoardDto.boardNo}, boardSection = ${readBoardDto.boardSection})}" method="post">
-								<button type="submit" class="top_delete_button">삭제</button>
+								<button onclick="spinerOn()" type="submit" class="top_delete_button">삭제</button>
 								</form>
 							</div>
 						</div>
@@ -108,7 +108,7 @@
 								<input type="hidden" name="boardNo" th:value="${comment.boardNo}">
 								<input type="hidden" name="commentNo" th:value="${comment.commentNo}">
 								<input type="hidden" name="pageLimit" th:value="${pageLimit}">
-								<button class="comment_delete_button" type="submit"></button>
+								<button onclick="spinerOn()" class="comment_delete_button" type="submit"></button>
 							</form>
 						</div>
 					</div>
@@ -126,7 +126,7 @@
 							</div>
 							<div class="button_comment_div">
 								<input type="hidden" name="pageLimit" th:value="${pageLimit}">
-								<button class="write_comment_button" type="button" onclick="data_submit()">등록</button>
+								<button class="write_comment_button" type="button" onclick="data_submit(); spinerOn();">등록</button>
 							</div>
 						</div>
 					</form>
