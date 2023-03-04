@@ -109,6 +109,12 @@
               $('#detailForm' + i).submit();
           });
       }
+      window.onpageshow = function (event) {
+          if (event.persisted) {
+              location.href="/submission/approval/approvalList?approvalSection=under"
+          }
+      };
+
   </script>
 </section>
 

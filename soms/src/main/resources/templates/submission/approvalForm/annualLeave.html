@@ -183,6 +183,13 @@
               $('#submissionComent').attr("placeholder", "반려사항을 기입하세요.");
           }
       });
+      window.onpageshow = function (event) {
+          if (event.persisted) {
+              $('#spinner').hide();
+              $('.modal-backdrop').remove();
+              $('body').css('overflow', 'auto');
+          }
+      };
   </script>
 </section>
 

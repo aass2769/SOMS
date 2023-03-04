@@ -46,14 +46,16 @@ public class SessionInterceptor implements HandlerInterceptor {
         if (approval.getSubmissionNo() != null && approval.getSubmissionStatus().equals("2") &&
             ((!approval.getProposerShowable().equals("불가") && approval.getProposerEmployeeNo() != null &&
                 approval.getApproverEmployeeNo() == null) || (!approval.getApproverShowable().equals("불가") &&
-                approval.getApproverEmployeeNo() != null)) && approval.getSubmissionOpen().equals("본인건")) {
+                approval.getApproverEmployeeNo() != null)) && (approval.getSubmissionOpen().equals("본인건") &&
+                approval.getApproverEmployeeNo() == null)) {
           complete += 1;
         }
         //미확인 상태인 '결재 반려 내역' 카운트
         if (approval.getSubmissionNo() != null && approval.getSubmissionStatus().equals("0") &&
             ((!approval.getProposerShowable().equals("불가") && approval.getProposerEmployeeNo() != null &&
                 approval.getApproverEmployeeNo() == null) || (!approval.getApproverShowable().equals("불가") &&
-                approval.getApproverEmployeeNo() != null)) && approval.getSubmissionOpen().equals("본인건")) {
+                approval.getApproverEmployeeNo() != null)) && (approval.getSubmissionOpen().equals("본인건") &&
+                approval.getApproverEmployeeNo() == null)) {
           reject += 1;
         }
       }

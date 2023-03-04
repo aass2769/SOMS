@@ -178,6 +178,16 @@
               $('#submitForm').submit();
           } else {}
       });
+      window.onpageshow = function (event) {
+          if (event.persisted) {
+              $('#spinner').hide();
+              $('.modal-backdrop').remove();
+              $('body').css('overflow', 'auto');
+              var form = document.getElementById("submitForm");
+              form.reset();
+          }
+      };
+
 
   </script>
 
