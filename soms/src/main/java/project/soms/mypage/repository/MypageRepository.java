@@ -61,4 +61,9 @@ public class MypageRepository {
 	public void mypageDelete(long employeeNo) {
 		mypageMapper.mypageDelete(employeeNo);
 	}
+	
+	// 회원 삭제 후 Null 처리
+	public void mypageDeleteNull(long employeeNo) {
+		mypageMapper.mypageDeleteNull(employeeNo);
+	}
 }

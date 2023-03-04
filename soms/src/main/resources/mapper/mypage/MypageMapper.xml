@@ -39,9 +39,11 @@
 	<insert id="mypageRegisterInsert">
 		insert into employee(employee_no, employee_id, employee_pw, employee_name,  employee_phone,
 								employee_email,  employee_addr,  employee_team, manage_no
+								
 								<if test="employeeAdmin != 0">
 									,employee_admin
 								</if>
+								
 								) 
 		values(#{employeeNo}, #{employeeId}, '1234', #{employeeName}, #{employeePhone}, 
 								#{employeeEmail}, #{employeeAddr}, #{employeeTeam}, #{manageNo}
@@ -93,11 +95,16 @@
 		limit 1;
 	</select>
 	
-	<delete id="mypageDelete">
+	<update id="mypageDelete">
 		update employee
 		set employee_leave = 'ok'
 		where employee_no = #{employeeNo}
-	</delete>
+	</update>
 	
+	<update id="mypageDeleteNull">
+		update employee
+		set employee_admin = null
+		where employee_admin = #{employeeNo}
+	</update>
 	
 </mapper>

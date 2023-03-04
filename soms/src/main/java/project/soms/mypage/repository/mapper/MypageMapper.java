@@ -38,4 +38,8 @@ public interface MypageMapper {
 	
 	// 회원 삭제
 	public void mypageDelete(long employeeNo);
+	
+	// 회원 삭제 후 null 처리
+	public void mypageDeleteNull(long employeeNo);
+
 }

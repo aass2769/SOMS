@@ -196,6 +196,7 @@ public class MypageController {
 		
 		try {
 			mypageRepository.mypageDelete(employeeNo);
+			mypageRepository.mypageDeleteNull(employeeNo);
 			count = 1;
 		}catch(Exception ex) {
 			count = 2;
