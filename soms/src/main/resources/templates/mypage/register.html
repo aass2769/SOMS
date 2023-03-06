@@ -88,6 +88,16 @@
 		</div>
 	</div>
 	
+	
+		<script>
+			window.onpageshow = function (event) {
+			    if (event.persisted) {
+			        $('#spinner').modal('show');
+					location.href="/mypage/register"
+			    }
+			};
+		</script>
+	
 		<script>
 			// 다른곳 클릭시 오프캔버스 닫기
 			$('#RegisterForm input').not("#RegisterInsertAdmin").click(function(){

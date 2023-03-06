@@ -39,6 +39,15 @@
 			</div>
 		</div>
 		
+		<script>
+			window.onpageshow = function (event) {
+			    if (event.persisted) {
+			        $('#spinner').modal('show');
+					location.href="/mypage"
+			    }
+			};
+		</script>
+		
 		<script th:inline="javascript">
 			const attendanceStat = /*[[${attendance}]]*/'';
 			
