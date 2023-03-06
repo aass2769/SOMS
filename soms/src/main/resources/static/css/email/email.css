@@ -130,11 +130,21 @@
 .SendMail_Recipient>label{
 	font-weight: bold;
 }
-.SendMail_Recipient>input{
-	margin-top: 5rem;
+.Recipient{
 	border: none;
 	border-bottom: 2px solid #f4f4f4;
 	width: 80%;
+}
+#addRecipients{
+    background-color: #EA471B;
+	border: 1px solid #EA471B;
+	border-radius: 0.4rem;
+    font-size: 0.7rem;
+    height: 1.5rem;
+    color: white;
+    font-family: 'KOTRA_BOLD-Bold';
+    padding:0.2rem 1rem 0.25rem 1rem;
+    margin-left: 0.3rem;
 }
 .SendMail_Title>label{
 	margin-right:2rem;
@@ -150,20 +160,29 @@
 .SendMail_AddFile>label{
 	font-weight: bold;
 }
-.SendMail_AddFile>input{
-	border: 2px solid #f4f4f4;
-	border-radius: 0.4rem;
-	width: 79.5%;
-	height: 5rem;
-}
+
 .SendMail_AddFile>input[type=file]::file-selector-button{
 	background-color: #EA471B;
 	border: 1px solid #EA471B;
 	border-radius: 0.4rem;
-	margin-left: 40%;
-	margin-top:3%;
+    font-size: 0.7rem;
+    height: 1.5rem;
+    color: white;
+    font-family: 'KOTRA_BOLD-Bold';
+    padding:0.2rem 1rem 0.25rem 1rem;
+    margin-left: 0.3rem;
+
+}
+.file-list{
+    border: 2px solid #f4f4f4;
+	border-radius: 0.4rem;
+	width: 79.5%;
+	height: 5rem;
+    margin-left:4.4%;
+    overFlow : auto;
 }
 .SendMail_Content>textarea{
+    margin-top:1rem;
 	border: 2px solid #f4f4f4;
 	border-radius: 0.4rem;
 	width: 86.2%;
@@ -183,4 +202,30 @@
     font-family: 'KOTRA_BOLD-Bold';
     padding:0.2rem 1rem 0.25rem 1rem;
     margin-left: 0.3rem;
+}
+.insert {
+    padding: 20px 30px;
+    display: block;
+    width: 600px;
+    margin: 5vh auto;
+    height: 90vh;
+    border: 1px solid #dbdbdb;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.insert .file-list {
+    height: 200px;
+    overflow: auto;
+    border: 1px solid #989898;
+    padding: 10px;
+}
+.insert .file-list .filebox p {
+    font-size: 14px;
+    margin-top: 10px;
+    display: inline-block;
+}
+.insert .file-list .filebox .delete i{
+    color: #ff5353;
+    margin-left: 5px;
 }

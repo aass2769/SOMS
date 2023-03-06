@@ -5,7 +5,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>메일</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="css.css">
 </head>
+
 <body>
     <article class="Article">
 		<div>
@@ -25,26 +28,132 @@
 			</div>
 			
 			<!--Contents-->
-			<div class="SendMail_Container">
-				<div class="SendMail_Recipient">
-					<label>받는사람</label><input type="text">
-				</div>
-				<div class="SendMail_Title">
-					<label>제목</label><input type="text">
-				</div>
-				<div class="SendMail_AddFile">
-					<label for="file">첨부파일</label>
-					<input type="file">
-				</div>
-				<div>네비바</div>
-				<div class="SendMail_Content">
-					<textarea rows="5" cols="33"></textarea>
-				</div>
-				<div class="SendMail-Btn">
-					<button>미리보기</button><button>임시저장</button><button>보내기</button>
-				</div>
-			</div>
-		</div>
+		<form method="get" name="signup" id="signup" action="#" enctype="multipart/form-data">
+                <div class="SendMail_Container">
+			    	<div class="SendMail_Recipient">
+			    		<label>받는사람</label><input type="text" name="Recipient" class="Recipient" id="Recipient" th:text="${emailDto.emailFrom}"><input type="button" id="addRecipients" value="Add">
+                        <div class="Check-Front" id="Recipient-Chk"></div>
+                    </div>
+			    	<div class="SendMail_Title">
+				    	<label>제목</label><input type="text" id="SendSubject">
+			    	</div>
+			    	<div ><span style="display:none;"></span>
+			    	<div class="SendMail_AddFile">
+				    	<label for="file">첨부파일</label>
+                        <input type="file" id="addfile" class="addfile"  name="addfile" onchange="addFile(this);" multiple/>
+                        <div id="file-list" class="file-list"></div>
+			    	</div>
+			    	<div class="SendMail_Content">
+			    		<textarea rows="5" cols="33" id="contentMessage" name="contentMessage"></textarea>
+			    	</div>
+			    	<div class="SendMail-Btn">
+			    		<button>임시 저장</button>
+                        <button type="submit">보내기</button>
+			    	</div>
+			    </div>
+		    </div>
+        </form>
+	<script th:inline="javascript">
+		//이메일 형식 체크
+		var mailJ = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+
+            $('#Recipient').blur(function(){
+                if(mailJ.test($('#Recipient').val())){
+                    console.log("true");
+                    $('#Recipient-Chk').text('');
+                }else{
+                    console.log("false");
+                    $('#Recipient-Chk').text('이메일 형식이 맞지 안습니다.');
+                    $('#Recipient-Chk').css('color', 'red');
+                    }
+                });
+                
+            //제목 여부 확인하고 보내기
+            $(document).ready(function() {
+                $('#signup').submit(function() {
+                    if ($('#SendSubject').val() == '') {
+                        if(confirm('제목이 없습니다. 전송하시겠습니까?')){
+                            //확인
+                            $('#SendSubject').text("제목 없음");
+                                }
+                            }
+                        }); 
+                });
+            
+            //메세지와 파일 둘 중 하나라도 없으면 alert발생
+            $(document).ready(function(){
+                   $('#signup').submit(function(){
+                        if($('#addfile').val()!=""||$('#contentMessage').val()!=""){
+                            return true;
+                        }else{
+                            alert("내용을 입력해주세요.");
+                            return false;
+                        }
+                    });
+                });
+
+            //수신자 추가 및 제거 최대 8명
+            $(document).ready (function () {     
+                var maxAppend = 1;           
+                $('#addRecipients').click (function () {                                        
+                    if (maxAppend >= 8) return;
+                        $('.SendMail_Recipient').append (                        
+                            '<input type="text" name="Recipient" id="Recipient" class="Recipient"> <input type="button" class="btnRemove" value="삭제"><br><div class="Check-Front" id="Recipient-Chk"></div>'                    
+                        ); // end append                            
+                        $('.btnRemove').on('click', function () {
+                            $(this).prev().remove (); // remove the textbox
+                            $(this).next ().remove (); // remove the <br>
+                            $(this).remove (); // remove the button
+                        });
+                    maxAppend++; 
+                }); // end click                                            
+            }); // end ready  
+            
+            //파일경로 파일이 있는지 존재 유무 확인
+            if($('#addfile').val()!=""){
+                $(document).ready(function(){
+                    $('#signup').submit(function(){
+                            
+                        var fileCheck = $('#addfile').val();
+                            if(fileCheck=="" ||fileCheck != file.value){
+                                alert("파일이 존재하지 않습니다.");
+                                
+                                console.log($('#addfile').val());
+                            }
+                        });
+                });
+            }
+            
+            /* 첨부파일 추가 */
+            function addFile(obj){
+                var files = obj.files;
+                let htmlData = '';
+                for (var i = 0; i < files.length; i++) {
+                    const file = files[i];
+                    // 목록 추가
+                    htmlData += '<div id="file' + i + '" class="filebox">';
+                    htmlData += '   <p class="name">' + file.name + '</p>';
+                    htmlData += '   <a class="delete" onclick="jsFunc.deleteFile(' + i + ');"><i class="far fa-minus-square"></i></a>';
+                    htmlData += '</div>';
+                }
+                document.querySelector('.file-list').innerHTML = htmlData;
+            }
+
+            /* 첨부파일 삭제 */
+            function deleteFile(num) {
+                var dt = new DataTransfer()
+                var { files } = selFile;
+
+                for (var i = 0; i < files.length; i++) {
+                    var file = files[i];
+                    if (num !== i) dt.items.add(file);
+                    selFile.files = dt.files;
+                }
+
+                document.querySelector("#file" + num).remove();
+            }
+
+	</script>
 	</article>
 </body>
 </html>

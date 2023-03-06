@@ -5,6 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>메일</title>
+    <link rel="stylesheet" href="css.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
     <section class="Article">
@@ -24,49 +26,40 @@
 			  <div style="height:5rem;"></div>
 			</div>
 			<!--네비바 부분-->
-			<div class="GetMail">
+			
+          
+            <div class="GetMail">
 				<div class="GetMail_Nav">
 					<ul>
-						<li class="lis1"><input type="checkbox" id="MailCheck"/></li>
-<!--						<li class="lis2"><label for="rate1">⭐</label></li>-->
-						<li class="lis3">읽음</li>
-						<li class="lis4"><button type="button" id="moveToTrash">삭제</button></li>
-						<li class="lis4"><button type="button" id="moveToJunk">스팸</button></li>
-						<li style="color:#f4f4f4;">|</li>
-						<li class="lis5">답장</li>
-						<li class="lis6">전체답장</li>
-						<li class="lis7">전달</li>
-						<li style="color:#f4f4f4;">|</li>
-						<li class="lis8">필터▼</li>
+						<li class="lis1"><input type="checkbox" id="MailCheck" onclick="toggleAll(this)"></li>
+						<li class="lis2">읽음</li>
+						<li class="lis3"><button onclick="deleteCheckedRows()">삭제</button></li>
+                        <li class="lis4"><button>스팸</button></li>
+						<li class="lis5"><button>답장</button></li>
+						<li class="lis7"><button>전달</button></li>
 						<li class="lis9" id="seenCount"></li>
 					</ul>
 				</div>
 				<!--테이블 부분-->
 				<div class="GetMail_Container">
 					<table>
-						<form id="emailListInbox" method="post" th:action="@{/email/moveToTrashOrJunk(folderName=${folderName})}">
-							<input type="hidden" name="moveFolder" id="moveFolder" value="">
-							<tr th:each="email : ${emailList}">
-								<td class="table1">
-									<input type="checkbox" name="emailNoList" th:value="${email.emailNo}" id="MailCheck"/>
-								</td>
-								<!--							<td class="table2">-->
-								<!--								<label for="rate1">⭐</label>-->
-								<!--							</td>-->
-								<td class="table3" th:id="${'seen' + emailStat.index}" th:text="${email.emailSeen ? '읽음' : '안읽음'}">
-									읽음 안읽음 확인
-								</td>
-								<td class="table4" th:text="${email.getEmailFrom()}">
-									발신자
-								</td>
-								<td class="table5">
-									<a class="detailLink" th:href="@{/email/emailDetail(emailNo=${email.getEmailNo()},folderName=${folderName})}" th:text="${email.getEmailSubject()}">제목</a>
-								</td>
-								<td class="table6" th:text="${email.getEmailSentDate()}">
-									발신일
-								</td>
-							</tr>
-						</form>
+						<tr th:each="email : ${emailList}">
+							<td class="table1">
+								<input type="checkbox" name="emailNoList" value="" />
+							</td>
+							<td class="table3" th:id="${'seen' + emailStat.index}" th:text="${email.emailSeen ? '읽음' : '안읽음'}">
+								읽음 안읽음 확인
+							</td>
+							<td class="table4" th:text="${email.getEmailFrom()}">
+								발신자
+							</td>
+							<td class="table5">
+								<a class="detailLink" th:href="@{/email/emailDetail(emailNo=${email.getEmailNo()},folderName='INBOX')}" th:text="${email.getEmailSubject()}">제목</a>
+							</td>
+							<td class="table6" th:text="${email.getEmailSentDate()}">
+								발신일
+							</td>			
+						</tr>		
 					</table>
 				</div>
 			</div>
@@ -75,30 +68,42 @@
 			<script th:inline="javascript">
 				$('.detailLink').on("click", function(){
 					$('#spinner').modal("show");
-				});
+				 });
 
-				$('#moveToTrash').on("click", function() {
-					$('#spinner').modal("show");
-					document.getElementById("moveFolder").value = "Trash";
-					$('#emailListInbox').submit();
-				});
-
-				$('#moveToJunk').on("click", function() {
-					$('#spinner').modal("show");
-					document.getElementById("moveFolder").value = "Junk E-mail";
-					$('#emailListInbox').submit();
-				});
-
-				let seenCount;
-				let max = [[${emailList.size}]]
-				for (let i = 0; i < max; i++) {
-					if ($('#seen' + i).text() == "안읽음") {
-						seenCount += 1;
-					}
-				}
-				$('#seenCount').innerHTML = seenCount + "/" + max;
+				 let seenCount;
+				 let max = [[${emailList.size}]]
+				 for (let i = 0; i < max; i++) {
+				 	if ($('#seen' + i).text() == "안읽음") {
+				 		seenCount += 1;
+				    }
+				 }
+				 $('#seenCount').innerHTML = seenCount + "/" + max;
 
 
+
+			//체크 된 메일 페이지에서 삭제
+                function deleteCheckedRows() {
+                    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+                    for (let i = 0; i < checkboxes.length; i++) {
+                        const checkbox = checkboxes[i];
+                        if (checkbox.checked&&checkbox.id !=="MailCheck") {
+                            const row = checkbox.closest('tr');
+                            if (row.parentNode) {
+                                row.parentNode.removeChild(row);
+                            }
+                        }
+                    }
+                }
+                
+                //메일 전부 체크
+                function toggleAll(source) {
+                    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+                    for (let i = 0; i < checkboxes.length; i++) {
+                        if (checkboxes[i] !== source) {
+                            checkboxes[i].checked = source.checked;
+                        }
+                    }
+                }
 			</script>
 	</section>
 </body>
