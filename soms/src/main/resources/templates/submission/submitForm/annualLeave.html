@@ -104,7 +104,8 @@
 
             <p class="m-0" style="font-size: 0.9rem; width:5rem;">시작 일 : </p>
             <input type="date" name="annualLeaveStart" class="border-0 border-bottom" style="font-size: 0.7rem; outline:none; width:6rem;" id="annualLeaveStart"
-                   th:field="*{annualLeaveStart}" th:errorclass="border-danger" th:min="${#dates.format(date, 'yyyy-MM-dd')}">
+                   th:field="*{annualLeaveStart}" th:errorclass="border-danger">
+<!--                   th:min="${#dates.format(date, 'yyyy-MM-dd')}">-->
 
             <p class="m-0 ms-3" style="font-size: 0.9rem; width:5rem;">종료 일 : </p>
             <input type="date" name="annualLeaveEnd" class="border-0 border-bottom" style="font-size: 0.7rem; outline:none; width:6rem;" id="annualLeaveEnd"
