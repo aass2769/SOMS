@@ -14,7 +14,6 @@ import project.soms.employee.dto.EmployeeDto;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -75,14 +74,10 @@ public class EmailController {
   @GetMapping("emailSend")
   public String emailSend(HttpServletRequest request, EmailDto emailDto, @RequestParam("recipients") List<String> recipients, @RequestParam("fileName") List<String> fileName) {
 
-    emailDto.setEmailFrom("admin@somsolution.awsapps.com");
     emailDto.setEmailRecipient(recipients);
+    emailDto.setEmailAttachment(fileName);
 
-    List<String> fileNameList = new ArrayList<>();
-    if (fileName.size() > 0) {
-      fileNameList.addAll(fileName);
-    }
-    emailDto.setEmailAttachment(fileNameList);
+
     try {
       emailService.emailSend(emailDto, getEmployee(request));
     } catch (MailSendException e) {

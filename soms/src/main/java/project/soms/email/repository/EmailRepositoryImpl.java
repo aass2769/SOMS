@@ -50,13 +50,13 @@ public class EmailRepositoryImpl implements EmailRepository{
    * emailDetail에서 기준값으로 해당 이메일의 상세 내역 select
    * 기준값은 long 타입으로 선언하여 메일 내역에 1씩 증가하여 값 할당
    */
-  private static Map<Long, EmailDto> emailMap = new TreeMap<>(Collections.reverseOrder());
+  private static final Map<Long, EmailDto> emailMap = new TreeMap<>(Collections.reverseOrder());
 
   //이메일 내역
   @Override
   public List<EmailDto> emailList(String employeeId, String employeePw, String folderName) {
-    /**
-     * 일단 테스트를 위해 계정 절대값 설정
+    /*
+      일단 테스트를 위해 계정 절대값 설정
      */
     employeeId = "admin";
 
@@ -76,9 +76,9 @@ public class EmailRepositoryImpl implements EmailRepository{
     try {
       //이메일 세션에 값을 스토어에 저장
       Store store = emailSession.getStore();
-      /**
-       * imap 주소
-       * 임직원 계정 (임직원 Id + 도메인), 임직원 비밀번호(공통값으로 설정)
+      /*
+        imap 주소
+        임직원 계정 (임직원 Id + 도메인), 임직원 비밀번호(공통값으로 설정)
        */
       store.connect("imap.mail.us-east-1.awsapps.com", employeeId + "@somsolution.awsapps.com", employeePw);
 
@@ -97,7 +97,7 @@ public class EmailRepositoryImpl implements EmailRepository{
 
         int addressPoint1 = message.getFrom()[0].toString().indexOf("<");
         int addressPoint2 = message.getFrom()[0].toString().indexOf(">");
-        String subString = "";
+        String subString;
         if (addressPoint1 >= 0) {
           subString = message.getFrom()[0].toString().substring(addressPoint1 + 1, addressPoint2 - 1);
           email.setEmailFrom(subString);
@@ -130,7 +130,7 @@ public class EmailRepositoryImpl implements EmailRepository{
 
           //메일 내용을 여러 Multipart 객체에
           Multipart multipart = (Multipart) content;
-          String sb = "";
+          StringBuilder sb = new StringBuilder();
 
           //EmailDto 에 파일 이름 리스트에 담기 위한 리스트를 선언
           List<String> attachmentFileName = new ArrayList<>();
@@ -145,7 +145,7 @@ public class EmailRepositoryImpl implements EmailRepository{
             //bodytype에 값들 중 'TEXT/PLAIN'으로 설정된 값은 String으로
             if (bodyPart.getContentType().contains("text/plain;") || bodyPart.getContentType().contains("text/html")) {
               String contents = (String) bodyPart.getContent();
-              sb += contents;
+              sb.append(contents);
             }
 
             //bodytype에 값들 중 첨부파일 (ATTACHMENT) 있는지 확인
@@ -155,7 +155,7 @@ public class EmailRepositoryImpl implements EmailRepository{
               //첨부파일을 프로젝트의 디렉토리에 저장
               String fileName = krStringParsing(bodyPart.getFileName());
               String extension = FilenameUtils.getExtension(fileName);
-              String newFileName = UUID.randomUUID().toString() + "." + extension;
+              String newFileName = UUID.randomUUID() + "." + extension;
               Files.createDirectories(Paths.get("src/main/resources/static/files"));
               Files.copy(is, Paths.get("src/main/resources/static/files/" + newFileName));
               is.close();
@@ -169,7 +169,7 @@ public class EmailRepositoryImpl implements EmailRepository{
             }
           }
           //EmailDto에 내용과 첨부파일 값 저장
-          email.setEmailContent(sb);
+          email.setEmailContent(sb.toString());
           email.setEmailAttachmentFileName(attachmentFileName);
           email.setEmailAttachment(attachment);
         }
@@ -182,10 +182,7 @@ public class EmailRepositoryImpl implements EmailRepository{
       //반환해줄 리스트 생성 후 emailMap의 값 주입
       emailList = new ArrayList<>(emailMap.values());
 
-    } catch (MessagingException e) {
-      log.error("error={}", e);
-      throw new RuntimeException(e);
-    } catch (IOException e) {
+    } catch (MessagingException | IOException e) {
       log.error("error={}", e);
       throw new RuntimeException(e);
     }
@@ -201,8 +198,8 @@ public class EmailRepositoryImpl implements EmailRepository{
 
   @Override
   public void emailUpdateSeen(String employeeId, String employeePw, String folderName, Long emailNo) {
-    /**
-     * 일단 테스트를 위해 계정 절대값 설정
+    /*
+      일단 테스트를 위해 계정 절대값 설정
      */
     employeeId = "admin";
 
@@ -228,8 +225,6 @@ public class EmailRepositoryImpl implements EmailRepository{
 
       message.setFlags(flags, true);
 
-    } catch (NoSuchProviderException e) {
-      throw new RuntimeException(e);
     } catch (MessagingException e) {
       throw new RuntimeException(e);
     }
@@ -239,8 +234,8 @@ public class EmailRepositoryImpl implements EmailRepository{
   @Override
   public void moveToTrashOrJunk(String employeeId, String employeePw, String folderName, String moveFolder, List<Long> emailNoList) {
 
-    /**
-     * 일단 테스트를 위해 계정 절대값 설정
+    /*
+      일단 테스트를 위해 계정 절대값 설정
      */
     employeeId = "admin";
     //설정 객체 생성 후 필요 값 할당
@@ -267,6 +262,7 @@ public class EmailRepositoryImpl implements EmailRepository{
         moveFolderName = store.getFolder("Junk E-mail");
       }
 
+      assert moveFolderName != null;
       moveFolderName.open(Folder.READ_WRITE);
 
       for (Long emailNo : emailNoList) {
@@ -298,8 +294,8 @@ public class EmailRepositoryImpl implements EmailRepository{
 
   @Override
   public void emailSend(EmailDto emailDto, EmployeeDto employee, String employeePw) throws FileNotFoundException {
-    /**
-     * 테스트용 사용자
+    /*
+      테스트용 사용자
      */
     employee.setEmployeeId("znyvua05");
 
@@ -324,6 +320,7 @@ public class EmailRepositoryImpl implements EmailRepository{
       textWarp.setContent(emailDto.getEmailContent(), "text/plain; charset=utf-8");
       messageContent.addBodyPart(textWarp);
 
+      emailDto.getEmailAttachment().removeIf(file -> file.equals("0"));
       if (emailDto.getEmailAttachment().size() > 0) {
         MimeBodyPart attachmentWarp = new MimeBodyPart();
         for (String fileName : emailDto.getEmailAttachment()) {
@@ -346,9 +343,7 @@ public class EmailRepositoryImpl implements EmailRepository{
 
       javaMailSender.send(message);
 
-    } catch (MessagingException e) {
-      throw new RuntimeException(e);
-    } catch (UnsupportedEncodingException e) {
+    } catch (MessagingException | UnsupportedEncodingException e) {
       throw new RuntimeException(e);
     } catch (MailSendException e) {
       saveDraftEmail(message, employee.getEmployeeId(), employeePw);
@@ -391,8 +386,8 @@ public class EmailRepositoryImpl implements EmailRepository{
   @Override
   public void deleteMessage(String employeeId, String employeePw, String folderName, List<Long> emailNoList) {
 
-    /**
-     * 일단 테스트를 위해 계정 절대값 설정
+    /*
+      일단 테스트를 위해 계정 절대값 설정
      */
     employeeId = "admin";
 
@@ -416,6 +411,7 @@ public class EmailRepositoryImpl implements EmailRepository{
         emailFolder = store.getFolder("Junk E-mail");
       }
 
+      assert emailFolder != null;
       emailFolder.open(Folder.READ_WRITE);
 
       for (Long emailNo : emailNoList) {
@@ -484,7 +480,7 @@ public class EmailRepositoryImpl implements EmailRepository{
 
     StringBuilder buffer = new StringBuilder();
 
-    String charsetMain = "UTF-8";
+    String charsetMain = "utf-8";
     String charsetSub = "B";
 
     Pattern p = Pattern.compile(pattern);
@@ -497,10 +493,7 @@ public class EmailRepositoryImpl implements EmailRepository{
         try {
           init();
           buffer.append(new String(Base64.decode(matcher.group(3)), charsetMain));
-        } catch (Base64DecodingException e) {
-          log.error("error={}", e);
-          throw new RuntimeException(e);
-        } catch (UnsupportedEncodingException e) {
+        } catch (Base64DecodingException | UnsupportedEncodingException e) {
           log.error("error={}", e);
           throw new RuntimeException(e);
         }
