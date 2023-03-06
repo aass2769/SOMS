@@ -218,8 +218,10 @@ public class SubmissionSubmitController {
     List<ApproverDto> approverDto = employeeService.approverCheck(result, request, employeeNo);
 
     //연차일 때는 시간이 0이 되도록
-    if (annualLeaveInsertForm.getAnnualLeaveSection().equals("연차") && annualLeaveInsertForm.getAnnualLeaveTime() > 0) {
-      result.rejectValue("annualLeaveTime", "notMatchSectionAndTime", new Object[]{}, null);
+    if (annualLeaveInsertForm.getAnnualLeaveTime() != null) {
+      if (annualLeaveInsertForm.getAnnualLeaveSection().equals("연차") && annualLeaveInsertForm.getAnnualLeaveTime() > 0) {
+        result.rejectValue("annualLeaveTime", "notMatchSectionAndTime", new Object[]{}, "연차에는 0시간을 입력하세요.");
+      }
     }
 
     //들어온 Dto 값들에 오류가 없는지 검증

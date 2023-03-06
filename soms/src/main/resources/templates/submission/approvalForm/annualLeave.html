@@ -185,9 +185,7 @@
       });
       window.onpageshow = function (event) {
           if (event.persisted) {
-              $('#spinner').hide();
-              $('.modal-backdrop').remove();
-              $('body').css('overflow', 'auto');
+              location.href="/submission/approval/detail/annualLeave";
           }
       };
   </script>

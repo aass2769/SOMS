@@ -104,15 +104,14 @@
 
             <p class="m-0" style="font-size: 0.9rem; width:5rem;">시작 일 : </p>
             <input type="date" name="annualLeaveStart" class="border-0 border-bottom" style="font-size: 0.7rem; outline:none; width:6rem;" id="annualLeaveStart"
-                   th:field="*{annualLeaveStart}" th:errorclass="border-danger">
-<!--                   th:min="${#dates.format(date, 'yyyy-MM-dd')}">-->
+                   th:field="*{annualLeaveStart}" th:errorclass="border-danger" th:min="${#dates.format(date, 'yyyy-MM-dd')}">
 
             <p class="m-0 ms-3" style="font-size: 0.9rem; width:5rem;">종료 일 : </p>
             <input type="date" name="annualLeaveEnd" class="border-0 border-bottom" style="font-size: 0.7rem; outline:none; width:6rem;" id="annualLeaveEnd"
                    th:field="*{annualLeaveEnd}" th:errorclass="border-danger">
 
             <p class="m-0 ms-3" style="font-size: 0.9rem; width:3rem;">시간 : </p>
-            <input type="text" name="annualLeaveTime" class="ms-1 border-0 border-bottom text-center" style="font-size: 0.7rem; outline:none; width:6rem;"
+            <input type="text" name="annualLeaveTime" id="annualLeaveTime" class="ms-1 border-0 border-bottom text-center" style="font-size: 0.7rem; outline:none; width:6rem;"
                    th:field="*{annualLeaveTime}" th:errorclass="border-danger">
             <small class="text-dark" style="font-size: 0.7rem" th:text="${#fields.hasErrors('annualLeaveTime') ? #fields.errors('annualLeaveTime') : ''}"></small>
 
@@ -145,7 +144,7 @@
           <div class="h-100 w-25 d-flex">
             <!-- 취소 버튼 클릭 시 결재 내역-결재중으로 이동 -->
             <a class="btn btn-outline-dark border w-50 h-100 rounded-0 text-light p-3"
-               th:href="@{/submission/approval/approvalList(approvalSection=under)}" style="background-color: #E86E1C">
+               th:href="@{/submission/approval/approvalList(approvalSection=under)}" onclick="$('#spinner').modal('show')" style="background-color: #E86E1C">
               취소
             </a>
             <!-- 상신 버튼 클릭 시 controller에 @PostMapping submission/form/expense 로 요청 -->
@@ -170,17 +169,13 @@
       });
       $('#formSubmit').on("click", function() {
           if (confirm("결재 상신 하시겠습니까?")) {
-              $('#spinner').modal("show");
+              $('#spinner').show();
               $('#submitForm').submit();
           } else {}
       });
       window.onpageshow = function (event) {
           if (event.persisted) {
-              $('#spinner').hide();
-              $('.modal-backdrop').remove();
-              $('body').css('overflow', 'auto');
-              var form = document.getElementById("submitForm");
-              form.reset();
+              location.href="/submission/form/annualLeave";
           }
       };
 
