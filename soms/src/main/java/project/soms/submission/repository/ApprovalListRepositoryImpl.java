@@ -84,10 +84,10 @@ public class ApprovalListRepositoryImpl implements ApprovalListRepository{
           approval.setProposerShowable(approval.getApproverShowable());
         }
 
-        /**
-         * 서식을 삭제할 때 열람가능여부 컬럼에 할당할 값을 설정
-         * 최하위 결재자일 경우엔 기안이라는 값을 할당하려 기안자만 열람 가능상태로 남도록
-         * 기안자일 경우엔 '결재'라는 값을 할당하여 최하위 결재자만 열람 가능하도록
+        /*
+          서식을 삭제할 때 열람가능여부 컬럼에 할당할 값을 설정
+          최하위 결재자일 경우엔 기안이라는 값을 할당하려 기안자만 열람 가능상태로 남도록
+          기안자일 경우엔 '결재'라는 값을 할당하여 최하위 결재자만 열람 가능하도록
          */
         if (submissionList.get(0).getApproverEmployeeNo().equals(approval.getApproverEmployeeNo()) && approval.getApproverShowable().equals("가능")) {
           approval.setDeleteCheck("기안");
@@ -127,10 +127,10 @@ public class ApprovalListRepositoryImpl implements ApprovalListRepository{
         } else if (!approval.getApproverShowable().equals("불가") && approval.getApproverEmployeeNo() != null) {
           approval.setProposerShowable(approval.getApproverShowable());
         }
-        /**
-         * 서식을 삭제할 때 열람가능여부 컬럼에 할당할 값을 설정
-         * 최하위 결재자일 경우엔 '기안'이라는 값을 할당하여 기안자만 열람 가능상태로 남도록
-         * 기안자일 경우엔 '결재'라는 값을 할당하여 최하위 결재자만 열람 가능하도록
+        /*
+          서식을 삭제할 때 열람가능여부 컬럼에 할당할 값을 설정
+          최하위 결재자일 경우엔 '기안'이라는 값을 할당하여 기안자만 열람 가능상태로 남도록
+          기안자일 경우엔 '결재'라는 값을 할당하여 최하위 결재자만 열람 가능하도록
          */
         if (submissionList.get(0).getApproverEmployeeNo().equals(approval.getApproverEmployeeNo()) && approval.getApproverShowable().equals("가능")) {
           approval.setDeleteCheck("기안");
@@ -182,6 +182,7 @@ public class ApprovalListRepositoryImpl implements ApprovalListRepository{
           expenseApprovalDetails.get(0).getExpenseNo(), expenseApprovalDetails.get(0).getExpenseSection(), expenseApprovalDetails.get(0).getExpensePjt(),
           expenseApprovalDetails.get(0).getExpenseDate(), expenseApprovalDetails.get(0).getExpenseCost(), expenseApprovalDetails.get(0).getExpenseContent());
     }
+    expenseApprovalDetail.setProposerEmployeeNo(expenseApprovalDetails.get(0).getProposerEmployeeNo());
     //반려 혹은 전체 결재 완료시 기안자에게 알람을 주기 위한 서식번호를 저장
     expenseApprovalDetail.setRejectValue(expenseApprovalDetails.get(0).getSubmissionNo());
     return expenseApprovalDetail;
@@ -211,6 +212,7 @@ public class ApprovalListRepositoryImpl implements ApprovalListRepository{
           overtimeApprovalDetails.get(0).getOvertimeStartDate(), overtimeApprovalDetails.get(0).getOvertimeStartTime(), overtimeApprovalDetails.get(0).getOvertimeEndDate(),
           overtimeApprovalDetails.get(0).getOvertimeEndTime(), overtimeApprovalDetails.get(0).getOvertimeContent());
     }
+    overtimeApprovalDetail.setProposerEmployeeNo(overtimeApprovalDetails.get(0).getProposerEmployeeNo());
     //반려 혹은 전체 결재 완료시 기안자에게 알람을 주기 위한 서식번호를 저장
     overtimeApprovalDetail.setRejectValue(overtimeApprovalDetails.get(0).getSubmissionNo());
     return overtimeApprovalDetail;
@@ -240,6 +242,7 @@ public class ApprovalListRepositoryImpl implements ApprovalListRepository{
           annualLeaveApprovalDetails.get(0).getAnnualLeaveStart(), annualLeaveApprovalDetails.get(0).getAnnualLeaveEnd(), annualLeaveApprovalDetails.get(0).getAnnualLeaveTime(),
           annualLeaveApprovalDetails.get(0).getAnnualLeaveContent());
     }
+    annualLeaveApprovalDetail.setProposerEmployeeNo(annualLeaveApprovalDetails.get(0).getProposerEmployeeNo());
     //반려 혹은 전체 결재 완료시 기안자에게 알람을 주기 위한 서식번호를 저장
     annualLeaveApprovalDetail.setRejectValue(annualLeaveApprovalDetails.get(0).getSubmissionNo());
     return annualLeaveApprovalDetail;
@@ -269,6 +272,7 @@ public class ApprovalListRepositoryImpl implements ApprovalListRepository{
           businessTripApprovalDetails.get(0).getBusinessTripStart(), businessTripApprovalDetails.get(0).getBusinessTripEnd(), businessTripApprovalDetails.get(0).getBusinessTripTime(),
           businessTripApprovalDetails.get(0).getBusinessTripDestination(), businessTripApprovalDetails.get(0).getBusinessTripContent());
     }
+    businessTripApprovalDetail.setProposerEmployeeNo(businessTripApprovalDetails.get(0).getProposerEmployeeNo());
     //반려 혹은 전체 결재 완료시 기안자에게 알람을 주기 위한 서식번호를 저장
     businessTripApprovalDetail.setRejectValue(businessTripApprovalDetails.get(0).getSubmissionNo());
     return businessTripApprovalDetail;
@@ -298,6 +302,7 @@ public class ApprovalListRepositoryImpl implements ApprovalListRepository{
           incidentApprovalDetails.get(0).getIncidentNo(), incidentApprovalDetails.get(0).getIncidentSection(),
           incidentApprovalDetails.get(0).getIncidentPjt(), incidentApprovalDetails.get(0).getIncidentContent());
     }
+    incidentApprovalDetail.setProposerEmployeeNo(incidentApprovalDetails.get(0).getProposerEmployeeNo());
     //반려 혹은 전체 결재 완료시 기안자에게 알람을 주기 위한 서식번호를 저장
     incidentApprovalDetail.setRejectValue(incidentApprovalDetails.get(0).getSubmissionNo());
     return incidentApprovalDetail;
@@ -349,7 +354,7 @@ public class ApprovalListRepositoryImpl implements ApprovalListRepository{
   private Date dateParse(String submissionDatetime) {
     Date date = null;
     try {
-      date = (Date) datetimeFormat.parse(submissionDatetime);
+      date = datetimeFormat.parse(submissionDatetime);
     } catch (ParseException e) {
       log.warn("submissionDatetime parse fail ={}", e);
     }

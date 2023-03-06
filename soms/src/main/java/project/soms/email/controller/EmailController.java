@@ -59,7 +59,7 @@ public class EmailController {
 
   @PostMapping("moveToTrashOrJunk")
   public String moveToTrashOrJunk(HttpServletRequest request, @RequestParam List<Long> emailNoList) {
-    emailNoList.removeIf(emailNo -> emailNo.equals(0));
+    emailNoList.removeIf(emailNo -> emailNo.equals(0L));
     if (emailNoList.size() <= 0) {
       return "redirect:" + request.getHeader("Referer");
     }
@@ -68,7 +68,7 @@ public class EmailController {
     } else {
       emailService.moveToTrashOrJunk(request, emailNoList);
     }
-    return "email/mailFolder/wasteBasket";
+    return "redirect:" + request.getHeader("Referer");
   }
 
   @ResponseBody
@@ -80,9 +80,7 @@ public class EmailController {
 
     List<String> fileNameList = new ArrayList<>();
     if (fileName.size() > 0) {
-      for (String file : fileName) {
-        fileNameList.add(file);
-      }
+      fileNameList.addAll(fileName);
     }
     emailDto.setEmailAttachment(fileNameList);
     try {
