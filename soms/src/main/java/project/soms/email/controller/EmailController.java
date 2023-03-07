@@ -1,12 +1,16 @@
 package project.soms.email.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailSendException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import project.soms.email.dto.EmailDto;
 import project.soms.email.service.EmailService;
 import project.soms.employee.dto.EmployeeDto;
@@ -14,14 +18,23 @@ import project.soms.employee.dto.EmployeeDto;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
+@Slf4j
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("email")
 public class EmailController {
 
+  /*
+  이메일 서비스 인터페이스 생성
+   */
   private final EmailService emailService;
 
   @GetMapping("getMail")
@@ -31,28 +44,55 @@ public class EmailController {
     return "email/getMailRepository";
   }
 
+  /*
+  이메일 작성 화면 응답
+   */
   @GetMapping("sendForm")
   public String readmail(Model model) {
     model.addAttribute("emailDto", new EmailDto());
     return "email/emailForm/sendMail";
   }
 
+  /*
+  답장 보낼 수신자 값을 담아서 화면 응답
+   */
   @GetMapping("reply")
   public String reply(Long emailNo, Model model) {
+    //화면에 응답할 emailDto 객체 생성
     EmailDto emailDto = new EmailDto();
 
-    EmailDto emailDetail = emailService.emailDetail(emailNo);
-    emailDto.setEmailRecipient(emailDetail.getEmailRecipient());
+    //파라미터로 전달받은 이메일번호로 이메일을 조회 후 이메일의 발신자 값을 수신자 값으로 객체에 값 할당
+    List<String> emailList = new ArrayList<>();
+    emailList.add(emailService.emailDetail(emailNo).getEmailFrom());
+    emailDto.setEmailRecipient(emailList);
 
+    //모델에 저장
     model.addAttribute("emailDto", emailDto);
+
+    //이메일 작성 화면 응답
     return "email/emailForm/sendMail";
   }
 
+  /*
+  전달 보낼 이메일의 내용 전체 담아서 화면 응답
+   */
   @GetMapping("forward")
   public String forward(Long emailNo, Model model) {
-
+    //파라미터로 전달받은 이메일번호로 이메일을 조회
     EmailDto emailDetail = emailService.emailDetail(emailNo);
+
+    //내용에 전달에 대한 정보 추가
+    String addForwardValue =
+        "<small><p>---------- Forwarded message ---------<br>" +
+        "보낸사람 : " + emailDetail.getEmailFrom() + "<br>" +
+        "Date : " + emailDetail.getEmailSentDate() + "<br>" +
+        "Subject : " + emailDetail.getEmailSubject() + "<br>" +
+        "To : " + emailDetail.getEmailFrom() + "<br><br><br><br>" +
+        emailDetail.getEmailContent();
+
+    //수신자 배열 초기화, 내용 추가
     emailDetail.setEmailRecipient(new ArrayList<>());
+    emailDetail.setEmailContent(addForwardValue);
 
     model.addAttribute("emailDto", emailDetail);
     return "email/emailForm/sendMail";
@@ -93,13 +133,34 @@ public class EmailController {
     return "redirect:" + request.getHeader("Referer");
   }
 
-  @ResponseBody
-  @GetMapping("emailSend")
-  public String emailSend(HttpServletRequest request, EmailDto emailDto, @RequestParam("recipients") List<String> recipients, @RequestParam("fileName") List<String> fileName) {
+  @PostMapping("emailSend")
+  public String emailSend(HttpServletRequest request, EmailDto emailDto, @RequestParam("recipients") List<String> recipients, @RequestParam List<MultipartFile> fileName) {
 
     emailDto.setEmailRecipient(recipients);
-    emailDto.setEmailAttachment(fileName);
+    List<String> fileNames = new ArrayList<>();
+    List<String> filePaths = new ArrayList<>();
 
+    try {
+      Path fileAddress = Paths.get("src/main/resources/static/files");
+      List<MultipartFile> fileList = fileName;
+      for (int i = 0; i < fileList.size(); i++) {
+
+        String fileRealName = StringUtils.cleanPath(fileList.get(i).getOriginalFilename());
+        String extension = FilenameUtils.getExtension(fileRealName);
+        String randomParseFileName = UUID.randomUUID() + "." + extension;
+        Files.createDirectories(fileAddress);
+        Path targetPath = fileAddress.resolve(randomParseFileName).normalize();
+        fileList.get(i).transferTo(targetPath);
+
+        fileNames.add(fileRealName);
+        filePaths.add("src/main/resources/static/files/" + randomParseFileName);
+      }
+
+      emailDto.setEmailAttachment(fileNames);
+      emailDto.setEmailAttachmentFileName(filePaths);
+    } catch (NullPointerException | IOException e) {
+      log.info("첨부파일이 없거나, 저장이 불가함={}", e);
+    }
 
     try {
       emailService.emailSend(emailDto, getEmployee(request));
@@ -109,7 +170,7 @@ public class EmailController {
       return "파일실패";
     }
 
-    return "test";
+    return "redirect:/email/emailList?folderName='Sent Items'";
   }
 
   @GetMapping("downloadAttachment")

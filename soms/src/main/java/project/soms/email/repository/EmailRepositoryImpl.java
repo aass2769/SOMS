@@ -55,11 +55,6 @@ public class EmailRepositoryImpl implements EmailRepository{
   //이메일 내역
   @Override
   public List<EmailDto> emailList(String employeeId, String employeePw, String folderName) {
-    /*
-      일단 테스트를 위해 계정 절대값 설정
-     */
-    employeeId = "znyvua05";
-
 
     //현재 map에 저장된 값 초기화
     emailMap.clear();
@@ -198,10 +193,6 @@ public class EmailRepositoryImpl implements EmailRepository{
 
   @Override
   public void emailUpdateSeen(String employeeId, String employeePw, String folderName, Long emailNo) {
-    /*
-      일단 테스트를 위해 계정 절대값 설정
-     */
-    employeeId = "znyvua05";
 
     //설정 객체 생성 후 필요 값 할당
     Properties properties = new Properties();
@@ -234,10 +225,6 @@ public class EmailRepositoryImpl implements EmailRepository{
   @Override
   public void moveToTrashOrJunk(String employeeId, String employeePw, String folderName, String moveFolder, List<Long> emailNoList) {
 
-    /*
-      일단 테스트를 위해 계정 절대값 설정
-     */
-    employeeId = "znyvua05";
     //설정 객체 생성 후 필요 값 할당
     Properties properties = new Properties();
     //메일 선언을 imap으로
@@ -294,10 +281,6 @@ public class EmailRepositoryImpl implements EmailRepository{
 
   @Override
   public void emailSend(EmailDto emailDto, EmployeeDto employee, String employeePw) throws FileNotFoundException {
-    /*
-      테스트용 사용자
-     */
-    employee.setEmployeeId("znyvua05");
 
     MimeMessage message = javaMailSender.createMimeMessage();
 
@@ -319,25 +302,27 @@ public class EmailRepositoryImpl implements EmailRepository{
       MimeBodyPart textWarp = new MimeBodyPart();
       textWarp.setContent(emailDto.getEmailContent(), "text/plain; charset=utf-8");
       messageContent.addBodyPart(textWarp);
-
-      emailDto.getEmailAttachment().removeIf(file -> file.equals("0"));
-      if (emailDto.getEmailAttachment().size() > 0) {
-        MimeBodyPart attachmentWarp = new MimeBodyPart();
-        for (String fileName : emailDto.getEmailAttachment()) {
-          FileDataSource files = new FileDataSource(fileName);
-          File file = new File(fileName);
-          if (file.exists()) {
-            attachmentWarp.setDataHandler(new DataHandler(files));
-            attachmentWarp.setFileName(MimeUtility.encodeText(files.getName()));
-            messageContent.addBodyPart(attachmentWarp);
-          } else {
-            log.error("fileName={}", fileName);
-            log.error("파일 명칭 불량");
-            message.setContent(messageContent);
-            saveDraftEmail(message, employee.getEmployeeId(), employeePw);
-            throw new FileNotFoundException();
+      try {
+        if (emailDto.getEmailAttachmentFileName().size() > 0) {
+          for (int j = 0; j < emailDto.getEmailAttachmentFileName().size(); j++) {
+            FileDataSource files = new FileDataSource(emailDto.getEmailAttachmentFileName().get(j));
+            File file = new File(emailDto.getEmailAttachmentFileName().get(j));
+            if (file.exists()) {
+              MimeBodyPart attachmentWarp = new MimeBodyPart();
+              attachmentWarp.setDataHandler(new DataHandler(files));
+              attachmentWarp.setFileName(MimeUtility.encodeText(emailDto.getEmailAttachment().get(j)));
+              messageContent.addBodyPart(attachmentWarp);
+            } else {
+              log.error("fileName={}", emailDto.getEmailAttachmentFileName().get(j));
+              log.error("파일 명칭 불량");
+              message.setContent(messageContent);
+              saveDraftEmail(message, employee.getEmployeeId(), employeePw);
+              throw new FileNotFoundException();
+            }
           }
         }
+      } catch (NullPointerException e) {
+        log.info("첨부파일 없음");
       }
 
       message.setContent(messageContent);
@@ -387,11 +372,6 @@ public class EmailRepositoryImpl implements EmailRepository{
   @Override
   public void deleteMessage(String employeeId, String employeePw, String folderName, List<Long> emailNoList) {
 
-    /*
-      일단 테스트를 위해 계정 절대값 설정
-     */
-    employeeId = "znyvua05";
-
     //설정 객체 생성 후 필요 값 할당
     Properties properties = new Properties();
     //메일 선언을 imap으로
@@ -422,7 +402,7 @@ public class EmailRepositoryImpl implements EmailRepository{
         Message[] foundMessages = emailFolder.search(searchTerm);
 
         if (foundMessages.length == 0) {
-          log.warn("이메일을 찾을 수 없음");
+          log.info("이메일을 찾을 수 없음");
         } else {
           for (Message message : foundMessages) {
             // 이메일을 삭제하면 휴지통으로 이동됨
