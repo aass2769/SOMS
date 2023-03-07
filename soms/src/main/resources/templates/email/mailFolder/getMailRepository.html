@@ -5,8 +5,6 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>메일</title>
-	<link rel="stylesheet" href="css.css">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
 <section class="Article">
@@ -29,7 +27,7 @@
 
 
 		<div class="GetMail">
-			<form id="mailListForm" method="get" th:action="@{email/moveToTrashOrJunk}">
+			<form class="GetMail_form" id="mailListForm" method="get" th:action="@{email/moveToTrashOrJunk}">
 				<input type="hidden" name="emailNoList" value="0">
 				<input type="hidden" name="moveFolder" id="moveFolder" value="">
 				<input type="hidden" name="folderName" th:value="${folderName}">
@@ -39,11 +37,9 @@
 						<li class="lis2">읽음</li>
 						<li class="lis3"><button id="trashbtn">삭제</button></li>
 						<li class="lis4" th:if="${folderName == 'INBOX'}"><button id="junkbtn">스팸</button></li>
-						<li class="lis5"><button>답장</button></li>
-						<li class="lis7"><button>전달</button></li>
 						<li class="lis9" id="seenCount"></li>
 				</ul>
-			</div>
+				</div>
 				<!--테이블 부분-->
 				<div class="GetMail_Container">
 					<table>

@@ -29,9 +29,13 @@
 			
 			<!--Contents-->
 		<form method="get" name="signup" id="signup" th:action="@{/email/emailSend}" enctype="multipart/form-data">
+				<input type="hidden" name="fileName" value="0">
                 <div class="SendMail_Container">
 			    	<div class="SendMail_Recipient">
-			    		<label>받는사람</label><input th:each="recipient : ${emailDto.getEmailRecipient()}" th:value="${recipient}" type="text" name="recipients" class="Recipient" id="Recipient"><input type="button" id="addRecipients" value="Add">
+			    		<label>받는사람</label>
+			    		<input th:each="recipient : ${emailDto.getEmailRecipient()}" th:value="${recipient}" type="text" name="recipients" class="Recipient" id="Recipient">
+			    		<!--<input th:if="${emailDto.getEmailRecipient().size > 1}" type="text" name="recipients" class="Recipient" id="Recipient">-->
+			    		<input type="button" id="addRecipients" value="Add">
                         <div class="Check-Front" id="Recipient-Chk"></div>
                     </div>
 			    	<div class="SendMail_Title">
@@ -44,7 +48,7 @@
 													<input type="hidden" name="fileName" th:value="${'src/main/resources/static/files/' + fileName}">
 													<input type="file" th:value="${emailDto.getEmailAttachment().get(fileNameStat.index)}" readonly>
 												</div>
-                        <input type="text" id="addfile" class="addfile"  name="fileName" onchange="addFile(this);" multiple/>
+                        <input type="file" id="addfile" class="addfile"  name="fileName" onchange="addFile(this);" multiple/>
                         <div id="file-list" class="file-list"></div>
 			    	</div>
 			    	<div class="SendMail_Content">
@@ -58,6 +62,8 @@
 		    </div>
         </form>
 	<script th:inline="javascript">
+
+		
 		//이메일 형식 체크
 		var mailJ = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
 
@@ -102,7 +108,7 @@
                 $('#addRecipients').click (function () {                                        
                     if (maxAppend >= 8) return;
                         $('.SendMail_Recipient').append (                        
-                            '<input type="text" name="recipients" id="Recipient" class="Recipient"> <input type="button" class="btnRemove" value="삭제"><br><div class="Check-Front" id="Recipient-Chk"></div>'
+                            '<input type="text" name="recipients" class="Recipient"> <input type="button" class="btnRemove" value="삭제"><br><div class="Check-Front" id="Recipient-Chk"></div>'
                         ); // end append                            
                         $('.btnRemove').on('click', function () {
                             $(this).prev().remove (); // remove the textbox
@@ -130,32 +136,79 @@
             
             /* 첨부파일 추가 */
             function addFile(obj){
-                var files = obj.files;
-                let htmlData = '';
-                for (var i = 0; i < files.length; i++) {
-                    const file = files[i];
-                    // 목록 추가
-                    htmlData += '<div id="file' + i + '" class="filebox">';
-                    htmlData += '   <p class="name">' + file.name + '</p>';
-                    htmlData += '   <a class="delete" onclick="jsFunc.deleteFile(' + i + ');"><i class="far fa-minus-square"></i></a>';
-                    htmlData += '</div>';
-                }
-                document.querySelector('.file-list').innerHTML = htmlData;
-            }
+                var maxFileCnt = 5;   // 첨부파일 최대 개수
+                var attFileCnt = document.querySelectorAll('.filebox').length;    // 기존 추가된 첨부파일 개수
+                var remainFileCnt = maxFileCnt - attFileCnt;    // 추가로 첨부가능한 개수
+                var curFileCnt = obj.files.length;  // 현재 선택된 첨부파일 개수
 
-            /* 첨부파일 삭제 */
-            function deleteFile(num) {
-                var dt = new DataTransfer()
-                var { files } = selFile;
-
-                for (var i = 0; i < files.length; i++) {
-                    var file = files[i];
-                    if (num !== i) dt.items.add(file);
-                    selFile.files = dt.files;
+                // 첨부파일 개수 확인
+                if (curFileCnt > remainFileCnt) {
+                    alert("첨부파일은 최대 " + maxFileCnt + "개 까지 첨부 가능합니다.");
                 }
 
-                document.querySelector("#file" + num).remove();
+                for (var i = 0; i < Math.min(curFileCnt, remainFileCnt); i++) {
+
+                    const file = obj.files[i];
+
+                    // 첨부파일 검증
+                    if (validation(file)) {
+                        // 파일 배열에 담기
+                        var reader = new FileReader();
+                        reader.onload = function () {
+                            filesArr.push(file);
+                        };
+                        reader.readAsDataURL(file)
+
+                        // 목록 추가
+                        let htmlData = '';
+                        htmlData += '<div id="file' + fileNo + '" class="filebox">';
+                        htmlData += '   <p class="name">' + file.name + '<a class="delete" onclick="deleteFile(' + fileNo + ');">삭제</a></p>';
+                        htmlData += '</div>';
+                        $('.file-list').append(htmlData);
+                        fileNo++;
+                    } else {
+                        continue;
+                    }
+                }
+                // 초기화
+                document.querySelector("input[type=file]").value = "";
             }
+
+            /* 첨부파일 검증 */
+            function validation(obj){
+                if (obj.name.length > 50) {
+                    alert("파일명이 50자 이상인 파일은 제외되었습니다.");
+                    return false;
+                } else if (obj.size > (100 * 1024 * 1024)) {
+                    alert("최대 파일 용량인 100MB를 초과한 파일은 제외되었습니다.");
+                    return false;
+                } else if (obj.name.lastIndexOf('.') == -1) {
+                    alert("확장자가 없는 파일은 제외되었습니다.");
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+
+                /* 첨부파일 삭제 */
+                function deleteFile(num) {
+                    document.querySelector("#file" + num).remove();
+                    filesArr[num].is_delete = true;
+                }
+
+
+                /* 폼 전송 */
+                function submitForm() {
+                    // 폼데이터 담기
+                    var form = document.querySelector("form");
+                    var formData = new FormData(form);
+                    for (var i = 0; i < filesArr.length; i++) {
+                        // 삭제되지 않은 파일만 폼데이터에 담기
+                        if (!filesArr[i].is_delete) {
+                            formData.append("attach_file", filesArr[i]);
+                        }
+                    }
+                }
 
 	</script>
 	</article>

@@ -10,6 +10,7 @@
 	width:80%;
 	margin-left:10%;
 	border-bottom: 0.15rem solid #f4f4f4;
+	
 }
 .GetMail_Nav ul{
 	margin-top: 2rem;
@@ -24,6 +25,7 @@
 	padding-left: 0.7rem;
 }
 .lis2{
+	padding-top:0.1rem;
 	padding-left: 0.7rem;
 }
 .lis3{
@@ -100,6 +102,24 @@
 	position:fixed
 }
 
+#trashbtn{
+	resize: none;
+	border:none;
+	overflow: hidden;
+	background-color: transparent;
+	font-weight: bold;
+	font-size: 0.97rem;
+}
+
+#junkbtn{
+	resize: none;
+	border:none;
+	overflow: hidden;
+	background-color: transparent;
+	font-weight: bold;
+	font-size: 0.97rem;
+}
+
 /*---페이지네이션---*/
 .Pagination_Mail{
 	margin-left:45%;
@@ -157,6 +177,9 @@
 	border-bottom: 2px solid #f4f4f4;
 	width: 80%;
 }
+.SendMail_AddFile{
+    margin-top:1rem;	
+}
 .SendMail_AddFile>label{
 	font-weight: bold;
 }
@@ -172,6 +195,10 @@
     padding:0.2rem 1rem 0.25rem 1rem;
     margin-left: 0.3rem;
 
+}
+input[type=file]{
+    width:90px;
+    color:transparent;
 }
 .file-list{
     border: 2px solid #f4f4f4;
@@ -225,7 +252,16 @@
     margin-top: 10px;
     display: inline-block;
 }
-.insert .file-list .filebox .delete i{
-    color: #ff5353;
-    margin-left: 5px;
+.delete{
+
+	background-color: #EA471B;
+    border: 0.2rem solid #EA471B;
+    border-radius: 0.38rem;
+
+    font-size: 0.7rem;
+    height: 1.5rem;
+    color: white;
+    font-family: 'KOTRA_BOLD-Bold';
+    padding:0.125rem 0.5rem 0.125rem 0.5rem;
+    margin-left: 0.5rem;
 }

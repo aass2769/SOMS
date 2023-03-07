@@ -35,7 +35,9 @@
 					</div>
 				</div>
 				<div><p>내용</p><p th:utext="${emailDetail.emailContent}"></p></div>
-				<div><button>답장</button><button>전달</button>
+				<div>
+					<a th:href="@{/email/reply(emailNo=${emailDetail.emailNo})}">답장</a>
+                    <a th:href="@{/email/forward(emailNo=${emailDetail.emailNo})}">전달</a>
 					<form method="post" th:action="@{/email/moveToTrash(folderName='INBOX')}">
 						<button type="submit" id="moveToTrash" name="emailNoList" th:value="${emailDetail.emailNo}">삭제</button>
 					</form>
