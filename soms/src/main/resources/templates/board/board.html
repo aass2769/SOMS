@@ -71,10 +71,9 @@
 					<th:bloak th:if="${noticeBoardList.size > 0}">
 						<tr th:each="noticeBoard : ${noticeBoardList}" class="board_tbody_tr">
 							<td th:text="'공지'" class="notice_board_tbody_no"></td>
-							<td class="notice_board_tbody_title"><a class="notice_board_content_link"
+							<td class="notice_board_tbody_title"><a onclick="spinerOn()" class="notice_board_content_link"
 									th:text="${noticeBoard.boardTitle}"
-									th:href="@{/board/boardRead(boardNo=${noticeBoard.boardNo}, pageLimit=${pageLimit})}"
-									onclick="spinerOn()"></a></td>
+									th:href="@{/board/boardRead(boardNo=${noticeBoard.boardNo}, pageLimit=${pageLimit})}"></a></td>
 							<td th:text="${noticeBoard.employeeTeam}" class="notice_board_tbody_team">부서</td>
 							<td th:text="${noticeBoard.manage}" class="notice_board_tbody_manage">대리</td>
 							<td th:text="${noticeBoard.employeeName}" class="notice_board_tbody_name">희용</td>
@@ -85,7 +84,7 @@
 					<!-- 일반 게시글 -->
 					<tr th:if="${boardList.size > 0}" th:each="selectList : ${boardList}" class="board_tbody_tr">
 						<td th:text="${startRowNo - selectListStat.index}" class="board_tbody_no"></td>
-						<td class="board_tbody_title"><a class="board_content_link" th:text="${selectList.boardTitle}"
+						<td class="board_tbody_title"><a onclick="spinerOn()" class="board_content_link" th:text="${selectList.boardTitle}"
 								th:href="@{/board/boardRead(boardNo=${selectList.boardNo}, pageLimit=${pageLimit})}"></a></td>
 						<td th:text="${selectList.employeeTeam}" class="board_tbody_team">부서</td>
 						<td th:text="${selectList.manage}" class="board_tbody_manage">대리</td>
@@ -134,12 +133,23 @@
 						<button onclick="spinerOn()" class="search_button" type="submit">검색</button>
 					</div>
 					<div class="board_search_write_button">
-						<button class="board_write_button"><a onclick="spinerOn()" class="board_write_a"
+						<button type="button" class="board_write_button"><a onclick="spinerOn()" class="board_write_a"
 								th:href="@{/board/boardWrite(boardSection=${boardSection}, pageLimit=${pageLimit})}">글쓰기</a></button>
 					</div>
 				</div>
 			</form>
 		</div>
+		<script>
+	window.onpageshow = function (event) {
+    if (event.persisted) {
+        $('#spinner').hide();
+        $('.modal-backdrop').remove();
+        $('body').css('overflow', 'auto');
+        var form = document.getElementById("submitForm");
+        form.reset();
+    }
+};
+		</script>
 	</section>
 </body>
 

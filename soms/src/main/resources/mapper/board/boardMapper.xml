@@ -5,7 +5,14 @@
 	<!-- 만약 검색을 했다면 where if 절에 있는 조건에 따라 쿼리 select-->
 	<!-- 공지 없음 -->
 	<select id="selectBoard" resultType="project.soms.board.dto.BoardDto">
-		SELECT board_no, board_section, board_announcement, board_title, board_content, board_date, board_views, employee_name, employee_team, manage
+		SELECT board_no, board_section, board_announcement, board_title, board_content, board_date, board_views, employee_name, employee_team, manage,
+		(SELECT count(board_no) FROM board A
+LEFT JOIN employee B ON A.employee_no = B.employee_no
+WHERE board_section = #{boardSection}
+AND board_announcement = '공지없음'
+<if test="boardDto.selectList != '' and boardDto.selectList == '제목'">AND A.board_title like concat('%',#{boardDto.searchInput},'%')</if>
+<if test="boardDto.selectList != '' and boardDto.selectList == '내용'">AND A.board_content like concat('%',#{boardDto.searchInput},'%')</if>
+<if test="boardDto.selectList != '' and boardDto.selectList == '작성자'">AND B.employee_name like concat('%',#{boardDto.searchInput},'%')</if>) as total
 		FROM board as A
 		LEFT JOIN employee as B
 		ON A.employee_no = B.employee_no

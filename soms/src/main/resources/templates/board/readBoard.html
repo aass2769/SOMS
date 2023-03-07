@@ -30,7 +30,7 @@
 					<div class="read_top_container">
 						<div class="read_top_button_left">
 							<div class="top_list_button_div">
-								<button type="button" onclick="spinerOn()" class="top_list_button"><a class="toa_list_a"
+								<button type="submit" onclick="spinerOn()" class="top_list_button"><a class="toa_list_a"
 										th:href="@{/board/boardList(boardSection = ${readBoardDto.boardSection} ,pageLimit=${pageLimit})}">목록</a></button>
 							</div>
 							<div class="top_previous_button_div">
@@ -53,7 +53,7 @@
 						<div class="read_top_button_right">
 							<div th:if="${session.LOGIN_EMPLOYEE.employeeNo} == ${readBoardDto.employeeNo}">
 								<form th:action="@{/board/boardWrite}" method="get">
-									<input type="hidden" name="boardNo" th:value="${readBoardDto.boardNo}">
+									<input type="hidden" name="boardNo" id="boardNo" th:value="${readBoardDto.boardNo}">
 									<input type="hidden" name="boardSection" th:value="${readBoardDto.boardSection}">
 									<input type="hidden" name="employeeNo" th:value="${readBoardDto.employeeNo}">
 									<input type="hidden" name="pageLimit" th:value="${pageLimit}">
@@ -62,6 +62,7 @@
 							</div>
 							<div th:if="${session.LOGIN_EMPLOYEE.employeeNo} == ${readBoardDto.employeeNo}" class="top_delete_button_div">
 								<form th:action="@{/board/boardDelete(boardNo = ${readBoardDto.boardNo}, boardSection = ${readBoardDto.boardSection})}" method="post">
+								<input type="hidden" name="pageLimit" id="pageLimit" th:value="${pageLimit}">
 								<button onclick="spinerOn()" type="submit" class="top_delete_button">삭제</button>
 								</form>
 							</div>
@@ -158,4 +159,16 @@
 	} else if((document.getElementById('after').value === 'after') && (page_no == 2)){
 		alert("다음 글이 없습니다.");
 	}
+</script>
+<script>
+	window.onpageshow = function (event) {
+    if (event.persisted) {
+        
+        let boardNo = $('#boardNo').val();
+        let pageLimit =$('#pageLimit').val();
+        
+        location.href="/board/boardRead?boardNo=" + boardNo + "&pageLimit=" + pageLimit + "&pageNo=" + page_no;
+        
+    }
+};
 </script>

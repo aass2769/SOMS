@@ -40,7 +40,6 @@ public class BoardController {
 		int total = boardService.selectBoardTotal(boardSection);
 		
 		//  전체 게시물 수에 따른 페이지의 개수  (double) 12/10 -> ceil(1.2) ->int(2.0) -> 2
-		
 		int totalPage = (int) Math.ceil((double)total/boardDto.getPageLimit());
 		
 		// pageOffset = 페이지당 제외하고 출력해야하는 글 개수, viewPage = 페이지 개수 중 페이지
@@ -54,13 +53,22 @@ public class BoardController {
 		//공지 없는 리스트
 		List<BoardDto> boardList = new ArrayList<>();
 		boardList =	boardService.selectBoard(boardSection, boardDto);
-		System.out.println(boardList.size());
 		
 		//공지 있는 리스트
 		List<BoardDto> noticeBoardList = new ArrayList<>();
 		noticeBoardList = boardService.selectNoticeBoard(boardSection, boardDto);
-		System.out.println(noticeBoardList.size());
-
+		
+		// total(전체 게시물 수)와 totalPage(게시물 수에 따른 페이지의 개수)를 검색 조건일 떄도 적용하기 위해 재할당
+		// 만약 검색 결과가 없을 시 전체 게시물 수를 0으로 할당.
+		if(boardList.size() == 0) {
+			total = 0;
+		} else {
+			total = boardList.get(0).getTotal();
+		}
+		
+		//전체 게시물 수에 따른 페이지의 개수  (double) 12/10 -> ceil(1.2) ->int(2.0) -> 2
+		totalPage = (int) Math.ceil((double)total/boardDto.getPageLimit());
+		
 		model.addAttribute("total", total);
 		model.addAttribute("viewPage", boardDto.getViewPage());
 		model.addAttribute("totalPage", totalPage);
@@ -116,7 +124,7 @@ public class BoardController {
 	@PostMapping("boardUpdate")
 	public String updateBoard(Model model, HttpServletRequest request , BoardDto readBoardDto, RedirectAttributes redirect) {
 		
-		String page_limit = request.getParameter("pageLimut");
+		String page_limit = request.getParameter("pageLimit");
 		int pageLimit = 10;
 		if(page_limit != null) {
 			pageLimit = Integer.parseInt(page_limit);
@@ -153,7 +161,13 @@ public class BoardController {
 	public String readBoard(Model model, Integer boardNo, HttpServletRequest request) {
 		//given
 		boardService.updateViews(boardNo);		//조회 수 update
-		BoardDto readBoardDto = boardService.readBoard(boardNo);	//게시글 상세내용
+		BoardDto readBoardDto = new BoardDto();	
+		try {
+			readBoardDto = boardService.readBoard(boardNo);	//게시글 상세내용
+		} catch (NullPointerException e) {
+			
+			return "redirect:/board/errorBoardPage";
+		}
 		List<CommentDto> commentList = boardService.selectComment(boardNo);	//댓글
 		Integer pageLimit = Integer.parseInt(request.getParameter("pageLimit")); //페이지당 게시글 출력
 		
@@ -191,10 +205,11 @@ public class BoardController {
 	
 	//게시글 삭제 메서드
 	@PostMapping("boardDelete")
-	public String deleteBoard(Integer boardNo, String boardSection, RedirectAttributes redirectAttributes) {
+	public String deleteBoard(Integer boardNo, int pageLimit, String boardSection, RedirectAttributes redirectAttributes) {
 
 		boardService.deleteBoard(boardNo);
 		
+		redirectAttributes.addAttribute("pageLimit", pageLimit);
 		redirectAttributes.addAttribute("boardSection", boardSection);
 		return "redirect:/board/boardList";
 	}
@@ -248,6 +263,11 @@ public class BoardController {
 		redirectAttributes.addAttribute("pageLimit", pageLimit);
 		
 		return "redirect:/board/boardRead";
+	}
+	
+	@GetMapping("errorBoardPage")
+	public String errorBoardPage() {
+		return "board/errorBoardPage";
 	}
 	
 }

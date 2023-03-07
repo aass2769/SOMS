@@ -105,9 +105,12 @@ public class BoardServiceImpl implements BoardService{
 	
 	//게시글 상세보기 select 메서드
 	@Override
-	public BoardDto readBoard(Integer boardNo) {
+	public BoardDto readBoard(Integer boardNo) throws NullPointerException {
 		
 		BoardDto readBoardDto = boardRepository.readBoard(boardNo); 
+		if (readBoardDto.getBoardTitle() == null) {
+			throw new NullPointerException();
+		}
 		return readBoardDto;
 	}
 	

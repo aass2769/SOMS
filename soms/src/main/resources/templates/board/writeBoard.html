@@ -28,7 +28,7 @@
 				<form id="form" method="post" th:if="${not #strings.isEmpty(readBoardDto.employeeNo)}" th:action="@{/board/boardUpdate}">
 					<div class="write_team_div">
 						<div class"write_team"><h2 class="write_team_h2" th:text="${boardSection + '게시판 / 글 작성'}">게시판</h2></div>	
-						<div><input type="checkbox" value="공지있음"> 공지</div>
+						<div><input type="checkbox" name="boardAnnouncement" value="공지있음"> 공지</div>
 					</div>
 					<div class="write_title_div">
 						<input th:value="${readBoardDto.boardTitle}" name="boardTitle" id="boardTitle" class="write_title" type="text" placeholder="제목을 입력하세요" value="">
@@ -54,7 +54,7 @@
 				<form id="form" method="post" th:unless="${not #strings.isEmpty(readBoardDto.employeeNo)}" th:action="@{/board/boardWrite}">
 					<div class="write_team_div">
 						<div class="write_team"><h2 class="write_team_h2" th:text="${boardSection + '게시판 / 글 작성'}">게시판</h2></div>
-						<div><input type="checkbox" value="공지있음"> 공지</div>
+						<div><input type="checkbox" name="boardAnnouncement" value="공지있음"> 공지</div>
 					</div>
 					<div class="write_title_div">
 						
@@ -62,10 +62,10 @@
 					</div>
 					<div class="write_content_div">
 						<textarea name="boardContent" id="boardContent" class="write_content" placeholder="내용을 입력하세요"></textarea>
-						<input name="boardSection" type="hidden" th:value="${boardSection}">
+						<input id="boardSection" name="boardSection" type="hidden" th:value="${boardSection}">
 						<input name="employeeNo" type="hidden" th:value="${employee.getEmployeeNo()}">
 						<input name="boardDate" type="hidden" th:value="${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd HH:mm:ss')}">
-						<input name="pageLimit" type="hidden" th:value="${pageLimit}">
+						<input id="pageLimit" name="pageLimit" type="hidden" th:value="${pageLimit}">
 					</div>
 					<div class="write_button_div">
 						<button type="button" id="write_submit" onclick="data_submit(); spinerOn();" class="write_button">등록</button>
@@ -93,4 +93,17 @@
 			document.getElementById('form').submit();
 		}
 	}
+</script>
+
+<script>
+	window.onpageshow = function (event) {
+    if (event.persisted) {
+        
+        let boardSection = $('#boardSection').val();
+        let pageLimit =$('#pageLimit').val();
+        
+        location.href="/board/boardWrite?boardSection=" + boardSection + "&pageLimit=" + pageLimit;
+        
+    }
+};
 </script>

@@ -26,7 +26,7 @@ public interface BoardService {
 	void deleteBoard(Integer boardNo);
 	
 	//게시글 상세보기 select 메서드
-	BoardDto readBoard(Integer boardNo);
+	BoardDto readBoard(Integer boardNo) throws NullPointerException;
 	
 	//조회 수 update 메서드
 	void updateViews(Integer boardNo);

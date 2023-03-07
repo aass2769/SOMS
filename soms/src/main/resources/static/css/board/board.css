@@ -401,3 +401,45 @@
 } 
 
 .comment_delete_button:after{display: inline-block; content: "\00d7"; font-size:25px;}
+
+/*errorBoardPage*/
+.wrap{
+	width: 100%;
+	height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.errorPageContainer{
+	width: 60%;
+    height: 40%;
+    border: 1px solid black;
+    text-align: center;
+}
+.errorPageButton{
+	width: 30%;
+	height: 30px;
+	background-color: #EA471B;
+	color: white;
+	border: #EA471B;
+	font-size: 18px;
+	cursor:pointer;
+}
+.errorPageButton:focus{
+	outline-color: transparent;
+    outline-style:solid;
+    box-shadow: 0 0 0 2px #EA471B;
+}
+
+.errorPageButton:hover{
+	background-color:#FF471B;
+      transition: 0.7s;
+}
+
+.errorBoardIcon{
+	width: 40px;
+	height: 40px;
+	margin-top: 30px;
+}

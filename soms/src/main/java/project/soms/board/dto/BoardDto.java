@@ -19,6 +19,8 @@ public class BoardDto {
 	private Integer beforeBoardNo;
 	private Integer afterBoardNo;
 	private Integer boardNumber;
+	//총 게시물 수
+	private int total;
 	// 검색 조건 (제목 or 작성자)
 	private String selectList = "";
 	// 검색한 내용
