@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+       
+<mapper namespace="project.soms.mypage.repository.mapper.MypageMapper">
+	
+	<update id="mypageInfomationUpdate">
+		update employee set 
+		employee_pw = #{employeePw},
+		employee_phone = #{employeePhone},
+		employee_addr = #{employeeAddr},
+		employee_email = #{employeeEmail}
+		
+		<if test="employeeId != null">
+			,employee_no = #{employeeNo},
+			employee_id = #{employeeId},
+			employee_name = #{employeeName},
+			employee_team = #{employeeTeam},
+			manage_no = #{manageNo}
+		</if>
+		
+		<if test="employeeAdmin > 0">
+			,employee_admin = #{employeeAdmin}
+		</if>
+		
+		
+		where employee_no = #{employeeNo}
+	</update>
+	
+	<select id="mypageRegisterManageList" resultType="project.soms.mypage.dto.ManageListDto">
+		select manage, manage_no from manage
+	</select>
+	
+	<select id="getEmployeeManageNo" resultType="Integer">
+		select manage_no from employee
+		where employee_no = #{employeeNo}
+	</select>
+	
+	<insert id="mypageRegisterInsert">
+		insert into employee(employee_no, employee_id, employee_pw, employee_name,  employee_phone,
+								employee_email,  employee_addr,  employee_team, manage_no
+								
+								<if test="employeeAdmin != 0">
+									,employee_admin
+								</if>
+								
+								) 
+		values(#{employeeNo}, #{employeeId}, '1234', #{employeeName}, #{employeePhone}, 
+								#{employeeEmail}, #{employeeAddr}, #{employeeTeam}, #{manageNo}
+								<if test="employeeAdmin != 0">
+									,#{employeeAdmin}
+								</if>
+								) 
+	</insert>
+	
+	<select id="mypageRegisterUniqueCheck" resultType="Integer">
+		select count(*) from employee
+		where employee_id = #{employeeId}
+		or employee_no = #{employeeNo}
+	</select>
+	
+	<select id="mypageEmployeeSearch" resultType="project.soms.employee.dto.EmployeeDto">
+		select a.employee_no, a.employee_id, a.employee_pw, a.employee_name, a.employee_phone, a.employee_email, a.employee_addr, a.employee_team, a.employee_admin, a.manage_no, b.manage
+		from employee as a
+		join manage as b
+		where a.manage_no = b.manage_no
+		and a.employee_no = #{employeeNo}
+	</select>
+	
+	<select id="getEmployeeAnnualLeave" resultType="project.soms.mypage.dto.AnnualLeaveDto">
+		select
+		submission_pri,
+		min(case(proposer_employee_no) when #{employeeNo} then proposer_employee_no else null end) as proposer_employee_no,
+		min(case(submission_status) when '반려' then 0 when '대기' then 1 else 2 end) as submission_status,
+		max(case(approver_employee_no) when #{employeeNo} then approver_employee_no else null end) as approver_employee_no,
+		max(case when annual_leave_section = '연차' then (select (datediff(annual_leave_end, annual_leave_start) + 1)) else 0 end) as date_diff,
+		annual_leave_section, annual_leave_start, annual_leave_end, annual_leave_time
+		from submission as a join annual_leave as b on a.annual_leave_no = b.annual_leave_no
+		where annual_leave_start like concat(#{year},'%')
+		group by submission_pri, annual_leave_section, annual_leave_start, annual_leave_end, annual_leave_time
+	</select>
+	
+	<select id="getEmployeeOvertime" resultType="project.soms.mypage.dto.OvertimeDto">
+		select
+		submission_pri,
+		min(case(proposer_employee_no) when #{employeeNo} then proposer_employee_no else null end) as proposer_employee_no,
+		min(case(submission_status) when '반려' then 0 when '대기' then 1 else 2 end) as submission_status,
+		max(case(approver_employee_no) when #{employeeNo} then approver_employee_no else null end) as approver_employee_no,
+		b.overtime_start_date, b.overtime_end_date, b.overtime_start_time, b.overtime_end_time
+		from submission as a
+		join overtime as b on a.overtime_no = b.overtime_no
+		where <![CDATA[ a.overtime_no is not null and b.overtime_start_date <= #{NowDate} and  b.overtime_end_date >= #{NowDate} ]]>
+		group by submission_pri, submission_subject, submission_datetime, b.overtime_start_date, b.overtime_end_date, b.overtime_start_time, b.overtime_end_time
+		order by submission_datetime desc
+		limit 1;
+	</select>
+	
+	<update id="mypageDelete">
+		update employee
+		set employee_leave = 'ok'
+		where employee_no = #{employeeNo}
+	</update>
+	
+	<update id="mypageDeleteNull">
+		update employee
+		set employee_admin = null
+		where employee_admin = #{employeeNo}
+	</update>
+	
+</mapper>

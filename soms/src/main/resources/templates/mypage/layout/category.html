@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+	<!-- 아래에 선언한 categorys를 main레이아웃에서 인클루드하여 레이아웃이 완성됩니다. 개별로 작성해야할 코드의 구분을 위하여 html파일을 구분하였습니다. -->
+	<ul class = "Categorys" th:fragment="categorys">
+
+		<!-- 카테고리 제목입니다 -->
+   		<div class = Category-Title>
+      		<i class="fa-solid fa-bars"></i>&nbsp;&nbsp;
+      		<p>마이페이지</p>
+    	</div>
+  
+    	<div class = 'Category-A'>
+      		<a href="/mypage" onclick="spinerOn()">근태 조회</a>
+    	</div>
+    
+    	<div class = 'Category-A' >
+      		<a href="#" data-bs-toggle="modal" data-bs-target="#emoloyeeInfomationModal">내정보 </a>
+    	</div>   
+    	
+	    <div class = 'Category-A' th:if="${attendanceExistence == 'false' && attendance == 2}">
+	      <a href="#" id = "Attendance_Btn" value="1">출근하기</a>
+	    </div>
+	    
+	    <div class = 'Category-A' th:if="${attendanceExistence == 'false' && attendance == 1}">
+	    	<a href="#" id = "Attendance_Btn" value = "2" >퇴근하기</a>
+	    </div>
+	    
+	    <div class = 'Category-A'>
+	      <a href="#" id = "employee_search" data-bs-toggle="offcanvas" data-bs-target="#SearchOffcanvas"
+				aria-controls="offcanvasRight">사원 조회</a>
+	    </div>
+	    
+	    
+	    <div class = 'Category-A' th:if="${employee.manageNo > 10}">
+	      <a href="/mypage/register" onclick="spinerOn()" >계정생성 </a>
+	    </div>
+	    
+	    <script>
+			function spinerOn(){
+				$('#spinner').modal('show');
+			}
+		</script>
+	    <script>
+			$('#Attendance_Btn').click(function(){
+				
+				let confirmText_go = '출근';
+				let confirmText_leave = '퇴근';
+				let confirmText = '';
+				
+				if($('#Attendance_Btn').attr('value') == 1){
+					confirmText = confirmText_go;
+				}
+				
+				if($('#Attendance_Btn').attr('value') == 2){
+					confirmText = confirmText_leave;
+				}
+				
+				if(confirm(confirmText + ' 하시겠습니까?')){
+					$('#spinner').modal('show');
+					$.ajax({
+						url:"/mypage/attendance",
+						type: "get",
+						success: function(result){
+							if(result == 1){
+								alert('출근이 완료되었습니다.');
+								$('#spinner').modal('show');
+								location.href="/mypage";
+								return
+							}
+							
+							if(result == 2){
+								alert('퇴근이 완료되었습니다.');
+								$('#spinner').modal('show');
+								location.href="/mypage";
+								return
+							}
+							
+							if(result == 3){
+								$('#spinner').modal('hide');
+								alert('서버에 전송 실패하였습니다.');
+							}
+						},
+					error: function(){ 
+						$('#spinner').modal('hide');
+						alert("서버에 전송 실패하였습니다.");
+					}
+					})
+				}
+			})
+		</script>
+
+	</ul>	
+</body>
+</html>
