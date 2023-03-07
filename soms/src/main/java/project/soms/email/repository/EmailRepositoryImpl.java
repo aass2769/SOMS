@@ -45,7 +45,7 @@ public class EmailRepositoryImpl implements EmailRepository{
   private final JavaMailSender javaMailSender;
   private final MailProperties mailProperties;
 
-  /**
+  /*
    * emailMap에 이매일 내역과 해당 값들 전체 저장
    * emailDetail에서 기준값으로 해당 이메일의 상세 내역 select
    * 기준값은 long 타입으로 선언하여 메일 내역에 1씩 증가하여 값 할당
@@ -58,7 +58,7 @@ public class EmailRepositoryImpl implements EmailRepository{
     /*
       일단 테스트를 위해 계정 절대값 설정
      */
-    employeeId = "admin";
+    employeeId = "znyvua05";
 
 
     //현재 map에 저장된 값 초기화
@@ -80,7 +80,7 @@ public class EmailRepositoryImpl implements EmailRepository{
         imap 주소
         임직원 계정 (임직원 Id + 도메인), 임직원 비밀번호(공통값으로 설정)
        */
-      store.connect("imap.mail.us-east-1.awsapps.com", employeeId + "@somsolution.awsapps.com", employeePw);
+      store.connect("imap.mail.us-east-1.awsapps.com", employeeId + "@somsolution.com", employeePw);
 
       //폴더이름으로 불러올 폴더 설정
       Folder emailFolder = store.getFolder(folderName);
@@ -201,7 +201,7 @@ public class EmailRepositoryImpl implements EmailRepository{
     /*
       일단 테스트를 위해 계정 절대값 설정
      */
-    employeeId = "admin";
+    employeeId = "znyvua05";
 
     //설정 객체 생성 후 필요 값 할당
     Properties properties = new Properties();
@@ -212,7 +212,7 @@ public class EmailRepositoryImpl implements EmailRepository{
 
     try {
       Store store = emailSession.getStore();
-      store.connect("imap.mail.us-east-1.awsapps.com", employeeId + "@somsolution.awsapps.com", employeePw);
+      store.connect("imap.mail.us-east-1.awsapps.com", employeeId + "@somsolution.com", employeePw);
 
       Folder emailFolder = store.getFolder(folderName);
       emailFolder.open(Folder.READ_WRITE);
@@ -237,7 +237,7 @@ public class EmailRepositoryImpl implements EmailRepository{
     /*
       일단 테스트를 위해 계정 절대값 설정
      */
-    employeeId = "admin";
+    employeeId = "znyvua05";
     //설정 객체 생성 후 필요 값 할당
     Properties properties = new Properties();
     //메일 선언을 imap으로
@@ -247,7 +247,7 @@ public class EmailRepositoryImpl implements EmailRepository{
 
     try {
       Store store = emailSession.getStore();
-      store.connect("imap.mail.us-east-1.awsapps.com", employeeId + "@somsolution.awsapps.com", employeePw);
+      store.connect("imap.mail.us-east-1.awsapps.com", employeeId + "@somsolution.com", employeePw);
 
       Folder emailFolder = store.getFolder(folderName);
       emailFolder.open(Folder.READ_WRITE);
@@ -331,6 +331,7 @@ public class EmailRepositoryImpl implements EmailRepository{
             attachmentWarp.setFileName(MimeUtility.encodeText(files.getName()));
             messageContent.addBodyPart(attachmentWarp);
           } else {
+            log.error("fileName={}", fileName);
             log.error("파일 명칭 불량");
             message.setContent(messageContent);
             saveDraftEmail(message, employee.getEmployeeId(), employeePw);
@@ -389,7 +390,7 @@ public class EmailRepositoryImpl implements EmailRepository{
     /*
       일단 테스트를 위해 계정 절대값 설정
      */
-    employeeId = "admin";
+    employeeId = "znyvua05";
 
     //설정 객체 생성 후 필요 값 할당
     Properties properties = new Properties();
@@ -400,7 +401,7 @@ public class EmailRepositoryImpl implements EmailRepository{
 
     try {
       Store store = emailSession.getStore();
-      store.connect("imap.mail.us-east-1.awsapps.com", employeeId + "@somsolution.awsapps.com", employeePw);
+      store.connect("imap.mail.us-east-1.awsapps.com", employeeId + "@somsolution.com", employeePw);
 
       Folder emailFolder = null;
       if (folderName.equals("Trash")) {

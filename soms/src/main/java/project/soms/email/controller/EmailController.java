@@ -14,6 +14,7 @@ import project.soms.employee.dto.EmployeeDto;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -31,8 +32,30 @@ public class EmailController {
   }
 
   @GetMapping("sendForm")
-  public String readmail() {
-    return "email/emailForm/test";
+  public String readmail(Model model) {
+    model.addAttribute("emailDto", new EmailDto());
+    return "email/emailForm/sendMail";
+  }
+
+  @GetMapping("reply")
+  public String reply(Long emailNo, Model model) {
+    EmailDto emailDto = new EmailDto();
+
+    EmailDto emailDetail = emailService.emailDetail(emailNo);
+    emailDto.setEmailRecipient(emailDetail.getEmailRecipient());
+
+    model.addAttribute("emailDto", emailDto);
+    return "email/emailForm/sendMail";
+  }
+
+  @GetMapping("forward")
+  public String forward(Long emailNo, Model model) {
+
+    EmailDto emailDetail = emailService.emailDetail(emailNo);
+    emailDetail.setEmailRecipient(new ArrayList<>());
+
+    model.addAttribute("emailDto", emailDetail);
+    return "email/emailForm/sendMail";
   }
 
 

@@ -28,23 +28,27 @@
 			</div>
 			
 			<!--Contents-->
-		<form method="get" name="signup" id="signup" action="#" enctype="multipart/form-data">
+		<form method="get" name="signup" id="signup" th:action="@{/email/emailSend}" enctype="multipart/form-data">
                 <div class="SendMail_Container">
 			    	<div class="SendMail_Recipient">
-			    		<label>받는사람</label><input type="text" name="Recipient" class="Recipient" id="Recipient" th:text="${emailDto.emailFrom}"><input type="button" id="addRecipients" value="Add">
+			    		<label>받는사람</label><input th:each="recipient : ${emailDto.getEmailRecipient()}" th:value="${recipient}" type="text" name="recipients" class="Recipient" id="Recipient"><input type="button" id="addRecipients" value="Add">
                         <div class="Check-Front" id="Recipient-Chk"></div>
                     </div>
 			    	<div class="SendMail_Title">
-				    	<label>제목</label><input type="text" id="SendSubject">
+				    	<label>제목</label><input type="text" name="emailSubject" th:value="${emailDto.getEmailSubject()}" id="SendSubject">
 			    	</div>
 			    	<div ><span style="display:none;"></span>
 			    	<div class="SendMail_AddFile">
 				    	<label for="file">첨부파일</label>
-                        <input type="file" id="addfile" class="addfile"  name="addfile" onchange="addFile(this);" multiple/>
+												<div th:each="fileName : ${emailDto.getEmailAttachmentFileName()}">
+													<input type="hidden" name="fileName" th:value="${'src/main/resources/static/files/' + fileName}">
+													<input type="file" th:value="${emailDto.getEmailAttachment().get(fileNameStat.index)}" readonly>
+												</div>
+                        <input type="text" id="addfile" class="addfile"  name="fileName" onchange="addFile(this);" multiple/>
                         <div id="file-list" class="file-list"></div>
 			    	</div>
 			    	<div class="SendMail_Content">
-			    		<textarea rows="5" cols="33" id="contentMessage" name="contentMessage"></textarea>
+			    		<textarea rows="5" cols="33" id="contentMessage" name="emailContent" th:text="${emailDto.getEmailContent()}"></textarea>
 			    	</div>
 			    	<div class="SendMail-Btn">
 			    		<button>임시 저장</button>
@@ -98,7 +102,7 @@
                 $('#addRecipients').click (function () {                                        
                     if (maxAppend >= 8) return;
                         $('.SendMail_Recipient').append (                        
-                            '<input type="text" name="Recipient" id="Recipient" class="Recipient"> <input type="button" class="btnRemove" value="삭제"><br><div class="Check-Front" id="Recipient-Chk"></div>'                    
+                            '<input type="text" name="recipients" id="Recipient" class="Recipient"> <input type="button" class="btnRemove" value="삭제"><br><div class="Check-Front" id="Recipient-Chk"></div>'
                         ); // end append                            
                         $('.btnRemove').on('click', function () {
                             $(this).prev().remove (); // remove the textbox
@@ -115,7 +119,7 @@
                     $('#signup').submit(function(){
                             
                         var fileCheck = $('#addfile').val();
-                            if(fileCheck=="" ||fileCheck != file.value){
+                            if(fileCheck == "" || fileCheck != file.value){
                                 alert("파일이 존재하지 않습니다.");
                                 
                                 console.log($('#addfile').val());
