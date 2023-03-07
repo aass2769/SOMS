@@ -1,6 +1,5 @@
 package project.soms.mypage.controller;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +32,7 @@ public class MypageController {
 	private final AttendanceRepository attendanceRepository;
 	
 	@GetMapping("mypage")	// 마이페이지 이동
-	public String mypage(Model model,HttpServletRequest req, String OffcnavasDivider, String AttendanceSelectDate, HttpServletResponse res) throws IOException {
+	public String mypage(Model model,HttpServletRequest req, String OffcnavasDivider, String AttendanceSelectDate, HttpServletResponse res) {
 		
 		// 세션에 저장된 사원의 값을 저장
 		EmployeeDto employee = (EmployeeDto) req.getSession().getAttribute("LOGIN_EMPLOYEE");

@@ -33,17 +33,14 @@ public class LoginController {
 		// DB에서 ID, PW 체크
 		EmployeeDto employee = loginMapper.login(id, pw);
 		
-		String location = "";
-		
 		if(employee == null) {
 			rttr.addAttribute("message", "아이디와 비밀번호가 부합하지 않습니다.");
-			location = "redirect:/login";
+			return "redirect:/login";
 		}else {
 			req.getSession().setAttribute("LOGIN_EMPLOYEE", employee);
-			location = "redirect:/mypage";
+			return "redirect:/mypage";
 		}
 		
-		return location;
 	}
 	
 	@GetMapping("logout")

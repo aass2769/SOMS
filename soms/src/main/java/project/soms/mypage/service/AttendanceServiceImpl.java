@@ -1,6 +1,5 @@
 package project.soms.mypage.service;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -94,7 +93,7 @@ public class AttendanceServiceImpl implements AttendanceService{
 	}
 
 	@Override	// 출퇴근 버튼 관리
-	public void getTodayAttendanceExistence(long employeeNo, Model model,HttpServletResponse res) throws IOException {
+	public void getTodayAttendanceExistence(long employeeNo, Model model,HttpServletResponse res){
 		Date now = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		String today = sdf.format(now).substring(0,10);
