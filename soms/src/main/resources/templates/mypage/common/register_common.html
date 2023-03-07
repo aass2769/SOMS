@@ -315,19 +315,6 @@
 					</div>
 				</div>
 			</div>
-			<script>
-				
-				var registerOffcanvas = document.getElementById('RegisterOffcanvas')
-				var searchOffcanvas = document.getElementById('SearchOffcanvas')
-				
-				registerOffcanvas.addEventListener('shown.bs.offcanvas', function () {
-					$('#SearchOffcanvas').offcanvas('hide');
-				})
-				
-				searchOffcanvas.addEventListener('shown.bs.offcanvas', function () {
-					$('#RegisterOffcanvas').offcanvas('hide');
-				})
-			</script>
 			<script>	
 				
 				//검색버튼 로딩
@@ -421,6 +408,23 @@
 					$('.attendance_check').css('border', 'red');
 				});
 				
+			</script>
+			
+			
+			<script>
+				$(function(){
+					
+					var registerOffcanvas = document.getElementById('RegisterOffcanvas')
+					var searchOffcanvas = document.getElementById('SearchOffcanvas')
+					
+					registerOffcanvas.addEventListener('shown.bs.offcanvas', function () {
+						$('#SearchOffcanvas').offcanvas('hide');
+					})
+					
+					searchOffcanvas.addEventListener('shown.bs.offcanvas', function () {
+						$('#RegisterOffcanvas').offcanvas('hide');
+					})
+				})
 			</script>
 </div>
 </body>
