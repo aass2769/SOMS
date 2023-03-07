@@ -18,6 +18,6 @@ public class FrontConfiguration implements WebMvcConfigurer {
      * 제외 페이지 : 로그인 페이지, 정적 페이지
      */
     registry.addInterceptor(sessionInterceptor).addPathPatterns("/**").
-        excludePathPatterns("/login", "/css/**", "/img/**", "/js/**");
+        excludePathPatterns("/login", "/logincheck", "/css/**", "/img/**", "/js/**");
   }
 }

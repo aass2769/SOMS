@@ -44,29 +44,32 @@
 							</div>
 						
 							<!-- 계정 --> 	
-					  		<input type="text" class="form-control mb-2" id="RegisterInsertId" placeholder="계정" name="employeeId">
+					  		<input type="text" class="form-control mb-2" id="RegisterInsertId" placeholder="계정" name="employeeId" maxlength="25">
 					  
 					  		<!-- 연락처 --> 	
 					  		<input type="number " class="form-control mb-2" id="RegisterInsertPhone" placeholder="연락처" name="employeePhone" maxlength="13">
 					  
 					  		<!-- 이메일 --> 	
-							<input type="email" class="form-control mb-2" id="RegisterInsertEmail" placeholder="이메일" name="employeeEmail">
+							<input type="email" class="form-control mb-2" id="RegisterInsertEmail" placeholder="이메일" name="employeeEmail" maxlength="50">
 					  
 					  		<!-- 자택주소 --> 	
-					  		<input type="text" class="form-control mb-2" id="RegisterInsertAddr" placeholder="자택주소" name="employeeAddr">
+					  		<input type="text" class="form-control mb-2" id="RegisterInsertAddr" placeholder="자택주소" name="employeeAddr" maxlength="50">
 					  
 					  	<div class = "d-flex mb-2">
 							<!-- 부서 --> 					  
 							<select class="form-select w-50" aria-label="부서" id="RegisterInsertTeam" name="employeeTeam">
 								<option value="경영 지원-경영 관리">경영 지원-경영 관리</option>
 								<option value="경영 지원-정보 보안">경영 지원-정보 보안</option> 
-								<option value="경영 지원-구매팀">경영 지원-구매팀</option> 
+								<option value="경영 지원-구매팀">경영 지원-구매팀</option>						
 								<option value="경영 지원-재무 회계">경영 지원-재무 회계</option> 
 								<option value="개발 연구-개발 1팀">개발 연구-개발 1팀</option> 
 								<option value="개발 연구-개발 2팀">개발 연구-개발 2팀</option> 
 								<option value="개발 연구-연구팀">개발 연구-연구팀</option> 
 								<option value="영업-홍보 마케팅">영업-홍보 마케팅</option> 
-								<option value="영업-해외 사업">영업-해외 사업</option> 
+								<option value="영업-해외 사업">영업-해외 사업</option>
+								<option value="영업">영업</option>
+								<option value="개발 연구">개발 연구</option>
+								<option value="경영 지원">경영 지원</option>
 								<option value="공통">공통</option>
 							</select>
 							
@@ -88,15 +91,17 @@
 		</div>
 	</div>
 	
+	<div th:replace="~{mypage/flagment/spinner :: spinner}"></div>
 	
 		<script>
 			window.onpageshow = function (event) {
 			    if (event.persisted) {
-			        $('#spinner').modal('show');
-					location.href="/mypage/register"
+			        location.href="/register";
 			    }
 			};
 		</script>
+	
+	
 	
 		<script>
 			// 다른곳 클릭시 오프캔버스 닫기
@@ -113,6 +118,7 @@
 				}else{
 					$('#RegisterInsertAdmin').val('');
 				}
+				
 			}
 		</script>
 
@@ -130,19 +136,27 @@
 			// 계정 생성 [버튼]
 			const Register_Btn = $('#registerBtn');
 			
-			// 회원가입 버튼 누르면 유효성 체크
+			// admin 값 변경 에러시			
+			function Admin(){
+				if(Register_Manage.val() == 11 || Register_Manage.val() == 13){
+					Register_Admin.val('없음');
+				}
+			}
 			
+			// 회원가입 버튼 누르면 유효성 체크
 			Register_Btn.click(function(){
 				const Register_Infos = ["Name", "No", "Manage", "Id", "Phone", "Email", "Addr", "Team", "Admin"];
-				
+				const employeeNo_regx = /^[0-9]+$/;	
 				const phone_regex = /\d{3}-\d{4}-\d{4}/; 
 				var Count = 0;
 				
+				// 관리자 또는 사장일경우 관리자값을 0으로 변경
 				if(Register_Manage.val() == 11 || Register_Manage.val() == 13){
 					Register_Infos.pop();
 					Register_Admin.val(0);
 				}
 				
+				// 모든 칸에값이 있는지 체크
 				for(var i = 0; i<Register_Infos.length; i++){
 					
 					var RegisterValues = $('#RegisterInsert'+ Register_Infos[i]).val();
@@ -151,24 +165,22 @@
 						Count += 1;
 					}
 				}
-				
 					
-				const employeeNo_regx = /^[0-9]+$/;	
-				
+				// 값이 다 있을 경우에
 				if(Count == Register_Infos.length){
 					
 					var RegisterNo = Register_No.val();
 					
 					if(RegisterNo.length != 11){
-						Register_Admin.val('');
+						Admin()
 						alert("사번이 잘못되었습니다.");
 						return
 					}else if(!employeeNo_regx.test(Register_No.val())){
-						Register_Admin.val('');
+						Admin()
 						alert("사번은 숫자만으로 입력이 가능합니다.");
 						return
 					}else if(!phone_regex.test(Register_Phone.val())){
-						Register_Admin.val('');
+						Admin()
 						alert("연락처 방식이 맞지않습니다.");
 						return
 					}else{
@@ -194,14 +206,14 @@
 								
 								if(result == 1){
 									$('#spinner').modal('hide');
+									Admin()
 									alert("현재 사번직급보다 관리자 직급이 더 작습니다.");
-									Register_Admin.val('');
 									return
 								}
 								if(result == 2){
 									$('#spinner').modal('hide');
+									Admin()
 									alert("중복된 사번 또는 아이디가 존재합니다.");
-									Register_Admin.val('');
 									return
 								}
 								if(result == 3){
@@ -211,15 +223,14 @@
 								}
 								if(result == 4){
 									$('#spinner').modal('hide');
+									Admin()
 									alert("서버에 전송 실패하였습니다.");
-									Register_Admin.val('');
 									return
 								}
 								
 							},
 						error: function(){ 
 							alert("서버에 전송 실패하였습니다.");
-							Register_Admin.val('');
 							$('#spinner').modal('hide');
 							;}
 						})
@@ -227,7 +238,6 @@
 					}
 				}else{
 					alert("누락된 정보가 있습니다.");
-					Register_Admin.val('');
 					return
 				}
 			})

@@ -1,9 +1,7 @@
 package project.soms.mypage.controller;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -84,7 +82,6 @@ public class MypageController {
 			req.getSession().invalidate();
 			count = 1;
 		}catch(Exception ex) {
-			System.out.println(ex);
 			count = 2;
 		}
 		
@@ -180,7 +177,6 @@ public class MypageController {
 				mypageRepository.mypageInfomationUpdate(employee); 
 				count = 2;
 			}catch(Exception ex) {
-				System.out.println(ex);
 				count = 3;
 			}
 		}

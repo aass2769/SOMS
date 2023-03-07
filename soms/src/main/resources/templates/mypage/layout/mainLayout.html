@@ -54,32 +54,14 @@
 		<div class = "Article" th:replace="${article}">
 		</div>
 		
-		    <!-- 내 정보 modal -->
-	<div th:replace="~{mypage/modal/infomation :: infomation}"></div>
-	<div th:replace="~{mypage/modal/infomation_admin :: infomation_admin}"></div>
-		 <!-- Modal -->
-        <div class="modal fade bg-transparent border-0" id="spinner" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered bg-transparent border-0">
-                <div class="modal-content bg-transparent border-0">
-                    <div class="modal-body bg-transparent" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
-                        <div>
-                            <small class="text-light">로딩중</small>
-                        </div>
-                        <div class="spinner-border text-light" role="status">
-                            <span class="visually-hidden">Loading...</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+		<!-- 내 정보 modal -->
+		<div th:replace="~{mypage/modal/infomation :: infomation}"></div>
+		<div th:replace="~{mypage/modal/infomation_admin :: infomation_admin}"></div>
 		
     </div>
     
 </body>
 	<script>
-		
-		$('#spinner').hide();
-		
 	    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
 	    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
 	</script>
