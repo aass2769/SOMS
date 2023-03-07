@@ -415,15 +415,11 @@
 				$(function(){
 					
 					var registerOffcanvas = document.getElementById('RegisterOffcanvas')
-					var searchOffcanvas = document.getElementById('SearchOffcanvas')
 					
 					registerOffcanvas.addEventListener('shown.bs.offcanvas', function () {
 						$('#SearchOffcanvas').offcanvas('hide');
 					})
 					
-					searchOffcanvas.addEventListener('shown.bs.offcanvas', function () {
-						$('#RegisterOffcanvas').offcanvas('hide');
-					})
 				})
 			</script>
 </div>

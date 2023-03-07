@@ -324,6 +324,16 @@
 				});
 				
 			</script>
+			
+			<script>
+				$(function(){
+					var searchOffcanvas = document.getElementById('SearchOffcanvas')
+					
+					searchOffcanvas.addEventListener('shown.bs.offcanvas', function () {
+						$('#RegisterOffcanvas').offcanvas('hide');
+					})
+				})
+			</script>
 </div>
 </body>
 
