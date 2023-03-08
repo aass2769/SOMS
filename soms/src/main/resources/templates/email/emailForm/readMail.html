@@ -25,7 +25,7 @@
 			</div>
 			<div>
 				<div><p>보낸 사람</p><p th:text="${emailDetail.emailFrom}"></p></div>
-				<div><p>받는 사람</p><p th:text="${employee.employeeId + '@somsolution.com'}"></p></div>
+				<div><p>받는 사람</p><p th:each="recipient : ${emailDetail.emailRecipient}" th:text="${recipient}"></p></div>
 				<div>날짜<span th:text="${emailDetail.emailSentDate}"></span><div>번역/프린트</div></div>
 				<div>
 					<div th:if="${emailDetail.emailHasAttachment}">첨부파일
@@ -34,11 +34,11 @@
 						th:text="${emailDetail.emailAttachment.get(attachmentFileNameStat.index)}"></a>
 					</div>
 				</div>
-				<div><p>내용</p><p th:utext="${emailDetail.emailContent}"></p></div>
+				<div><p>내용</p><p th:utext="${emailDetail.getEmailContent()}"></p></div>
 				<div>
 					<a th:href="@{/email/reply(emailNo=${emailDetail.emailNo})}">답장</a>
                     <a th:href="@{/email/forward(emailNo=${emailDetail.emailNo})}">전달</a>
-					<form method="post" th:action="@{/email/moveToTrash(folderName='INBOX')}">
+					<form method="post" th:action="@{/email/moveToTrashOrJunk(folderName=${folderName},moveFolder='Trash')}">
 						<button type="submit" id="moveToTrash" name="emailNoList" th:value="${emailDetail.emailNo}">삭제</button>
 					</form>
 				</div>

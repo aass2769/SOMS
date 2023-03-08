@@ -28,7 +28,7 @@
 			</div>
 			
 			<!--Contents-->
-		<form method="get" name="signup" id="signup" th:action="@{/email/emailSend}" enctype="multipart/form-data">
+		<form method="post" name="signup" id="signup" th:action="@{/email/emailSend}" enctype="multipart/form-data">
 				<input type="hidden" name="fileName" value="0">
                 <div class="SendMail_Container">
 			    	<div class="SendMail_Recipient">
@@ -45,14 +45,14 @@
 			    	<div class="SendMail_AddFile">
 				    	<label for="file">첨부파일</label>
 												<div th:each="fileName : ${emailDto.getEmailAttachmentFileName()}">
-													<input type="hidden" name="fileName" th:value="${'src/main/resources/static/files/' + fileName}">
-													<input type="file" th:value="${emailDto.getEmailAttachment().get(fileNameStat.index)}" readonly>
+													<input type="hidden" name="addedFileName" th:value="${'src/main/resources/static/files/' + fileName}">
+													<input type="text" name="addedFile" th:value="${emailDto.getEmailAttachment().get(fileNameStat.index)}" readonly>
 												</div>
                         <input type="file" id="addfile" class="addfile"  name="fileName" onchange="addFile(this);" multiple/>
                         <div id="file-list" class="file-list"></div>
 			    	</div>
 			    	<div class="SendMail_Content">
-			    		<textarea rows="5" cols="33" id="contentMessage" name="emailContent" th:text="${emailDto.getEmailContent()}"></textarea>
+			    		<textarea rows="5" cols="33" id="contentMessage" name="emailContent" th:utext="${emailDto.getEmailContent()}"></textarea>
 			    	</div>
 			    	<div class="SendMail-Btn">
 			    		<button>임시 저장</button>

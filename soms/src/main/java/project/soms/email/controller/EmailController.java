@@ -9,7 +9,10 @@ import org.springframework.mail.MailSendException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import project.soms.email.dto.EmailDto;
 import project.soms.email.service.EmailService;
@@ -60,7 +63,6 @@ public class EmailController {
   public String reply(Long emailNo, Model model) {
     //화면에 응답할 emailDto 객체 생성
     EmailDto emailDto = new EmailDto();
-
     //파라미터로 전달받은 이메일번호로 이메일을 조회 후 이메일의 발신자 값을 수신자 값으로 객체에 값 할당
     List<String> emailList = new ArrayList<>();
     emailList.add(emailService.emailDetail(emailNo).getEmailFrom());
@@ -114,7 +116,7 @@ public class EmailController {
   public String emailDetail(Long emailNo, Model model, HttpServletRequest request) {
     EmailDto emailDetail = emailService.emailDetail(emailNo);
     emailService.emailUpdateSeen(request, emailNo);
-    model.addAttribute("employee", getEmployee(request));
+    model.addAttribute("folderName", request.getParameter("folderName"));
     model.addAttribute("emailDetail", emailDetail);
     return "email/emailForm/readMail";
   }
@@ -134,7 +136,10 @@ public class EmailController {
   }
 
   @PostMapping("emailSend")
-  public String emailSend(HttpServletRequest request, EmailDto emailDto, @RequestParam("recipients") List<String> recipients, @RequestParam List<MultipartFile> fileName) {
+  public String emailSend(HttpServletRequest request, EmailDto emailDto, @RequestParam("recipients") List<String> recipients,
+                          @RequestParam(value = "fileName", required = false) List<MultipartFile> fileName,
+                          @RequestParam(value = "addedFileName", required = false) List<String> addedFileName,
+                          @RequestParam(value = "addedFile", required = false) List<String> addedFile) {
 
     emailDto.setEmailRecipient(recipients);
     List<String> fileNames = new ArrayList<>();
@@ -156,21 +161,26 @@ public class EmailController {
         filePaths.add("src/main/resources/static/files/" + randomParseFileName);
       }
 
-      emailDto.setEmailAttachment(fileNames);
-      emailDto.setEmailAttachmentFileName(filePaths);
+      for (int i = 0; i < addedFileName.size(); i++) {
+        fileNames.add(addedFile.get(i));
+        filePaths.add(addedFileName.get(i));
+      }
+
     } catch (NullPointerException | IOException e) {
       log.info("첨부파일이 없거나, 저장이 불가함={}", e);
     }
+    emailDto.setEmailAttachment(fileNames);
+    emailDto.setEmailAttachmentFileName(filePaths);
 
     try {
       emailService.emailSend(emailDto, getEmployee(request));
     } catch (MailSendException e) {
-      return "test실패화면";
+      return "이메일주소가유효하지않을때";
     } catch (FileNotFoundException e) {
-      return "파일실패";
+      return "파일전송실패화면";
     }
 
-    return "redirect:/email/emailList?folderName='Sent Items'";
+    return "redirect:/email/emailList?folderName=Sent Items";
   }
 
   @GetMapping("downloadAttachment")

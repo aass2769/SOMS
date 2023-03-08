@@ -27,7 +27,7 @@
 
 
 		<div class="GetMail">
-			<form class="GetMail_form" id="mailListForm" method="get" th:action="@{email/moveToTrashOrJunk}">
+			<form class="GetMail_form" id="mailListForm" method="post" th:action="@{/email/moveToTrashOrJunk}">
 				<input type="hidden" name="emailNoList" value="0">
 				<input type="hidden" name="moveFolder" id="moveFolder" value="">
 				<input type="hidden" name="folderName" th:value="${folderName}">

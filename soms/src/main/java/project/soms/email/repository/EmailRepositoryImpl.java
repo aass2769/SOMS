@@ -94,7 +94,7 @@ public class EmailRepositoryImpl implements EmailRepository{
         int addressPoint2 = message.getFrom()[0].toString().indexOf(">");
         String subString;
         if (addressPoint1 >= 0) {
-          subString = message.getFrom()[0].toString().substring(addressPoint1 + 1, addressPoint2 - 1);
+          subString = message.getFrom()[0].toString().substring(addressPoint1 + 1, addressPoint2);
           email.setEmailFrom(subString);
         } else {
           email.setEmailFrom(message.getFrom()[0].toString());
@@ -103,7 +103,15 @@ public class EmailRepositoryImpl implements EmailRepository{
         List<String> recipients = new ArrayList<>();
         if (message.getAllRecipients().length > 0) {
           for (int j = 0; j < message.getAllRecipients().length; j++) {
-            recipients.add(String.valueOf(message.getAllRecipients()[j]));
+            int trimPoint1 = message.getAllRecipients()[j].toString().indexOf("<");
+            int trimPoint2 = message.getAllRecipients()[j].toString().indexOf(">");
+            String subString2;
+            if (addressPoint1 >= 0) {
+              subString2 = message.getAllRecipients()[j].toString().substring(trimPoint1 + 1, trimPoint2);
+              recipients.add(subString2);
+            } else {
+              recipients.add(String.valueOf(message.getAllRecipients()[j]));
+            }
           }
         }
         email.setEmailRecipient(recipients);
@@ -249,7 +257,6 @@ public class EmailRepositoryImpl implements EmailRepository{
         moveFolderName = store.getFolder("Junk E-mail");
       }
 
-      assert moveFolderName != null;
       moveFolderName.open(Folder.READ_WRITE);
 
       for (Long emailNo : emailNoList) {
