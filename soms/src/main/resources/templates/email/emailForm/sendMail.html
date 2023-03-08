@@ -135,6 +135,9 @@
             }
             
             /* 첨부파일 추가 */
+            var fileNo = 0;
+            var filesArr = new Array();
+            
             function addFile(obj){
                 var maxFileCnt = 5;   // 첨부파일 최대 개수
                 var attFileCnt = document.querySelectorAll('.filebox').length;    // 기존 추가된 첨부파일 개수

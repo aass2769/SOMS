@@ -4,13 +4,11 @@
 .GetMail{
 	display: flex;
 	flex-direction: column;
+	margin-left:5%;
 }
 /*---받은 메일 네비바---*/
 .GetMail_Nav{
 	width:80%;
-	margin-left:10%;
-	border-bottom: 0.15rem solid #f4f4f4;
-	
 }
 .GetMail_Nav ul{
 	margin-top: 2rem;
@@ -56,7 +54,6 @@
 /*---받은 메일 테이블---*/
 .GetMail_Container{
 	width:80%;
-	margin-left:10%;
 }
 .GetMail_Container table{
 	width:90%;
@@ -88,9 +85,7 @@
     text-overflow: ellipsis;/*글자가 width 넓이를 넘는 경우 생략부호(..)표시*/
     white-space: nowrap;/*공백 문자가 있을경우 줄바꿈 하지 않고 한 줄로 나오게 처리*/
 }
-.table5{
-	padding-left: 20%; 
-}
+
 .table5 p{
 	margin:0;
 	width:14rem;
