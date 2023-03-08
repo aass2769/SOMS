@@ -57,8 +57,8 @@
 							</td>
 							<td th:if="${folderName == 'Sent Items' || folderName == 'Drafts'}" class="table4">
 								<small>
-									<span th:each="recipient : ${email.getEmailRecipient()}" th:if="${#lists.size(recipient)>1}" th:text="" th:text="${recipient}+'외'+${#lists.size(recipient)}-1">수신자 배열</span>
-									<span th:each="recipient : ${email.getEmailRecipient()}" th:if="${#lists.size(recipient)==1}"  th:text="${recipient}">수신자 배열</span>
+									<span th:if="${#lists.size(email.getEmailRecipient())} &gt; 1" th:text="${email.getEmailRecipient()[0]} + '외' + ${#lists.size(email.getEmailRecipient()) - 1}">수신자 배열</span>
+									<span th:if="${#lists.size(email.getEmailRecipient())} == 1" th:each="recipient : ${email.getEmailRecipient()}" th:text="${recipient}">수신자 배열</span>
 									</small>
 							</td>
 							<td class="table5">
