@@ -178,9 +178,9 @@ public class EmailController {
     try {
       emailService.emailSend(emailDto, getEmployee(request));
     } catch (MailSendException e) {
-      return "이메일주소가유효하지않을때";
+    	return "/email/errorMail_1";
     } catch (FileNotFoundException e) {
-      return "파일전송실패화면";
+    	return "/email/errorMail_2";
     }
 
     return "redirect:/email/emailList?folderName=Sent Items";
