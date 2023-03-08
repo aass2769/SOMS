@@ -1,5 +1,7 @@
 *{
 	list-style: none;
+	text-decoration-line: none;
+	color: black;
 }
 .GetMail{
 	display: flex;
@@ -33,8 +35,9 @@
 	padding-left: 0.7rem;
 	padding-right:3rem;
 }
-.lis5{
+.lis5 > a{
 	padding-left: 3rem;
+	
 }
 .lis6{
 	padding-left: 0.7rem;
@@ -203,6 +206,8 @@ input[type=file]{
     margin-left:4.4%;
     overFlow : auto;
 }
+
+/*수정할 부분*/
 .SendMail_Content>textarea{
     margin-top:1rem;
 	border: 2px solid #f4f4f4;
@@ -248,7 +253,6 @@ input[type=file]{
     display: inline-block;
 }
 .delete{
-
 	background-color: #EA471B;
     border: 0.2rem solid #EA471B;
     border-radius: 0.38rem;
@@ -260,3 +264,83 @@ input[type=file]{
     padding:0.125rem 0.5rem 0.125rem 0.5rem;
     margin-left: 0.5rem;
 }
+
+
+   .Read-Container{
+        display:flex;
+        flex-direction: column;
+        margin-left:10%;
+        margin-top: 3%;
+    }
+    .Read-From{
+        display:flex;
+        flex-direction: row;
+    }
+    .Read-From > p{
+        margin-left: 1rem;
+        padding:0;
+        margin-top:0;
+    }
+    .Read-From >div{
+        border-bottom:0.15rem solid #f4f4f4;
+        width:70%; 
+    }
+    .Read-FromContent{
+        margin-top:0;
+        margin-bottom:0;
+        margin-left: 1rem;;
+    }
+    .Read-Recipient{
+        display:flex;
+        flex-direction: row;
+        margin-top:1rem;
+    }
+    .Read-Recipient > p{
+        margin-left: 1rem;
+    }
+    .Read-Recipient >div{
+        border-bottom:0.15rem solid #f4f4f4;
+        width:70%;
+    }
+    .Read-RecipientContent{
+        margin-top:0;
+        margin-bottom: 0;
+        margin-left: 1rem;
+    }
+    .Read-Date{
+        margin-top:1rem;
+        text-align: right;
+        margin-right:10%;
+    }
+    .Read-Content{
+        width:60rem;
+        height:25rem;
+        border:0.15rem solid #f4f4f4;
+        border-radius: 1rem;
+    }
+    .Read-Button{
+        text-align: right;
+        margin-right: 10%;
+    }
+    .Read-Button form> a{
+        background-color: #EA471B;
+        border: 1px solid #EA471B;
+        border-radius: 0.4rem;
+        font-size: 0.7rem;
+        height: 1.5rem;
+        color: white;
+        font-family: 'KOTRA_BOLD-Bold';
+        padding:0.2rem 1rem 0.25rem 1rem;
+        margin-left: 0.3rem;
+    }
+    .Read-Button form>button{
+        background-color: #EA471B;
+        border: 1px solid #EA471B;
+        border-radius: 0.4rem;
+        font-size: 0.7rem;
+        height: 1.5rem;
+        color: white;
+        font-family: 'KOTRA_BOLD-Bold';
+        padding:0.2rem 1rem 0.25rem 1rem;
+        margin-left: 0.3rem;
+    }

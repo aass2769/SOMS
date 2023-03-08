@@ -23,33 +23,49 @@
 			  <!-- 본문의 내용 위치를 잡기위해 만든 상담 공백 -->
 			  <div style="height:5rem;"></div>
 			</div>
-			<div>
-				<div><p>보낸 사람</p><p th:text="${emailDetail.emailFrom}"></p></div>
-				<div><p>받는 사람</p><p th:each="recipient : ${emailDetail.emailRecipient}" th:text="${recipient}"></p></div>
-				<div>날짜<span th:text="${emailDetail.emailSentDate}"></span><div>번역/프린트</div></div>
-				<div>
+			<div class="Read-Container">
+				<div class="Read-From">
+                        <label>보낸 사람</label>
+                        <div>
+                             <p class="Read-FromContent" th:text="${emailDetail.emailFrom}"></p>
+                        </div>
+                </div>
+				<div class="Read-Recipient">
+                    <label>받는 사람</label>
+                    <div>
+                        <p class="Read-RecipientContent" th:each="recipient : ${emailDetail.emailRecipient}" th:text="${recipient}"></p>
+                    </div>
+                </div>
+				<div class="Read-Date">
+                    <span th:text="${emailDetail.emailSentDate}"></span>
+                </div>
+				<div class="Read-Attachment">
 					<div th:if="${emailDetail.emailHasAttachment}">첨부파일
 						<a th:each="attachmentFileName : ${emailDetail.emailAttachmentFileName}"
 						th:href="@{/email/downloadAttachment(fileName=${attachmentFileName})}"
 						th:text="${emailDetail.emailAttachment.get(attachmentFileNameStat.index)}"></a>
 					</div>
 				</div>
-				<div><p>내용</p><p th:utext="${emailDetail.getEmailContent()}"></p></div>
-				<div>
-					<a th:href="@{/email/reply(emailNo=${emailDetail.emailNo})}">답장</a>
-                    <a th:href="@{/email/forward(emailNo=${emailDetail.emailNo})}">전달</a>
+				<div class="Read-Content">
+                    <p class="test" th:utext="${emailDetail.getEmailContent()}"></p>
+                </div>
+				<div class="Read-Button">
 					<form method="post" th:action="@{/email/moveToTrashOrJunk(folderName=${folderName},moveFolder='Trash')}">
+                        <a th:href="@{/email/reply(emailNo=${emailDetail.emailNo})}">답장</a>
+                         <a th:href="@{/email/forward(emailNo=${emailDetail.emailNo})}">전달</a>
 						<button type="submit" id="moveToTrash" name="emailNoList" th:value="${emailDetail.emailNo}">삭제</button>
 					</form>
 				</div>
 			</div>
 		</div>
 
-			<script>
+	<script>
 				$('#moveToTrash').on("click", function() {
 					$('#spinner').modal("show");
 				});
-			</script>
+	</script>
 	</section>
+</body>
+</html>
 </body>
 </html>
