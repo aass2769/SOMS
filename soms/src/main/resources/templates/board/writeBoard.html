@@ -54,7 +54,7 @@
 						<input name="pageLimit" type="hidden" th:value="${pageLimit}">
 					</div>
 					<div class="write_button_div">
-						<button type="button"  id="write_submit" onclick="data_submit(); spinerOn();" class="write_button">수정</button>
+						<button type="button"  id="write_submit" onclick="data_submit();" class="write_button">수정</button>
 					</div>
 				</form>
 				
@@ -86,7 +86,7 @@
 						<input id="pageLimit" name="pageLimit" type="hidden" th:value="${pageLimit}">
 					</div>
 					<div class="write_button_div">
-						<button type="button" id="write_submit" onclick="data_submit(); spinerOn();" class="write_button">등록</button>
+						<button type="button" id="write_submit" onclick="data_submit();" class="write_button">등록</button>
 					</div>
 				</form>
 			</div>
@@ -109,6 +109,7 @@
 		} else{
 			alert("게시글이 작성되었습니다.");
 			document.getElementById('form').submit();
+			spinerOn();
 		}
 	}
 </script>
