@@ -14,11 +14,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import project.soms.mypage.dto.AttendanceDto;
 import project.soms.mypage.dto.OvertimeDto;
 import project.soms.mypage.repository.AttendanceRepository;
 import project.soms.mypage.repository.MypageRepository;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AttendanceServiceImpl implements AttendanceService{
@@ -174,6 +176,14 @@ public class AttendanceServiceImpl implements AttendanceService{
 		System.out.println("현재 날짜: " + today);
 		System.out.println("현재 분: " + nowminute);
 		System.out.println("최종 attendance값: " + attendance);
+		
+		log.info("오늘 출퇴근 여부 ={}", existence);
+		log.info("오늘 출근 시간 ={}", gotime);
+		log.info("오늘 퇴근 시간 ={}", leavetime);
+		log.info("현재 시간 ={}", nowtime);
+		log.info("현재 날짜 ={}", today);
+		log.info("현재 분 ={}", nowminute);
+		log.info("최종 attendance값 ={}", attendance);
 		
 		
 	}
