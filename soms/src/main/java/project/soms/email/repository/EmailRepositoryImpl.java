@@ -91,10 +91,10 @@ public class EmailRepositoryImpl implements EmailRepository{
         email.setEmailSubject(message.getSubject());
 
         int addressPoint1 = message.getFrom()[0].toString().indexOf("<");
-        int addressPoint2 = message.getFrom()[0].toString().indexOf(">");
+        int addressPoint2 = message.getFrom()[0].toString().length();
         String subString;
         if (addressPoint1 >= 0) {
-          subString = message.getFrom()[0].toString().substring(addressPoint1 + 1, addressPoint2);
+          subString = message.getFrom()[0].toString().substring(addressPoint1 + 1, addressPoint2 - 1);
           email.setEmailFrom(subString);
         } else {
           email.setEmailFrom(message.getFrom()[0].toString());
@@ -104,10 +104,10 @@ public class EmailRepositoryImpl implements EmailRepository{
         if (message.getAllRecipients().length > 0) {
           for (int j = 0; j < message.getAllRecipients().length; j++) {
             int trimPoint1 = message.getAllRecipients()[j].toString().indexOf("<");
-            int trimPoint2 = message.getAllRecipients()[j].toString().indexOf(">");
+            int trimPoint2 = message.getAllRecipients()[j].toString().length();
             String subString2;
             if (addressPoint1 >= 0) {
-              subString2 = message.getAllRecipients()[j].toString().substring(trimPoint1 + 1, trimPoint2);
+              subString2 = message.getAllRecipients()[j].toString().substring(trimPoint1 + 1, trimPoint2 - 1);
               recipients.add(subString2);
             } else {
               recipients.add(String.valueOf(message.getAllRecipients()[j]));
@@ -146,7 +146,7 @@ public class EmailRepositoryImpl implements EmailRepository{
             BodyPart bodyPart = multipart.getBodyPart(j);
 
             //bodytype에 값들 중 'TEXT/PLAIN'으로 설정된 값은 String으로
-            if (bodyPart.getContentType().contains("text/plain;") || bodyPart.getContentType().contains("text/html")) {
+            if (bodyPart.getContentType().contains("text/html")) {
               String contents = (String) bodyPart.getContent();
               sb.append(contents);
             }
@@ -307,7 +307,7 @@ public class EmailRepositoryImpl implements EmailRepository{
       MimeMultipart messageContent = new MimeMultipart("mixed");
 
       MimeBodyPart textWarp = new MimeBodyPart();
-      textWarp.setContent(emailDto.getEmailContent(), "text/plain; charset=utf-8");
+      textWarp.setContent(emailDto.getEmailContent(), "text/html; charset=utf-8");
       messageContent.addBodyPart(textWarp);
       try {
         if (emailDto.getEmailAttachmentFileName().size() > 0) {
