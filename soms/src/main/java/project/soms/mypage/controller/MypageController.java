@@ -88,7 +88,7 @@ public class MypageController {
 	}
 	
 	@GetMapping("mypage/register")	// 계정생성 이동
-	public String register(Model model, HttpServletRequest req, String OffcnavasDivider) {
+	public String register(Model model, HttpServletRequest req, String OffcnavasDivider, HttpServletResponse res) {
 		
 		EmployeeDto employee = (EmployeeDto) req.getSession().getAttribute("LOGIN_EMPLOYEE");
 		model.addAttribute("employee", employee);
@@ -97,6 +97,9 @@ public class MypageController {
 		model.addAttribute("registerManages", registerManages);
 		
 		mypageServiceImpl.mypageCommonSetting(model, req, OffcnavasDivider);
+		
+		// 출퇴근 설정
+		attendanceServiceImpl.getTodayAttendanceExistence(employee.getEmployeeNo(), model, res);
 		
 		return "mypage/register";
 	}
