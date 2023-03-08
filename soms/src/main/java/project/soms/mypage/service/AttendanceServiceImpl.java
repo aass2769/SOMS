@@ -167,6 +167,15 @@ public class AttendanceServiceImpl implements AttendanceService{
 		
 		model.addAttribute("attendance", attendance);
 		
+		System.out.println("오늘 출퇴근 여부: " + existence);
+		System.out.println("오늘 출근 시간: " + gotime);
+		System.out.println("오늘 퇴근 시간: " + leavetime);
+		System.out.println("현재 시간: " + nowtime);
+		System.out.println("현재 날짜: " + today);
+		System.out.println("현재 분: " + nowminute);
+		System.out.println("최종 attendance값: " + attendance);
+		
+		
 	}
 		
 		
