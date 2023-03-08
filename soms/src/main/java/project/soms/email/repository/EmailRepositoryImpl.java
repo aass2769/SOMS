@@ -151,6 +151,13 @@ public class EmailRepositoryImpl implements EmailRepository{
               sb.append(contents);
             }
 
+            if (email.getEmailFrom().indexOf("somsolution") >= 0) {
+              if (bodyPart.getContentType().contains("text/plain")) {
+                String contents = (String) bodyPart.getContent();
+                sb.append(contents);
+              }
+            }
+
             //bodytype에 값들 중 첨부파일 (ATTACHMENT) 있는지 확인
             if (Part.ATTACHMENT.equalsIgnoreCase(bodyPart.getDisposition()) || StringUtils.isNotBlank(bodyPart.getFileName())) {
               InputStream is = bodyPart.getInputStream();
@@ -307,7 +314,7 @@ public class EmailRepositoryImpl implements EmailRepository{
       MimeMultipart messageContent = new MimeMultipart("mixed");
 
       MimeBodyPart textWarp = new MimeBodyPart();
-      textWarp.setContent(emailDto.getEmailContent(), "text/html; charset=utf-8");
+      textWarp.setContent(emailDto.getEmailContent(), "text/plain; charset=utf-8");
       messageContent.addBodyPart(textWarp);
       try {
         if (emailDto.getEmailAttachmentFileName().size() > 0) {
