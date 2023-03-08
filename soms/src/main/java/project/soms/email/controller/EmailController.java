@@ -156,6 +156,8 @@ public class EmailController {
         Path targetPath = fileAddress.resolve(randomParseFileName).normalize();
         fileList.get(i).transferTo(targetPath);
 
+        log.info("file={}", targetPath);
+
         fileNames.add(fileRealName);
         filePaths.add("src/main/resources/static/files/" + randomParseFileName);
       }
@@ -163,6 +165,8 @@ public class EmailController {
       for (int i = 0; i < addedFileName.size(); i++) {
         fileNames.add(addedFile.get(i));
         filePaths.add(addedFileName.get(i));
+
+        log.info("files={}", addedFile);
       }
 
     } catch (NullPointerException | IOException e) {

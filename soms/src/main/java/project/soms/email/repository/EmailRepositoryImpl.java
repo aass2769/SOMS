@@ -319,6 +319,7 @@ public class EmailRepositoryImpl implements EmailRepository{
               attachmentWarp.setDataHandler(new DataHandler(files));
               attachmentWarp.setFileName(emailDto.getEmailAttachment().get(j));
               messageContent.addBodyPart(attachmentWarp);
+              log.info("첨부파일 저장");
             } else {
               log.error("fileName={}", emailDto.getEmailAttachmentFileName().get(j));
               log.error("파일 명칭 불량");
@@ -484,7 +485,7 @@ public class EmailRepositoryImpl implements EmailRepository{
           init();
           buffer.append(new String(Base64.decode(matcher.group(3)), charsetMain));
         } catch (Base64DecodingException | UnsupportedEncodingException e) {
-          log.error("errorlog={}", e);
+          log.error("error={}", e);
           throw new RuntimeException(e);
         }
       }
