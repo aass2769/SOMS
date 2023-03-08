@@ -484,7 +484,7 @@ public class EmailRepositoryImpl implements EmailRepository{
           init();
           buffer.append(new String(Base64.decode(matcher.group(3)), charsetMain));
         } catch (Base64DecodingException | UnsupportedEncodingException e) {
-          log.error("error={}", e);
+          log.error("errorlog={}", e);
           throw new RuntimeException(e);
         }
       }
