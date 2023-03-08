@@ -22,11 +22,11 @@
       		<a href="#" data-bs-toggle="modal" data-bs-target="#emoloyeeInfomationModal">내정보 </a>
     	</div>   
     	
-	    <div class = 'Category-A' th:if="${attendanceExistence == 'false' && attendance == 2}">
+	    <div class = 'Category-A' th:if="${attendanceExistence == 'false' && attendance == 2 && employee.manageNo < 11}">
 	      <a href="#" id = "Attendance_Btn" value="1">출근하기</a>
 	    </div>
 	    
-	    <div class = 'Category-A' th:if="${attendanceExistence == 'false' && attendance == 1}">
+	    <div class = 'Category-A' th:if="${attendanceExistence == 'false' && attendance == 1 && employee.manageNo < 11}">
 	    	<a href="#" id = "Attendance_Btn" value = "2" >퇴근하기</a>
 	    </div>
 	    

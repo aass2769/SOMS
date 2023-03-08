@@ -119,16 +119,17 @@ public class AttendanceServiceImpl implements AttendanceService{
 		// 당일 연장근무가 있을 경우 연장근무로 끝나는시간을 변경
 		OvertimeDto overtime = mypageRepository.getEmployeeOvertime(employeeNo, today);
 		
-		Integer attendance = 3;
-		
-		if(overtime != null) {
-			if(overtime.getOvertimeStartTime()<gotime) {
-				gotime = overtime.getOvertimeStartTime();
-			}else {
-				leavetime = overtime.getOvertimeEndTime();
-			}
+		if(overtime.getSubmissionStatus() == 2 && overtime.getApproverEmployeeNo() == null && 
+				overtime.getProposerEmployeeNo() != null && overtime != null) {
+			
+				if(overtime.getOvertimeStartTime()<gotime) {
+					gotime = overtime.getOvertimeStartTime();
+				}else {
+					leavetime = overtime.getOvertimeEndTime();
+				}
 		}
 		
+		Integer attendance = 3;
 		
 		if((nowtime==(gotime-1))&&(nowminute>=50) || (nowtime>=gotime)) {
 			

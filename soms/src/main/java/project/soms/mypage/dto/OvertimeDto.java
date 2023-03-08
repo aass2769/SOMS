@@ -4,6 +4,8 @@ import lombok.Data;
 
 @Data
 public class OvertimeDto {
+	private String submissionPri;
+	
 	private String proposerEmployeeNo;
 	private Integer submissionStatus;
 	private String approverEmployeeNo;
@@ -14,8 +16,4 @@ public class OvertimeDto {
 	private Integer overtimeStartTime;
 	private Integer overtimeEndTime;
 	
-	public OvertimeDto(Integer overtimeStartTime, Integer overtimeEndTime) {
-		this.overtimeStartTime = overtimeStartTime;
-		this.overtimeEndTime = overtimeEndTime;
-	}
 }
