@@ -15,7 +15,7 @@
 			<div class="position-fixed bg-white" style="width:78.8%">
 				<!-- 페이지 본문의 제목 -->
 				<div>
-					<h1 class="pt-4 px-4 text-start">게시글 작성</h1>
+					<h1 class="pt-4 px-4 text-start" th:text="${boardSection + '게시판 / 글 작성'}">게시글 작성</h1>
 				</div>
 				<!-- 본문의 제목과 내용을 구분하는 선 -->
 				<hr style="border: solid 1px #EA471B; opacity: 1; margin:0;">
@@ -27,8 +27,17 @@
 			<div class="write_container">
 				<form id="form" method="post" th:if="${not #strings.isEmpty(readBoardDto.employeeNo)}" th:action="@{/board/boardUpdate}">
 					<div class="write_team_div">
-						<div class"write_team"><h2 class="write_team_h2" th:text="${boardSection + '게시판 / 글 작성'}">게시판</h2></div>	
-						<div><input type="checkbox" name="boardAnnouncement" value="공지있음"> 공지</div>
+						<div class="write_team_div_div">
+							<div class="write_team">
+								<button type="button" class="writeBoard_showListButton">
+									<a class="writeBoard_showListA" onclick="spinerOn()" th:href="@{/board/boardList(boardSection = ${readBoardDto.boardSection}, viewPage = 1, pageLimit = ${pageLimit})}">목록보기</a>
+								</button>
+							</div>
+							<div class="check_wrap">
+								<input id="check_btn" type="checkbox" name="boardAnnouncement" value="공지있음"> 
+								<label class="boardAnnouncement_label" for="check_btn"></label><span class="boardAnnouncement_span">공지</span>
+							</div>
+						</div>
 					</div>
 					<div class="write_title_div">
 						<input th:value="${readBoardDto.boardTitle}" name="boardTitle" id="boardTitle" class="write_title" type="text" placeholder="제목을 입력하세요" value="">
@@ -53,8 +62,17 @@
 				<!--게시판 글쓰기. employNo가 없으면-->
 				<form id="form" method="post" th:unless="${not #strings.isEmpty(readBoardDto.employeeNo)}" th:action="@{/board/boardWrite}">
 					<div class="write_team_div">
-						<div class="write_team"><h2 class="write_team_h2" th:text="${boardSection + '게시판 / 글 작성'}">게시판</h2></div>
-						<div><input type="checkbox" name="boardAnnouncement" value="공지있음"> 공지</div>
+						<div class="write_team_div_div">
+							<div class="write_team">
+								<button type="button" class="writeBoard_showListButton">
+									<a class="writeBoard_showListA" onclick="spinerOn()" th:href="@{/board/boardList(boardSection = ${boardSection}, viewPage = 1, pageLimit = ${pageLimit})}">목록보기</a>
+								</button>
+							</div>
+							<div class="check_wrap">
+								<input id="check_btn" type="checkbox" name="boardAnnouncement" value="공지있음"> 
+								<label class="boardAnnouncement_label" for="check_btn"></label><span class="boardAnnouncement_span">공지</span>
+							</div>
+						</div>
 					</div>
 					<div class="write_title_div">
 						

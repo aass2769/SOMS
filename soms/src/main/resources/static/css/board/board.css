@@ -176,7 +176,10 @@
 	/*height: 1000px;*/
 	border: 1px solid #D5D5D5;
 	margin-top: 40px;
-	background-color: rgb(235, 71, 26, 0.02);;
+}
+
+.write_team{
+	margin-bottom: 0.5%;
 }
 
 .write_team_div{
@@ -188,6 +191,65 @@
 .write_team_h2{
 	margin-top: 20%;
 	color: #EB471A;
+}
+
+.write_team_div_div{
+	width: 95%;
+	border-bottom: 3px solid #D5D5D5;
+	display: flex;
+	justify-content: space-between;
+	margin-top: 5%;
+	margin-bottom: 1%;
+}
+
+input#check_btn{
+  display:none;
+  }
+
+input#check_btn + label{
+  cursor:pointer;
+ }
+
+input#check_btn + label > span{
+  vertical-align: middle;
+  padding-left: 5px;
+}
+input#check_btn + label:before{
+  content:"";
+  display:inline-block;
+  width:17px;
+  height:17px;
+  border:2px solid #EB471A;
+  border-radius: 4px;
+  vertical-align:middle;
+  }
+  
+/* label:before에 체크 된 상태 CSS */  
+input#check_btn:checked + label:before{
+  content:"";
+  background-color:#EB471A;
+  border-color:#EB471A;
+  background-image: url('check_btn.png');
+  background-repeat: no-repeat;
+  background-position: 50%;
+  }
+
+.boardAnnouncement_span{
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
+.writeBoard_showListButton{
+	background-color: #EB471A;
+	color: white;
+	border: 1px solid #EB471A;
+	border-radius: 5px;
+	height: 40px;
+}
+
+.writeBoard_showListA{
+	color: white;
+	text-decoration: none;	
 }
 
 .write_title{
@@ -415,12 +477,11 @@
 .errorPageContainer{
 	width: 60%;
     height: 40%;
-    border: 1px solid black;
     text-align: center;
 }
 .errorPageButton{
-	width: 30%;
-	height: 30px;
+	width: 40%;
+	height: 40px;
 	background-color: #EA471B;
 	color: white;
 	border: #EA471B;
@@ -442,4 +503,9 @@
 	width: 40px;
 	height: 40px;
 	margin-top: 30px;
+}
+
+.errorContent{
+	margin-top: 6%;
+	margin-bottom: 8%;
 }
