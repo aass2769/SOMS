@@ -117,6 +117,7 @@ public class EmailController {
     emailService.emailUpdateSeen(request, emailNo);
     model.addAttribute("folderName", request.getParameter("folderName"));
     model.addAttribute("emailDetail", emailDetail);
+    model.addAttribute("emailNo", emailNo);
     return "email/emailForm/readMail";
   }
 

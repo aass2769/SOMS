@@ -39,7 +39,7 @@
 						<li class="lis2">읽음</li>
 						<li class="lis3"><button id="trashbtn">삭제</button></li>
 						<li class="lis4" th:if="${folderName == 'INBOX'}"><button id="junkbtn">스팸</button></li>
-						<li class="lis5"><a th:href="@{/email/sendForm}">보내기</a></li>
+						<li class="lis5"><a onclick="spinerOn()" th:href="@{/email/sendForm}">보내기</a></li>
 						<li class="lis9" id="seenCount"></li>
 				</ul>
 				</div>
@@ -58,8 +58,8 @@
 							</td>
 							<td th:if="${folderName == 'Sent Items' || folderName == 'Drafts'}" class="table4">
 								<small>
-									<span th:if="${#lists.size(email.getEmailRecipient()) > 1}" th:text="${email.getEmailRecipient()[0]} + '외 ' + (${#lists.size(email.getEmailRecipient()) - 1})">수신자 배열</span>
-									<span th:if="${#lists.size(email.getEmailRecipient()) == 1}" th:text="${email.getEmailRecipient()[0]}">수신자 배열</span>
+									<span onclick="spinerOn()" th:if="${#lists.size(email.getEmailRecipient()) > 1}" th:text="${email.getEmailRecipient()[0]} + '외 ' + (${#lists.size(email.getEmailRecipient()) - 1})">수신자 배열</span>
+									<span onclick="spinerOn()" th:if="${#lists.size(email.getEmailRecipient()) == 1}" th:text="${email.getEmailRecipient()[0]}">수신자 배열</span>
 								</small>
 							</td>
 							<td class="table5">
@@ -139,6 +139,8 @@
 				}
 			}
 		}
+		
+		//뒤로가기 시 spinner 무한로딩 방지
 		let folderName = /*[[${folderName}]]*/'';
 		window.onpageshow = function (event) {
 		if (event.persisted) {

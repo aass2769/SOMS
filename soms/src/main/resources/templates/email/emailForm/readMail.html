@@ -53,8 +53,8 @@
                 </div>
 				<div class="Read-Button">
 					<form method="post" th:action="@{/email/moveToTrashOrJunk(folderName=${folderName},moveFolder='Trash')}">
-                        <a th:href="@{/email/reply(emailNo=${emailDetail.emailNo})}">답장</a>
-                         <a th:href="@{/email/forward(emailNo=${emailDetail.emailNo})}">전달</a>
+                        <a onclick="spinerOn()" th:href="@{/email/reply(emailNo=${emailDetail.emailNo})}">답장</a>
+                         <a onclick="spinerOn()" th:href="@{/email/forward(emailNo=${emailDetail.emailNo})}">전달</a>
 						<button type="submit" id="moveToTrash" name="emailNoList" th:value="${emailDetail.emailNo}">삭제</button>
 					</form>
 				</div>
@@ -65,6 +65,16 @@
 				$('#moveToTrash').on("click", function() {
 					$('#spinner').modal("show");
 				});
+	</script>
+	<script>
+		//뒤로가기 시 spinner 무한로딩 방지
+		let folderName = /*[[${folderName}]]*/'';
+		let emailNo = /*[[${emailNo}]]*/'';
+		window.onpageshow = function (event) {
+		if (event.persisted) {
+		location.href="/email/emailDetail?emailNo=" + emailNo + "&emailNo=" + emailNo;
+			}
+		};
 	</script>
 	</section>
 </body>
