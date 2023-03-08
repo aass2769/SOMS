@@ -112,7 +112,7 @@ public class AttendanceServiceImpl implements AttendanceService{
 		int gotime = 9;
 		int leavetime = 18;
 		
-		int nowtime = Integer.parseInt(sdf.format(now).substring(11, 13));
+		int nowtime = Integer.parseInt(sdf.format(now).substring(10, 13));
 		
 		int nowminute = Integer.parseInt(sdf.format(now).substring(14, 16));
 
