@@ -15,7 +15,9 @@
 			<div class="position-fixed bg-white" style="width:75%">
 				<!-- 페이지 본문의 제목 -->
 				<div>
-					<h1 class="pt-4 px-4 text-start ">받은 메일 보관함</h1>
+					<h1 class="pt-4 px-4 text-start " th:if="${folderName == 'INBOX'}">받은 메일함</h1>
+					<h1 class="pt-4 px-4 text-start " th:if="${folderName == 'Sent Items'}">보낸 메일함</h1>
+					<h1 class="pt-4 px-4 text-start " th:if="${folderName == 'Trash'}">휴지통</h1>
 				</div>
 				<!-- 본문의 제목과 내용을 구분하는 선 -->
 				<hr style="border: solid 2px #EA471B; opacity: 1; margin:0;">
@@ -54,7 +56,10 @@
 								발신자
 							</td>
 							<td th:if="${folderName == 'Sent Items' || folderName == 'Drafts'}" class="table4">
-								<small><span th:each="recipient : ${email.getEmailRecipient()}" th:text="${recipient}">수신자 배열</span></small>
+								<small>
+									<span th:each="recipient : ${email.getEmailRecipient()}" th:if="${#lists.size(recipient)>1}" th:text="" th:text="${recipient}+'외'+${#lists.size(recipient)}-1">수신자 배열</span>
+									<span th:each="recipient : ${email.getEmailRecipient()}" th:if="${#lists.size(recipient)==1}"  th:text="${recipient}">수신자 배열</span>
+									</small>
 							</td>
 							<td class="table5">
 								<a class="detailLink" th:href="@{/email/emailDetail(emailNo=${email.getEmailNo()},folderName=${folderName})}" th:text="${email.getEmailSubject()}">제목</a>
