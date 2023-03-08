@@ -148,8 +148,6 @@
 				
 				if(confirm('정말로 수정하시겠습니까?')){
 					$('#emoloyeeInfomationModal').modal('hide');
-					$('#spinner').modal('show');
-					
 					$.ajax({
 							url: "/mypage/infomation/update",
 							type: "post",
@@ -163,11 +161,11 @@
 						success:function(result){
 								if(result == 1){
 									alert("개인정보가 업데이트 되었습니다. 다시 로그인해주세요.");
+									$('#spinner').modal('show');
 									location.href= '/login';
 									return
 								}
 								if(result == 2){
-									$('#spinner').modal('hide');
 									alert("서버에 전송 실패하였습니다.");
 									return
 								}

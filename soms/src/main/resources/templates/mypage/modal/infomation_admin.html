@@ -225,7 +225,6 @@
 					return
 				}
 				if(confirm('정말 수정하시겠습니까?')){
-					$('#spinner').modal('show');
 					$.ajax({
 							url: "/mypage/adminin/update",
 							type: "post",
@@ -244,18 +243,17 @@
 						success:function(result){
 								
 								if(result == 1){
-									$('#spinner').modal('hide');
 									alert("현재 사번직급보다 관리자 직급이 더 작습니다.");
 									$('#InfomationAdmin1Admin').val('');
 									return
 								}
 								if(result == 2){
-									$('#spinner').modal('hide');
 									alert("해당 사원의 정보가 업데이트 되었습니다.");
 									$('#emoloyeeInfomationAdminModal').modal('hide');
 									return
 								}
 								if(result == 3){
+									$('#spinner').modal('show');
 									alert("서버에 전송 실패하였습니다.");
 									location.href="/mypage";
 									return
