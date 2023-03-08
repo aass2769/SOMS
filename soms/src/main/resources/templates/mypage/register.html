@@ -183,7 +183,6 @@
 						if(Register_Admin.val() == '없음'){
 							Register_Admin.val(0);
 						}
-						$('#spinner').modal('show');
 						$.ajax({
 							url: "/mypage/register/insert",
 							type: "post",
@@ -201,24 +200,22 @@
 						success:function(result){
 								
 								if(result == 1){
-									$('#spinner').modal('hide');
 									Admin()
 									alert("현재 사번직급보다 관리자 직급이 더 작습니다.");
 									return
 								}
 								if(result == 2){
-									$('#spinner').modal('hide');
 									Admin()
 									alert("중복된 사번 또는 아이디가 존재합니다.");
 									return
 								}
 								if(result == 3){
+									$('#spinner').modal('show');
 									alert("성공적으로 계정이 생성되었습니다.");
 									location.href="/mypage";
 									return
 								}
 								if(result == 4){
-									$('#spinner').modal('hide');
 									Admin()
 									alert("서버에 전송 실패하였습니다.");
 									return
@@ -227,7 +224,6 @@
 							},
 						error: function(){ 
 							alert("서버에 전송 실패하였습니다.");
-							$('#spinner').modal('hide');
 							;}
 						})
 						
