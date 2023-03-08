@@ -317,7 +317,7 @@ public class EmailRepositoryImpl implements EmailRepository{
             if (file.exists()) {
               MimeBodyPart attachmentWarp = new MimeBodyPart();
               attachmentWarp.setDataHandler(new DataHandler(files));
-              attachmentWarp.setFileName(MimeUtility.encodeText(emailDto.getEmailAttachment().get(j)));
+              attachmentWarp.setFileName(emailDto.getEmailAttachment().get(j));
               messageContent.addBodyPart(attachmentWarp);
             } else {
               log.error("fileName={}", emailDto.getEmailAttachmentFileName().get(j));
@@ -342,6 +342,8 @@ public class EmailRepositoryImpl implements EmailRepository{
       saveDraftEmail(message, employee.getEmployeeId(), employeePw);
       throw new RuntimeException(e);
     }
+
+    log.info("이매일 전송 완료");
 
   }
 

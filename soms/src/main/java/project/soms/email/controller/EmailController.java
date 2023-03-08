@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailSendException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -150,7 +149,7 @@ public class EmailController {
       List<MultipartFile> fileList = fileName;
       for (int i = 0; i < fileList.size(); i++) {
 
-        String fileRealName = StringUtils.cleanPath(fileList.get(i).getOriginalFilename());
+        String fileRealName = fileList.get(i).getOriginalFilename();
         String extension = FilenameUtils.getExtension(fileRealName);
         String randomParseFileName = UUID.randomUUID() + "." + extension;
         Files.createDirectories(fileAddress);
