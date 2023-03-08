@@ -85,11 +85,11 @@ public class EmailController {
     //내용에 전달에 대한 정보 추가
     String addForwardValue =
         "<small><p>---------- Forwarded message ---------<br>" +
-        "보낸사람 : " + emailDetail.getEmailFrom() + "<br>" +
-        "Date : " + emailDetail.getEmailSentDate() + "<br>" +
-        "Subject : " + emailDetail.getEmailSubject() + "<br>" +
-        "To : " + emailDetail.getEmailFrom() + "<br><br><br><br>" +
-        emailDetail.getEmailContent();
+            "보낸사람 : " + emailDetail.getEmailFrom() + "<br>" +
+            "Date : " + emailDetail.getEmailSentDate() + "<br>" +
+            "Subject : " + emailDetail.getEmailSubject() + "<br>" +
+            "To : " + emailDetail.getEmailFrom() + "</p></small><br><br><br><br>" +
+            emailDetail.getEmailContent();
 
     //수신자 배열 초기화, 내용 추가
     emailDetail.setEmailRecipient(new ArrayList<>());
