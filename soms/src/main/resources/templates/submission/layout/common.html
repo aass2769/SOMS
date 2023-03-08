@@ -136,9 +136,11 @@
                   <p></p>
                 </div>
                 <span class="td_common_manage_name">
-                  <input class="common_manage_name"
-                         th:value="${team.manage} + ' | ' + ${team.employeeName}" type="button">
-                  <input type="hidden" th:value="${team.employeeNo}">
+                  <input type="hidden" th:id="${'team2approverNo' + teamStat.index}" th:value="${team.employeeNo}">
+                  <input type="hidden" th:id="${'team2approverName' + teamStat.index}" th:value="${team.employeeName}">
+                  <button class="common_manage_name" th:id="${'team2approverKey' + teamStat.index}"
+                          th:text="${team.manage} + ' | ' + ${team.employeeName}" type="button"
+                          data-bs-toggle="modal" data-bs-target="#approverSelect"></button>
                 </span>
               </div>
             </div>
@@ -161,9 +163,11 @@
                   <p></p>
                 </div>
                 <span class="td_common_manage_name">
-                  <input class="common_manage_name"
-                         th:value="${team.manage} + ' | ' + ${team.employeeName}" type="button">
-                  <input type="hidden" th:value="${team.employeeNo}">
+                  <input type="hidden" th:id="${'team3approverNo' + teamStat.index}" th:value="${team.employeeNo}">
+                  <input type="hidden" th:id="${'team3approverName' + teamStat.index}" th:value="${team.employeeName}">
+                  <button class="common_manage_name" th:id="${'team3approverKey' + teamStat.index}"
+                          th:text="${team.manage} + ' | ' + ${team.employeeName}" type="button"
+                          data-bs-toggle="modal" data-bs-target="#approverSelect"></button>
                 </span>
               </div>
             </div>
@@ -186,9 +190,11 @@
                   <p></p>
                 </div>
                 <span class="td_common_manage_name">
-                  <input class="common_manage_name"
-                         th:value="${team.manage} + ' | ' + ${team.employeeName}" type="button">
-                  <input type="hidden" th:value="${team.employeeNo}">
+                  <input type="hidden" th:id="${'team4approverNo' + teamStat.index}" th:value="${team.employeeNo}">
+                  <input type="hidden" th:id="${'team4approverName' + teamStat.index}" th:value="${team.employeeName}">
+                  <button class="common_manage_name" th:id="${'team4approverKey' + teamStat.index}"
+                          th:text="${team.manage} + ' | ' + ${team.employeeName}" type="button"
+                          data-bs-toggle="modal" data-bs-target="#approverSelect"></button>
                 </span>
               </div>
             </div>
@@ -211,9 +217,11 @@
                   <p></p>
                 </div>
                 <span class="td_common_manage_name">
-                  <input class="common_manage_name"
-                         th:value="${team.manage} + ' | ' + ${team.employeeName}" type="button">
-                  <input type="hidden" th:value="${team.employeeNo}">
+                  <input type="hidden" th:id="${'team5approverNo' + teamStat.index}" th:value="${team.employeeNo}">
+                  <input type="hidden" th:id="${'team5approverName' + teamStat.index}" th:value="${team.employeeName}">
+                  <button class="common_manage_name" th:id="${'team5approverKey' + teamStat.index}"
+                          th:text="${team.manage} + ' | ' + ${team.employeeName}" type="button"
+                          data-bs-toggle="modal" data-bs-target="#approverSelect"></button>
                 </span>
               </div>
             </div>
@@ -236,9 +244,11 @@
                   <p></p>
                 </div>
                 <span class="td_common_manage_name">
-                  <input class="common_manage_name"
-                         th:value="${team.manage} + ' | ' + ${team.employeeName}" type="button">
-                  <input type="hidden" th:value="${team.employeeNo}">
+                  <input type="hidden" th:id="${'team6approverNo' + teamStat.index}" th:value="${team.employeeNo}">
+                  <input type="hidden" th:id="${'team6approverName' + teamStat.index}" th:value="${team.employeeName}">
+                  <button class="common_manage_name" th:id="${'team6approverKey' + teamStat.index}"
+                          th:text="${team.manage} + ' | ' + ${team.employeeName}" type="button"
+                          data-bs-toggle="modal" data-bs-target="#approverSelect"></button>
                 </span>
               </div>
             </div>
@@ -261,9 +271,11 @@
                   <p></p>
                 </div>
                 <span class="td_common_manage_name">
-                  <input class="common_manage_name"
-                         th:value="${team.manage} + ' | ' + ${team.employeeName}" type="button">
-                  <input type="hidden" th:value="${team.employeeNo}">
+                  <input type="hidden" th:id="${'team7approverNo' + teamStat.index}" th:value="${team.employeeNo}">
+                  <input type="hidden" th:id="${'team7approverName' + teamStat.index}" th:value="${team.employeeName}">
+                  <button class="common_manage_name" th:id="${'team7approverKey' + teamStat.index}"
+                          th:text="${team.manage} + ' | ' + ${team.employeeName}" type="button"
+                          data-bs-toggle="modal" data-bs-target="#approverSelect"></button>
                 </span>
               </div>
             </div>
@@ -286,9 +298,11 @@
                   <p></p>
                 </div>
                 <span class="td_common_manage_name">
-                  <input class="common_manage_name"
-                         th:value="${team.manage} + ' | ' + ${team.employeeName}" type="button">
-                  <input type="hidden" th:value="${team.employeeNo}">
+                  <input type="hidden" th:id="${'team8approverNo' + teamStat.index}" th:value="${team.employeeNo}">
+                  <input type="hidden" th:id="${'team8approverName' + teamStat.index}" th:value="${team.employeeName}">
+                  <button class="common_manage_name" th:id="${'team8approverKey' + teamStat.index}"
+                          th:text="${team.manage} + ' | ' + ${team.employeeName}" type="button"
+                          data-bs-toggle="modal" data-bs-target="#approverSelect"></button>
                 </span>
               </div>
             </div>
@@ -311,9 +325,11 @@
                   <p></p>
                 </div>
                 <span class="td_common_manage_name">
-                  <button class="common_manage_name" th:value="${team.employeeNo}"
-                         th:text="${team.manage} + ' | ' + ${team.employeeName}" type="button"></button>
-                  <input type="hidden" th:value="${team.employeeNo}">
+                  <input type="hidden" th:id="${'team9approverNo' + teamStat.index}" th:value="${team.employeeNo}">
+                  <input type="hidden" th:id="${'team9approverName' + teamStat.index}" th:value="${team.employeeName}">
+                  <button class="common_manage_name" th:id="${'team9approverKey' + teamStat.index}"
+                          th:text="${team.manage} + ' | ' + ${team.employeeName}" type="button"
+                          data-bs-toggle="modal" data-bs-target="#approverSelect"></button>
                 </span>
               </div>
             </div>

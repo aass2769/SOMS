@@ -138,6 +138,63 @@
     <div th:replace="~{submission/layout/common :: common}" style="justify-content: start;"></div>
   </form>
   <script>
+      let teamApproverNo = document.getElementById("teamApproverNo").value;
+      let teamApproverName = document.getElementById("teamApproverName").value;
+      let selectedCommons = document.getElementById("selectedCommons").childElementCount;
+      console.log(selectedCommons);
+
+      for (let i = 0; i < 8; i++) {
+          $('#approverSelect' + i).on("click", function() {
+              document.getElementById("insertKey").setAttribute('value', i);
+              document.getElementById("deleteKey").setAttribute('value', i);
+          })
+          if ($('#approverNo' + i).val() != "") {
+              document.getElementById("approverSelect" + i).innerHTML = "변경";
+          } else {
+              document.getElementById("approverSelect" + i).innerHTML = "추가";
+          }
+      }
+
+      for (let i = 0; i < 10; i++) {
+          let max = document.getElementById("team" + i).childElementCount;
+          for (let j = 0; j < max; j++) {
+              $('#team' + i + 'approverKey' + j).on("click", function() {
+                  teamApproverNo =  $('#team' + i + 'approverNo' + j).val();
+                  teamApproverName = $('#team' + i + 'approverName' + j).val();
+                  document.getElementById("modalBody").innerHTML = "<b>'" + teamApproverName + "'</b>님을 결재자로 선택하시겠습니까?";
+              });
+          }
+      }
+
+      for (let i = 0; i < selectedCommons; i++) {
+          $('#selectedCommon' + i).on("click", function() {
+              teamApproverNo =  $('#selectedCommonNo' + i).val();
+              teamApproverName = $('#selectedCommonName' + i).val();
+              console.log(teamApproverNo);
+              console.log(teamApproverName);
+              document.getElementById("modalBody").innerHTML = "<b>'" + teamApproverName + "'</b>님을 결재자로 선택하시겠습니까?";
+              $('#approverSelect').modal("show");
+          })
+      }
+
+
+      function approverChange() {
+          let keyNum = document.getElementById("insertKey").value;
+          console.log(keyNum);
+          for (let i = 0; i < 8; i++) {
+              if (keyNum == i) {
+                  let approverNo = document.getElementById("approverNo" + i);
+                  let approverName = document.getElementById("approverName" + i);
+                  let approverSelect = document.getElementById("approverSelect" + i);
+                  approverNo.setAttribute('value', teamApproverNo);
+                  approverName.setAttribute('value', teamApproverName);
+                  approverSelect.innerText = "변경";
+                  $('#approverSelect').modal('hide');
+                  $('#offcanvasRight').offcanvas('hide');
+              }
+          }
+      }
+
       $('#formSubmit').on("click", function() {
           if (confirm("결재 상신 하시겠습니까?")) {
               $('#spinner').modal("show");
@@ -145,7 +202,8 @@
           } else {}
       });
       window.onpageshow = function (event) {
-          if (event.persisted) {
+          if (event.persisted || (window.performance && window.performance.navigation.type == 2)) {
+              $('#spinner').modal("show");
               location.href="/submission/form/incident";
           }
       };
