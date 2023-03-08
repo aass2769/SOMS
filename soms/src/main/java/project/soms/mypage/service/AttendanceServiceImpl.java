@@ -112,7 +112,7 @@ public class AttendanceServiceImpl implements AttendanceService{
 		int gotime = 9;
 		int leavetime = 18;
 		
-		int nowtime = Integer.parseInt(sdf.format(now).substring(10, 13));
+		int nowtime = Integer.parseInt(sdf.format(now).substring(12, 13));
 		
 		int nowminute = Integer.parseInt(sdf.format(now).substring(14, 16));
 
@@ -184,7 +184,6 @@ public class AttendanceServiceImpl implements AttendanceService{
 		log.info("현재 날짜 ={}", today);
 		log.info("현재 분 ={}", nowminute);
 		log.info("최종 attendance값 ={}", attendance);
-		
 		
 	}
 		
