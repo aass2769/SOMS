@@ -27,15 +27,17 @@
     <!-- JQUERY -->
     <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
     
-	<!-- offcanvas -->
+    <!-- OffCanvas
 	<div th:replace="~{mypage/common/register_common :: registerCommon}"></div> 
 	<div th:replace="~{mypage/common/search_common :: searchCommon}"></div> 
 	<div th:replace="~{mypage/common/admin_Common :: adminCommon}"></div> 
 	<link th:href="@{/css/common/common.css}" rel="stylesheet">
+	-->
 	
-	<!-- 내 정보 modal -->
+	<!-- 내 정보 modal 
 	<div th:replace="~{mypage/modal/infomation :: infomation}"></div>
 	<div th:replace="~{mypage/modal/infomation_admin :: infomation_admin}"></div>
+	-->
 </head>
 <body>
 	<!-- * class "All"은 모든 작업영역입니다 건들지 말아주세요! -->
@@ -56,7 +58,6 @@
         <!-- 페이지가 들어갈 아티클입니다 -->
 		<div class = "Article" th:replace="${article}">
 		</div>
-		
     </div>
     
 </body>
