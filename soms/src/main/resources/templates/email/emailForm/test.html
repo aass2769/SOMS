@@ -1,19 +1,14 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>Title</title>
+  <title>파일을 찾을 수 없습니다.</title>
 </head>
 <body>
-<form method="get" th:action="@{/email/emailSend}">
-  emailTo<input type="text" name="recipients">
-  emailTo<input type="text" name="recipients">
-  emailSubject<input type="text" name="emailSubject">
-  emailContent<input type="text" name="emailContent">
-  <input type="hidden" name="fileName" value="0">
-  <input type="submit">
-</form>
-
+<script>
+  alert("파일을 찾을 수 없습니다.");
+  location.href="/email/sendForm";
+</script>
 
 </body>
 </html>

@@ -2,6 +2,7 @@ package project.soms.email.service;
 
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailSendException;
 import project.soms.email.dto.EmailDto;
 import project.soms.employee.dto.EmployeeDto;
 
@@ -19,7 +20,7 @@ public interface EmailService {
 
   void moveToTrashOrJunk(HttpServletRequest request, List<Long> emailNoList);
 
-  void emailSend(EmailDto emailDto, EmployeeDto employee) throws FileNotFoundException;
+  void emailSend(EmailDto emailDto, EmployeeDto employee) throws FileNotFoundException, MailSendException;
 
   void deleteMessage(HttpServletRequest request, List<Long> emailNoList);
 

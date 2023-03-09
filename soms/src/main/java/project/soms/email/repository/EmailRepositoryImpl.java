@@ -301,7 +301,7 @@ public class EmailRepositoryImpl implements EmailRepository{
   }
 
   @Override
-  public void emailSend(EmailDto emailDto, EmployeeDto employee, String employeePw) throws FileNotFoundException {
+  public void emailSend(EmailDto emailDto, EmployeeDto employee, String employeePw) throws FileNotFoundException, MailSendException {
 
     MimeMessage message = javaMailSender.createMimeMessage();
 
@@ -328,7 +328,8 @@ public class EmailRepositoryImpl implements EmailRepository{
           for (int j = 0; j < emailDto.getEmailAttachmentFileName().size(); j++) {
             FileDataSource files = new FileDataSource(emailDto.getEmailAttachmentFileName().get(j));
             File file = new File(emailDto.getEmailAttachmentFileName().get(j));
-            if (file.exists()) {
+            if (file.exists() && file.isFile()) {
+              log.info(file.getName());
               MimeBodyPart attachmentWarp = new MimeBodyPart();
               attachmentWarp.setDataHandler(new DataHandler(files));
               attachmentWarp.setFileName(emailDto.getEmailAttachment().get(j));
@@ -349,12 +350,14 @@ public class EmailRepositoryImpl implements EmailRepository{
 
       message.setContent(messageContent);
 
-      javaMailSender.send(message);
+      try {
+        javaMailSender.send(message);
+      } catch (MailSendException e) {
+        saveDraftEmail(message, employee.getEmployeeId(), employeePw);
+        throw new MailSendException(String.valueOf(e));
+      }
 
     } catch (MessagingException | UnsupportedEncodingException e) {
-      throw new RuntimeException(e);
-    } catch (MailSendException e) {
-      saveDraftEmail(message, employee.getEmployeeId(), employeePw);
       throw new RuntimeException(e);
     }
 

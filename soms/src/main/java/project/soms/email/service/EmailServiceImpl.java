@@ -3,6 +3,7 @@ package project.soms.email.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailSendException;
 import org.springframework.stereotype.Service;
 import project.soms.email.dto.EmailDto;
 import project.soms.email.repository.EmailRepository;
@@ -52,11 +53,13 @@ public class EmailServiceImpl implements EmailService {
   }
 
   @Override
-  public void emailSend(EmailDto emailDto, EmployeeDto emoloyee) throws FileNotFoundException {
+  public void emailSend(EmailDto emailDto, EmployeeDto emoloyee) throws FileNotFoundException, MailSendException {
     try {
       emailRepository.emailSend(emailDto, emoloyee, emailPw);
     } catch (FileNotFoundException e) {
       throw new FileNotFoundException();
+    } catch (MailSendException e) {
+      throw new MailSendException(String.valueOf(e));
     }
   }
 

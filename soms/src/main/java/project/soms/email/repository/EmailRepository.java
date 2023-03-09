@@ -2,6 +2,7 @@ package project.soms.email.repository;
 
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailSendException;
 import project.soms.email.dto.EmailDto;
 import project.soms.employee.dto.EmployeeDto;
 
@@ -24,7 +25,7 @@ public interface EmailRepository {
 
   void moveToTrashOrJunk(String employeeId, String employeePw, String folderName, String moveFolder, List<Long> emailNoList);
 
-  void emailSend(EmailDto emailDto, EmployeeDto employee, String employeePw) throws FileNotFoundException;
+  void emailSend(EmailDto emailDto, EmployeeDto employee, String employeePw) throws FileNotFoundException, MailSendException;
 
   void deleteMessage(String employeeId, String employeePw, String moveFolder, List<Long> emailNoList);
 

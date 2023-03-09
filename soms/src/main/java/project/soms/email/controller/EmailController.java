@@ -19,6 +19,7 @@ import project.soms.employee.dto.EmployeeDto;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -142,6 +143,11 @@ public class EmailController {
       List<MultipartFile> fileList = fileName;
       if (fileList != null) {
         for (int i = 0; i < fileList.size(); i++) {
+
+          File file = new File(fileList.get(i).getOriginalFilename());
+          if (!file.isFile()) {
+            return "email/emailForm/test";
+          }
 
           String fileRealName = fileList.get(i).getOriginalFilename();
           String extension = FilenameUtils.getExtension(fileRealName);
