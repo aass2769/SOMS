@@ -22,18 +22,16 @@
     </div>
 
     <div class = Category-A>
+      <a class="category"  th:href="@{/email/emailList(folderName='Drafts')}">임시보관함</a>
+    </div>
+
+    <div class = Category-A>
       <a class="category"  th:href="@{/email/emailList(folderName='Trash')}">휴지통</a>
     </div>
 
-
-	<!-- 스피너 적용 함수입니다.-->
-    <script>
-			
-		function spinerOn(){
-			$('#spinner').modal('show');
-		}
-			
-	</script>
+    <div class = Category-A>
+      <a class="category"  th:href="@{/email/emailList(folderName='Junk E-mail')}">스팸메일함</a>
+    </div>
 
    <!-- 드롭다운 기능 스크립트 입니다 -->
 	<script>
@@ -49,7 +47,7 @@
 	            }else{
 	                cas.show('fast');
 	            }
-	    })
+	    });
 	</script>
   </ul>
 

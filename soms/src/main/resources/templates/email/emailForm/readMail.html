@@ -15,9 +15,11 @@
 			  <div class="position-fixed bg-white" style="width:75%">
 			    <!-- 페이지 본문의 제목 -->
 			    <div>
-			        <h1 class="pt-4 px-4 text-start " th:if="${folderName == 'INBOX'}">받은 메일함</h1>
-					<h1 class="pt-4 px-4 text-start " th:if="${folderName == 'Sent Items'}">보낸 메일함</h1>
-					<h1 class="pt-4 px-4 text-start " th:if="${folderName == 'Trash'}">휴지통</h1>
+						<h1 class="pt-4 px-4 text-start " th:if="${folderName == 'INBOX'}">받은 메일함</h1>
+						<h1 class="pt-4 px-4 text-start " th:if="${folderName == 'Sent Items'}">보낸 메일함</h1>
+						<h1 class="pt-4 px-4 text-start " th:if="${folderName == 'Drafts'}">임시보관함</h1>
+						<h1 class="pt-4 px-4 text-start " th:if="${folderName == 'Trash'}">휴지통</h1>
+						<h1 class="pt-4 px-4 text-start " th:if="${folderName == 'Junk E-mail'}">스팸메일함</h1>
 			    </div>
 			    <!-- 본문의 제목과 내용을 구분하는 선 -->
 			    <hr style="border: solid 2px #EA471B; opacity: 1; margin:0;">
@@ -27,20 +29,20 @@
 			</div>
 			<div class="Read-Container">
 				<div class="Read-From">
-                        <label>보낸 사람</label>
-                        <div>
-                             <p class="Read-FromContent" th:text="${emailDetail.emailFrom}"></p>
-                        </div>
-                </div>
+					<label>보낸 사람</label>
+					<div>
+						<p class="Read-FromContent" th:text="${emailDetail.emailFrom}"></p>
+					</div>
+				</div>
 				<div class="Read-Recipient">
-                    <label>받는 사람</label>
-                    <div>
-                        <p class="Read-RecipientContent" th:each="recipient : ${emailDetail.emailRecipient}" th:text="${recipient}"></p>
-                    </div>
-                </div>
+					<label>받는 사람</label>
+					<div>
+						<p class="Read-RecipientContent" th:each="recipient : ${emailDetail.emailRecipient}" th:text="${recipient}"></p>
+					</div>
+				</div>
 				<div class="Read-Date">
-                    <span th:text="${emailDetail.emailSentDate}"></span>
-                </div>
+					<span th:text="${emailDetail.emailSentDate}"></span>
+				</div>
 				<div class="Read-Attachment">
 					<div th:if="${emailDetail.emailHasAttachment}">첨부파일
 						<a th:each="attachmentFileName : ${emailDetail.emailAttachmentFileName}"
