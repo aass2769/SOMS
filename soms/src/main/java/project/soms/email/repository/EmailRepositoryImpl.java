@@ -145,16 +145,20 @@ public class EmailRepositoryImpl implements EmailRepository{
             //multipart에 들어간 bodypart를 bodypart객체로
             BodyPart bodyPart = multipart.getBodyPart(j);
 
+            log.info("contenttype={}", bodyPart.getContentType());
             //bodytype에 값들 중 'TEXT/PLAIN'으로 설정된 값은 String으로
             if (bodyPart.getContentType().contains("text/html")) {
-              String contents = (String) bodyPart.getContent();
+              String contents = String.valueOf(bodyPart.getContent());
               sb.append(contents);
             }
 
-            if (email.getEmailFrom().indexOf("somsolution") >= 0) {
-              if (bodyPart.getContentType().contains("text/plain")) {
-                String contents = (String) bodyPart.getContent();
-                sb.append(contents);
+            if (bodyPart.getContentType().contains("multipart/alternative")) {
+              Multipart mp = (Multipart) bodyPart.getContent();
+              for (int k = 0; k < mp.getCount(); k++) {
+                BodyPart bp = mp.getBodyPart(k);
+                if (bp.getContentType().contains("text/html")) {
+                  sb.append(bp.getContent());
+                }
               }
             }
 
@@ -314,7 +318,7 @@ public class EmailRepositoryImpl implements EmailRepository{
       MimeMultipart messageContent = new MimeMultipart("mixed");
 
       MimeBodyPart textWarp = new MimeBodyPart();
-      textWarp.setContent(emailDto.getEmailContent(), "text/plain; charset=utf-8");
+      textWarp.setContent(emailDto.getEmailContent(), "text/html; charset=utf-8");
       messageContent.addBodyPart(textWarp);
       try {
         if (emailDto.getEmailAttachmentFileName().size() > 0) {

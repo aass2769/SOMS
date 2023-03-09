@@ -141,10 +141,11 @@
 		}
 		
 		//뒤로가기 시 spinner 무한로딩 방지
-		let folderName = /*[[${folderName}]]*/'';
+		let folderName = [[${folderName}]];
 		window.onpageshow = function (event) {
-		if (event.persisted) {
-		location.href="/email/emailList?folderName=" + folderName;
+			if (event.persisted || (window.performance && window.performance.navigation.type == 2)) {
+				$('#spinner').modal("show");
+				location.href="/email/emailList?&folderName=" + folderName;
 			}
 		};
 	</script>

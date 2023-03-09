@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ko" th:replace="~{email/layout/mainLayout :: layout(~{::title}, ~{::section})}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>메일</title>
+</head>
+<body>
+    <section class="Article">
+		<div>
+			<!--Title 부분-->
+			<div style="width:90%; margin-left: 5%">
+
+			  <div class="position-fixed bg-white" style="width:75%">
+			    <!-- 페이지 본문의 제목 -->
+			    <div>
+			      <h1 th:if="${folderName == 'INBOX'}" class="pt-4 px-4 text-start">받은메일함</h1>
+			      <h1 th:if="${folderName == 'Sent Items'}" class="pt-4 px-4 text-start">보낸메일함</h1>
+			      <h1 th:if="${folderName == 'Drafts'}" class="pt-4 px-4 text-start">임시보관함</h1>
+			      <h1 th:if="${folderName == 'Trash'}" class="pt-4 px-4 text-start">휴지통</h1>
+			      <h1 th:if="${folderName == 'Junk Items'}" class="pt-4 px-4 text-start">스팸메일함</h1>
+			    </div>
+			    <!-- 본문의 제목과 내용을 구분하는 선 -->
+			    <hr style="border: solid 2px #EA471B; opacity: 1; margin:0;">
+			  </div>
+			  <!-- 본문의 내용 위치를 잡기위해 만든 상담 공백 -->
+			  <div style="height:5rem;"></div>
+			</div>
+			<div class="text-center">
+
+				<div class="d-flex ms-5 mt-3" style="width:80%;">
+					<div style="width:5%;"></div>
+					<form style="width:5%;" method="get" th:action="@{/email/reply}">
+						<button class="text-center rounded-1 border-0 text-light" style="font-size:0.8rem; text-decoration:none; background-color: #D8542E;"
+										th:value="${emailDetail.getEmailNo()}" name="emailNo" id="reply">답장</button>
+					</form>
+					<form style="width:5%;" method="get" th:action="@{/email/forward}">
+						<button class="text-center rounded-1 border-0 text-light" style="font-size:0.8rem; text-decoration:none; background-color: #D8542E;"
+										th:value="${emailDetail.getEmailNo()}" name="emailNo" id="forward">전달</button>
+					</form>
+					<form style="width:5%;" method="post" th:action="@{/email/moveToTrashOrJunk(folderName=${folderName},moveFolder='Trash')}">
+						<button type="submit" class="text-center rounded-1 border-0 text-light" style="font-size:0.8rem; background-color: #E86E1C;"
+										id="moveToTrash" name="emailNoList" th:value="${emailDetail.getEmailNo()}">삭제</button>
+					</form>
+					<div style="width:80%;"></div>
+				</div>
+
+				<div class="d-flex ms-5 mt-4" style="width:80%; height:1.7rem; max-height: 3rem;">
+					<p class="text-center" style="font-size:0.9rem; width:10%;">제목 : </p>
+					<p class="text-start" style="font-size:1.1rem; max-width:90%;" th:text="${emailDetail.getEmailSubject()}"></p>
+				</div>
+
+				<div class="d-flex ms-5 mt-3" style="width:80%; height:1.3rem;">
+					<p class="text-center" style="font-size:0.7rem; width:10%;">보낸 사람 : </p>
+					<p class="text-start" style="font-size:0.7rem; max-width:90%;" th:text="${emailDetail.getEmailFrom()}"></p>
+				</div>
+				<div class="d-flex ms-5" style="width:80%; height:1.3rem; max-height: 2.1rem;">
+					<p class="text-center" style="font-size:0.7rem; width:10%;">받은 사람 : </p>
+					<div class="d-flex" style="max-width: 90%;">
+						<p class="text-start" style="font-size:0.7rem;"
+							 th:each="recipient : ${emailDetail.getEmailRecipient()}" th:text="${recipient + '  '}"></p>
+					</div>
+				</div>
+				<div class="d-flex ms-5" style="width:80%; height:1.3rem;">
+					<p class="text-center" style="font-size:0.7rem; width:10%;">날짜 : </p>
+					<p class="text-start" style="font-size:0.7rem; max-width:90%;" th:text="${emailDetail.getEmailSentDate()}"></p>
+				</div>
+
+				<div class="d-flex ms-5 my-3 border-bottom" style="width:80%;">
+					<p class="text-center" style="font-size:0.9rem; width:10%;">내용 : </p>
+					<div class="text-start" style="font-size:0.9rem; max-width:90%; min-height: 10rem; max-height: 20rem; overflow-y: auto;"
+					th:utext="${emailDetail.getEmailContent()}"></div>
+				</div>
+
+				<div class="d-flex ms-5 my-3 border-bottom" style="width:80%;" th:if="${emailDetail.emailHasAttachment}">
+					<p class="text-center" style="font-size:0.8rem; width:10%;">첨부파일 : </p>
+					<div class="d-flex" style="max-width: 90%;">
+						<a class="text-start me-2" style="font-size:0.7rem; text-decoration: none;"
+							 th:each="attachment : ${emailDetail.getEmailAttachmentFileName()}"
+							 th:href="@{/email/downloadAttachment(fileName=${attachmentFileName})}"
+							 th:text="${emailDetail.getEmailAttachment().get(attachmentStat.index) + '  '}"></a>
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+			<script th:inline="javascript">
+
+				let folderName = [[${folderName}]];
+				let emailNo = [[${emailDetail.getEmailNo()}]];
+				$('#moveToTrash').on("click", function() {
+					$('#spinner').modal("show");
+				});
+				$('#reply').on("click", function() {
+					$('#spinner').modal("show");
+				});
+				$('#forward').on("click", function() {
+					$('#spinner').modal("show");
+				});
+
+				window.onpageshow = function (event) {
+					if (event.persisted || (window.performance && window.performance.navigation.type == 2)) {
+						$('#spinner').modal("show");
+						location.href="/email/emailList?&folderName=" + folderName;
+					}
+				};
+
+			</script>
+	</section>
+</body>
+</html>

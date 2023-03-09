@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ko" th:replace="~{email/layout/mainLayout :: layout(~{::title}, ~{::section})}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>메일</title>
+</head>
+<body>
+    <section class="Article">
+		<div>
+			<!--Title 부분-->
+			<div style="width:90%; margin-left: 5%">
+
+			  <div class="position-fixed bg-white" style="width:75%">
+			    <!-- 페이지 본문의 제목 -->
+			    <div>
+			      <h1 class="pt-4 px-4 text-start">메일쓰기</h1>
+			    </div>
+			    <!-- 본문의 제목과 내용을 구분하는 선 -->
+			    <hr style="border: solid 2px #EA471B; opacity: 1; margin:0;">
+			  </div>
+			  <!-- 본문의 내용 위치를 잡기위해 만든 상담 공백 -->
+			  <div style="height:5rem;"></div>
+			</div>
+			<form method="post" id="emailSendForm" th:action="@{/email/emailSend}" enctype="multipart/form-data">
+			<div class="text-center">
+
+				<div class="d-flex ms-5 mt-5" style="width:80%;">
+					<p class="text-center" style="font-size:0.9rem; width:10%;">받는 사람 : </p>
+					<div style="width:5%; height:1.7rem;" class="border border-1 rounded-1">
+						<label id="addRecipient" class="bg-transparent text-center"
+									 style="font-size:0.7rem;">추가</label>
+					</div>
+					<div style="width: 85%; height:auto;">
+						<div class="d-flex text-start" id="recipients1">
+							<div class="d-flex w-25 me-1" th:each="recipient : ${emailDto.getEmailRecipient()}">
+								<input id="recipient" type="text" class="text-start border-0 border-bottom" name="recipients" style="font-size:0.7rem; width:100%;" th:value="${recipient}" readonly>
+								<input type="button" id="btnRemove" class="btnRemove border-0 bg-transparent text-center" style="width:1rem; height:1rem; font-size:0.5rem;" value="X">
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="d-flex ms-5" style="width:80%;">
+					<p style="width:10%;"></p>
+					<div style="width:5%;"></div>
+					<div style="width: 85%; height:auto;">
+						<div class="d-flex text-start" id="recipients2"></div>
+					</div>
+				</div>
+
+
+				<div class="d-flex ms-5 my-3 border-bottom" style="width:80%; height:2.1rem; max-height: 3.3rem;">
+					<p class="text-center" style="font-size:0.9rem; width:10%;">제목 : </p>
+					<div class="text-start ps-2" style="font-size:1.1rem; width:90%; outline:none;"
+							 th:text="${emailDto.getEmailSubject()}" contenteditable="true" id="subject">
+					</div>
+					<input type="hidden" id="emailSubject" name="emailSubject">
+				</div>
+
+				<div class="d-flex ms-5 my-3 border-bottom" style="width:80%;">
+					<p class="text-center" style="font-size:0.9rem; width:10%;">내용 : </p>
+					<div class="text-start p-2" style="font-size:0.7rem; width:90%; min-height: 10rem; max-height: 20rem; overflow-y: auto; outline:none;" contenteditable="true"
+					id="content" th:utext="${emailDto.getEmailContent()}"></div>
+					<input type="hidden" id="emailContent" name="emailContent">
+				</div>
+
+				<div class="d-flex ms-5 my-3 border-bottom" style="width:80%;">
+					<p class="text-center" style="font-size:0.9rem; width:10%;">첨부파일 : </p>
+					<div style="width:5%; height:1.7rem;" class="border border-1 rounded-1">
+						<label for="addFile" name="fileName" class="bg-transparent text-center"
+										style="font-size:0.7rem;">추가</label>
+						<div class="d-none" id="addFileWarp">
+							<input type="file" id="addFile" class="addFile" multiple/>
+						</div>
+					</div>
+					<div class="d-flex" id="filesWarp" style="width: 85%; overflow-x: auto;">
+						<div class="d-flex text-start" style="font-size:0.7rem; text-decoration: none;"
+							 th:each="attachment : ${emailDto.getEmailAttachmentFileName()}" th:id="${'file' + attachmentStat.index}">
+							<input type="hidden" name="addedFileName" th:value="${'src/main/resources/static/files/' + attachment}">
+							<input type="text" class="border-0 w-auto text-end" style="height:1rem;"
+										 name="addedFile" th:value="${emailDto.getEmailAttachment().get(attachmentStat.index)}" readonly>
+							<input type="button" class="btnRemove border-0 bg-transparent text-start"
+										 style="width:1rem; height:1rem; font-size:0.5rem;" id="addedFileRemove" value="X">
+						</div>
+					</div>
+				</div>
+
+				<div class="d-flex ms-5 mt-3" style="width:80%;">
+					<div style="width:5%;"></div>
+					<form style="width:5%;" method="get" th:action="@{/email/reply}">
+						<button type="submit" class="text-center rounded-1 border-0 text-light"
+										style="font-size:0.8rem; text-decoration:none; background-color: #D8542E;">
+							전송
+						</button>
+					</form>
+					<div style="width:90%;"></div>
+				</div>
+
+
+			</div>
+			</form>
+		</div>
+
+			<script th:inline="javascript">
+				var filesArr = new Array();
+
+				//이메일 형식 체크
+				var mailJ = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+
+				$('#recipient').blur(function(){
+					if(mailJ.test($('#recipient').val())){
+					}else{
+						alert("이메일 형식이 맞지 않습니다.");
+					}
+				});
+
+				//제목 여부 확인하고 보내기
+				$(document).ready(function() {
+					$('#emailSendForm').submit(function() {
+						if ($('#recipients1').children().length <= 0 && $('#recipients2').children().length <= 0) {
+							alert("수신자를 입력하세요.");
+							return false;
+						}
+						$('#emailSubject').val($('#subject').html());
+						if ($('#emailSubject').val() == '') {
+							if(confirm('제목이 없습니다. 전송하시겠습니까?')){
+								$('#emailSubject').val("제목 없음");
+							} else {
+								return false;
+							}
+						}
+						$('#emailContent').val($('#content').html());
+						if($('#addFile').val() == "" && $('#emailContent').val() == ""){
+							alert("내용을 입력해주세요.");
+							return false;
+						} else {
+							for (let i = 0; i < filesArr.length; i++) {
+								if (!filesArr[i].is_delete) {
+									let inputFile = '<input type=file name=fileName value="' + filesArr[i] + '" >';
+									$('#addFileWarp').append(inputFile);
+								}
+							}
+							return true;
+						}
+					});
+				});
+
+
+
+
+				var maxAppend1 = document.getElementById("recipients1").childElementCount;
+				var maxAppend2 = document.getElementById("recipients2").childElementCount;
+				$('#addRecipient').click (function () {
+					if (maxAppend1 == 4 && maxAppend2 == 4) return;
+					if (maxAppend1 < 4) {
+						$('#recipients1').append (
+								'<div class="w-25 me-1 d-flex"><input type="text" name="recipients" class="text-start border-0 border-bottom" style="font-size:0.7rem; width:100%;"><input type="button" class="btnRemove border-0 bg-transparent text-center" style="width:1rem; height:1rem; font-size:0.5rem;" value="X"></div>'
+						); // end append
+						maxAppend1 = document.getElementById("recipients1").childElementCount;
+					} else {
+						$('#recipients2').append (
+								'<div class="w-25 me-1 d-flex"><input type="text" name="recipients" class="text-start border-0 border-bottom" style="font-size:0.7rem; width:100%;"><input type="button" class="btnRemove border-0 bg-transparent text-center" style="width:1rem; height:1rem; font-size:0.5rem;" value="X"></div>'
+						); // end append
+						maxAppend2 = document.getElementById("recipients2").childElementCount;
+					}
+					$('#btnRemove').on('click', function () {
+						$(this).prev().remove();
+						$(this).unwrap();
+						$(this).remove();
+						maxAppend1 = document.getElementById("recipients1").childElementCount;
+						maxAppend2 = document.getElementById("recipients2").childElementCount;
+					});
+				});
+
+				/* 첨부파일 추가 */
+				var fileNo = 0;
+
+				$('#addFile').on("change", function() {
+					var maxFileCnt = 10;   // 첨부파일 최대 개수
+					var attFileCnt = document.getElementById("filesWarp").childElementCount;
+					var remainFileCnt = maxFileCnt - attFileCnt;    // 추가로 첨부가능한 개수
+					var curFileCnt = this.files.length;  // 현재 선택된 첨부파일 개수
+
+					// 첨부파일 개수 확인
+					if (curFileCnt > remainFileCnt) {
+						alert("첨부파일은 최대 " + maxFileCnt + "개 까지 첨부 가능합니다.");
+					}
+
+					for (var i = 0; i < curFileCnt; i++) {
+						const file = this.files[i];
+
+						var reader = new FileReader();
+						reader.onload = function () {
+							filesArr.push(file);
+						};
+						reader.readAsDataURL(file)
+
+						// 목록 추가
+						let insert = '<div class="d-flex text-start" id="file' + fileNo + '" style="font-size:0.7rem; text-decoration: none;">' +
+								'<input type="text" class="border-0 w-auto text-end" style="height:1rem;" name="fileName" value="'+ file.name +'" readonly>' +
+								'<input type="button" class="btnRemove border-0 bg-transparent text-start" ' +
+								'style="width:1rem; height:1rem; font-size:0.5rem;" id="fileRemove' + fileNo + '" value="X">' +
+								'</div>'
+
+						$('#filesWarp').append(insert);
+						fileNo++;
+						/* 첨부파일 삭제 */
+						for (let i = 0; i < 10; i++) {
+							$('#fileRemove' + i).on("click", function() {
+								$('#file' + i).empty();
+								$('#file' + i).remove();
+								filesArr[i].is_delete = true;
+							});
+						}
+					}
+				});
+
+				$('#addedFileRemove').on("click", function() {
+					$(this).prev().remove();
+					$(this).prev().remove();
+					$(this).unwrap();
+					$(this).remove();
+				});
+
+				window.onpageshow = function (event) {
+					if (event.persisted || (window.performance && window.performance.navigation.type == 2)) {
+						$('#spinner').modal("show");
+						location.href="/email/sendForm";
+					}
+				};
+
+			</script>
+	</section>
+</body>
+</html>

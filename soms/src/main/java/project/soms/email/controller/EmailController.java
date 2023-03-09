@@ -39,20 +39,13 @@ public class EmailController {
    */
   private final EmailService emailService;
 
-  @GetMapping("getMail")
-  public String mailmain(Model model) {
-    model.addAttribute("tilte", "제목");
-    model.addAttribute("article", "내용");
-    return "email/getMailRepository";
-  }
-
   /*
   이메일 작성 화면 응답
    */
   @GetMapping("sendForm")
   public String readmail(Model model) {
     model.addAttribute("emailDto", new EmailDto());
-    return "email/emailForm/sendMail";
+    return "email/emailForm/sendMailRe";
   }
 
   /*
@@ -71,7 +64,7 @@ public class EmailController {
     model.addAttribute("emailDto", emailDto);
 
     //이메일 작성 화면 응답
-    return "email/emailForm/sendMail";
+    return "email/emailForm/sendMailRe";
   }
 
   /*
@@ -88,7 +81,7 @@ public class EmailController {
             "보낸사람 : " + emailDetail.getEmailFrom() + "<br>" +
             "Date : " + emailDetail.getEmailSentDate() + "<br>" +
             "Subject : " + emailDetail.getEmailSubject() + "<br>" +
-            "To : " + emailDetail.getEmailFrom() + "</p></small><br><br><br><br>" +
+            "To : " + emailDetail.getEmailFrom() + "</p></small><br><br><br>" +
             emailDetail.getEmailContent();
 
     //수신자 배열 초기화, 내용 추가
@@ -96,7 +89,7 @@ public class EmailController {
     emailDetail.setEmailContent(addForwardValue);
 
     model.addAttribute("emailDto", emailDetail);
-    return "email/emailForm/sendMail";
+    return "email/emailForm/sendMailRe";
   }
 
 
@@ -117,8 +110,7 @@ public class EmailController {
     emailService.emailUpdateSeen(request, emailNo);
     model.addAttribute("folderName", request.getParameter("folderName"));
     model.addAttribute("emailDetail", emailDetail);
-    model.addAttribute("emailNo", emailNo);
-    return "email/emailForm/readMail";
+    return "email/emailForm/readMailRe";
   }
 
   @PostMapping("moveToTrashOrJunk")
@@ -148,26 +140,28 @@ public class EmailController {
     try {
       Path fileAddress = Paths.get("src/main/resources/static/files");
       List<MultipartFile> fileList = fileName;
-      for (int i = 0; i < fileList.size(); i++) {
+      if (fileList != null) {
+        for (int i = 0; i < fileList.size(); i++) {
 
-        String fileRealName = fileList.get(i).getOriginalFilename();
-        String extension = FilenameUtils.getExtension(fileRealName);
-        String randomParseFileName = UUID.randomUUID() + "." + extension;
-        Files.createDirectories(fileAddress);
-        Path targetPath = fileAddress.resolve(randomParseFileName).normalize();
-        fileList.get(i).transferTo(targetPath);
+          String fileRealName = fileList.get(i).getOriginalFilename();
+          String extension = FilenameUtils.getExtension(fileRealName);
+          String randomParseFileName = UUID.randomUUID() + "." + extension;
+          Files.createDirectories(fileAddress);
+          Path targetPath = fileAddress.resolve(randomParseFileName).normalize();
+          fileList.get(i).transferTo(targetPath);
 
-        log.info("file={}", targetPath);
+          log.info("file={}", targetPath);
 
-        fileNames.add(fileRealName);
-        filePaths.add("src/main/resources/static/files/" + randomParseFileName);
+          fileNames.add(fileRealName);
+          filePaths.add("src/main/resources/static/files/" + randomParseFileName);
+        }
       }
 
       for (int i = 0; i < addedFileName.size(); i++) {
         fileNames.add(addedFile.get(i));
         filePaths.add(addedFileName.get(i));
 
-        log.info("files={}", addedFile);
+        log.info("files={}", filePaths);
       }
 
     } catch (NullPointerException | IOException e) {
@@ -179,9 +173,9 @@ public class EmailController {
     try {
       emailService.emailSend(emailDto, getEmployee(request));
     } catch (MailSendException e) {
-    	return "/email/errorMail_1";
+      return "email/emailForm/errorMail_1";
     } catch (FileNotFoundException e) {
-    	return "/email/errorMail_2";
+      return "email/emailForm/errorMail_2";
     }
 
     return "redirect:/email/emailList?folderName=Sent Items";
