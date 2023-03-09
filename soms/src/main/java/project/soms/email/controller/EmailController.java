@@ -19,7 +19,6 @@ import project.soms.employee.dto.EmployeeDto;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -137,18 +136,11 @@ public class EmailController {
     emailDto.setEmailRecipient(recipients);
     List<String> fileNames = new ArrayList<>();
     List<String> filePaths = new ArrayList<>();
-
     try {
       Path fileAddress = Paths.get("src/main/resources/static/files");
       List<MultipartFile> fileList = fileName;
       if (fileList != null) {
         for (int i = 0; i < fileList.size(); i++) {
-
-          File file = new File(fileList.get(i).getOriginalFilename());
-          if (!file.isFile()) {
-            return "email/emailForm/test";
-          }
-
           String fileRealName = fileList.get(i).getOriginalFilename();
           String extension = FilenameUtils.getExtension(fileRealName);
           String randomParseFileName = UUID.randomUUID() + "." + extension;
@@ -171,7 +163,7 @@ public class EmailController {
       }
 
     } catch (NullPointerException | IOException e) {
-      log.info("첨부파일이 없거나, 저장이 불가함={}", e);
+      log.info("exception={}", e);
     }
     emailDto.setEmailAttachment(fileNames);
     emailDto.setEmailAttachmentFileName(filePaths);

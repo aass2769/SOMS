@@ -69,10 +69,10 @@
 				<div class="d-flex ms-5 my-3 border-bottom" style="width:80%;">
 					<p class="text-center" style="font-size:0.9rem; width:10%;">첨부파일 : </p>
 					<div style="width:5%; height:1.7rem;" class="border border-1 rounded-1">
-						<label for="addFile" name="fileName" class="bg-transparent text-center" onmouseover="this.style.cursor='pointer'"
+						<label for="addFile" id="fileLabel" name="fileName" class="bg-transparent text-center" onmouseover="this.style.cursor='pointer'"
 										style="font-size:0.7rem;">추가</label>
 						<div class="d-none" id="addFileWarp">
-							<input type="file" id="addFile" class="addFile" multiple/>
+							<input type="file" id="addFile" class="addFile" multiple>
 						</div>
 					</div>
 					<div class="d-flex" id="filesWarp" style="width: 85%; overflow-x: auto;">
@@ -138,8 +138,7 @@
 						} else {
 							for (let i = 0; i < filesArr.length; i++) {
 								if (!filesArr[i].is_delete) {
-									let inputFile = '<input type=file name=fileName value="' + filesArr[i] + '" >';
-									$('#addFileWarp').append(inputFile);
+									$('#addFile').attr("name", "fileName");
 								}
 							}
 							return true;
