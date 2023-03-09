@@ -78,7 +78,7 @@
 					<div class="d-flex" style="max-width: 90%;">
 						<a class="text-start me-2" style="font-size:0.7rem; text-decoration: none;"
 							 th:each="attachment : ${emailDetail.getEmailAttachmentFileName()}"
-							 th:href="@{/email/downloadAttachment(fileName=${attachmentFileName})}"
+							 th:href="@{/email/downloadAttachment(fileName=${attachment})}"
 							 th:text="${emailDetail.getEmailAttachment().get(attachmentStat.index) + '  '}"></a>
 					</div>
 				</div>
