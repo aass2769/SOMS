@@ -141,45 +141,48 @@ public class EmailRepositoryImpl implements EmailRepository{
 
           //content에 담긴 값만큼 반복
           for (int j = 0; j < multipart.getCount(); j++) {
+            try {
+              //multipart에 들어간 bodypart를 bodypart객체로
+              BodyPart bodyPart = multipart.getBodyPart(j);
 
-            //multipart에 들어간 bodypart를 bodypart객체로
-            BodyPart bodyPart = multipart.getBodyPart(j);
+              //bodytype에 값들 중 'TEXT/PLAIN'으로 설정된 값은 String으로
+              if (bodyPart.getContentType().contains("text/html")) {
+                String contents = String.valueOf(bodyPart.getContent());
+                sb.append(contents);
+              }
 
-            log.info("contenttype={}", bodyPart.getContentType());
-            //bodytype에 값들 중 'TEXT/PLAIN'으로 설정된 값은 String으로
-            if (bodyPart.getContentType().contains("text/html")) {
-              String contents = String.valueOf(bodyPart.getContent());
-              sb.append(contents);
-            }
-
-            if (bodyPart.getContentType().contains("multipart/alternative")) {
-              Multipart mp = (Multipart) bodyPart.getContent();
-              for (int k = 0; k < mp.getCount(); k++) {
-                BodyPart bp = mp.getBodyPart(k);
-                if (bp.getContentType().contains("text/html")) {
-                  sb.append(bp.getContent());
+              if (bodyPart.getContentType().contains("multipart/alternative")) {
+                Multipart mp = (Multipart) bodyPart.getContent();
+                for (int k = 0; k < mp.getCount(); k++) {
+                  BodyPart bp = mp.getBodyPart(k);
+                  if (bp.getContentType().contains("text/html")) {
+                    String alterContents = String.valueOf(bp.getContent());
+                    sb.append(alterContents);
+                  }
                 }
               }
-            }
 
-            //bodytype에 값들 중 첨부파일 (ATTACHMENT) 있는지 확인
-            if (Part.ATTACHMENT.equalsIgnoreCase(bodyPart.getDisposition()) || StringUtils.isNotBlank(bodyPart.getFileName())) {
-              InputStream is = bodyPart.getInputStream();
+              //bodytype에 값들 중 첨부파일 (ATTACHMENT) 있는지 확인
+              if (Part.ATTACHMENT.equalsIgnoreCase(bodyPart.getDisposition()) || StringUtils.isNotBlank(bodyPart.getFileName())) {
+                InputStream is = bodyPart.getInputStream();
 
-              //첨부파일을 프로젝트의 디렉토리에 저장
-              String fileName = krStringParsing(bodyPart.getFileName());
-              String extension = FilenameUtils.getExtension(fileName);
-              String newFileName = UUID.randomUUID() + "." + extension;
-              Files.createDirectories(Paths.get("src/main/resources/static/files"));
-              Files.copy(is, Paths.get("src/main/resources/static/files/" + newFileName));
-              is.close();
+                //첨부파일을 프로젝트의 디렉토리에 저장
+                String fileName = krStringParsing(bodyPart.getFileName());
+                String extension = FilenameUtils.getExtension(fileName);
+                String newFileName = UUID.randomUUID() + "." + extension;
+                Files.createDirectories(Paths.get("src/main/resources/static/files"));
+                Files.copy(is, Paths.get("src/main/resources/static/files/" + newFileName));
+                is.close();
 
-              //첨부파일 여부를 true로
-              email.setEmailHasAttachment(true);
+                //첨부파일 여부를 true로
+                email.setEmailHasAttachment(true);
 
-              //다운로드로 보낼 filename과 화면에 나타낼 filename
-              attachmentFileName.add(newFileName);
-              attachment.add(fileName);
+                //다운로드로 보낼 filename과 화면에 나타낼 filename
+                attachmentFileName.add(newFileName);
+                attachment.add(fileName);
+              }
+            } catch (FolderClosedException e) {
+              log.error("error={}", e);
             }
           }
           //EmailDto에 내용과 첨부파일 값 저장
@@ -198,7 +201,7 @@ public class EmailRepositoryImpl implements EmailRepository{
 
     } catch (MessagingException | IOException e) {
       log.error("error={}", e);
-      throw new RuntimeException(e);
+//      throw new RuntimeException(e);
     }
     return emailList;
   }
@@ -412,6 +415,7 @@ public class EmailRepositoryImpl implements EmailRepository{
         log.info("스팸메일함 폴더 생성");
         emailFolder = store.getFolder("Junk E-mail");
       }
+
 
       assert emailFolder != null;
       emailFolder.open(Folder.READ_WRITE);
