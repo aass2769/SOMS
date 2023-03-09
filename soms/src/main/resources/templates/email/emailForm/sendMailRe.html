@@ -156,12 +156,12 @@
 					if (maxAppend1 == 4 && maxAppend2 == 4) return;
 					if (maxAppend1 < 4) {
 						$('#recipients1').append (
-								'<div class="w-25 me-1 d-flex"><input type="text" name="recipients" class="text-start border-0 border-bottom" style="font-size:0.7rem; width:100%;"><input type="button" class="btnRemove border-0 bg-transparent text-center" style="width:1rem; height:1rem; font-size:0.5rem;" value="X"></div>'
+								'<div class="w-25 me-1 d-flex"><input type="text" id="recipient" name="recipients" class="text-start border-0 border-bottom" style="font-size:0.7rem; width:100%;"><input type="button" class="btnRemove border-0 bg-transparent text-center" style="width:1rem; height:1rem; font-size:0.5rem;" value="X"></div>'
 						); // end append
 						maxAppend1 = document.getElementById("recipients1").childElementCount;
 					} else {
 						$('#recipients2').append (
-								'<div class="w-25 me-1 d-flex"><input type="text" name="recipients" class="text-start border-0 border-bottom" style="font-size:0.7rem; width:100%;"><input type="button" class="btnRemove border-0 bg-transparent text-center" style="width:1rem; height:1rem; font-size:0.5rem;" value="X"></div>'
+								'<div class="w-25 me-1 d-flex"><input type="text" id="recipient" name="recipients" class="text-start border-0 border-bottom" style="font-size:0.7rem; width:100%;"><input type="button" class="btnRemove border-0 bg-transparent text-center" style="width:1rem; height:1rem; font-size:0.5rem;" value="X"></div>'
 						); // end append
 						maxAppend2 = document.getElementById("recipients2").childElementCount;
 					}
