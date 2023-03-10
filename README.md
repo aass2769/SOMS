@@ -3,7 +3,7 @@ Sun Operation management Solution 사이트
 
 ## 🧾프로젝트 소개
 썬 회사의 경영관리를 위해 사내 자체 이메일 구축 및 간편 전산 결재 시스템 제작. 사내 게시판과 사원 정보 및 근태 관리 시스템을 구현한 사이트입니다.
-soms 주소 : somsolution.com
+soms 주소 : (http://somsolution.com)
 ## 🗓개발기간
 2023 . 02 . 01 . ~ 2023 . 02 . 03 .  
 :point_right: 요구사항정의서 작성 및 프로젝트 설계 전반 작업  
@@ -20,7 +20,7 @@ soms 주소 : somsolution.com
 :point_right: 기능 구현 완료 (이메일 제외)  
 :point_right: 구현 중 필요에 따라 요구사항 변경  
 
-2023 . 02 . 22 . ~ 2023 . 03 . 03 .  
+2023 . 02 . 22 . ~ 2023 . 03 . 08 .  
 :point_right:aws 호스팅 후 테스트 진행  
 :point_right: 오류 파악 및 수정  
 :point_right: 기능 미비 부분 확인 후 개선  
