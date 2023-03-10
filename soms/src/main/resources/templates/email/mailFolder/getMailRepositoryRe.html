@@ -34,8 +34,11 @@
 			<div style="width:2%;">
 				<input type="checkbox" id="MailCheck" onclick="toggleAll(this)">
 			</div>
-			<div style="width:5%;" th:if="${folderName == 'INBOX'}">
+			<div style="width:4%;" th:if="${folderName == 'INBOX'}">
 				<button class="text-center rounded-1 border-0 bg-transparent text-dark" style="font-size:0.8rem;" id="seen">읽음</button>
+			</div>
+			<div style="width:5%;" th:if="${folderName != 'Sent Items'}">
+				<p class="text-start border-0 text-dark" style="font-size:0.6rem; margin-top: 0.3rem;" id="seenCount"></p>
 			</div>
 			<div style="width:5%;" th:if="${folderName == 'INBOX'}">
 				<button class="text-center rounded-1 border-0 text-light" style="font-size:0.8rem; background-color: #D8542E;" id="junk">스팸</button>
@@ -43,7 +46,7 @@
 			<div style="width:5%;">
 				<button class="text-center rounded-1 border-0 text-light" style="font-size:0.8rem; background-color: #E86E1C;" id="trash">삭제</button>
 			</div>
-			<div style="width:78%;"></div>
+			<div style="width:74%;"></div>
 		</div>
 
 		<div class="ms-5">
@@ -82,7 +85,7 @@
 					<input class="py-auto" type="checkbox" name="emailNoList" th:value="${email.emailNo}">
 				</div>
 				<div style="width:6%; font-size: 0.7rem;" class="text-center">
-					<p style="padding-top:0.2rem;" th:if="${folderName == 'INBOX'}" th:text="${email.emailSeen ? '읽음' : '안읽음'}"></p>
+					<p th:id="${'seen' + emailStat.index}" style="padding-top:0.2rem;" th:if="${folderName == 'INBOX'}" th:text="${email.emailSeen ? '읽음' : '안읽음'}"></p>
 				</div>
 				<div style="width:27%" class="text-start"
 						 th:if="${folderName == 'INBOX' || folderName == 'Junk E-mail' || folderName == 'Trash'}">
@@ -163,14 +166,14 @@
 		// 	$('#spinner').modal("show");
 		//  });
 
-		let seenCount;
+		let seenCount = 0;
 		let max = [[${emailList.size}]]
 		for (let i = 0; i < max; i++) {
 			if ($('#seen' + i).text() == "안읽음") {
 				seenCount += 1;
 			}
 		}
-		$('#seenCount').innerHTML = seenCount + "/" + max;
+		$('#seenCount').text("[ "+seenCount + " / " + max+" ]");
 
 
 
