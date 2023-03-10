@@ -92,6 +92,17 @@ public class EmailController {
     return "email/emailForm/sendMailRe";
   }
 
+  /*
+  임시보관한 메일 다시 쓰기
+   */
+  @GetMapping("retry")
+  public String retry(Long emailNo, Model model) {
+    //파라미터로 전달받은 이메일번호로 이메일을 조회
+    EmailDto emailDetail = emailService.emailDetail(emailNo);
+
+    model.addAttribute("emailDto", emailDetail);
+    return "email/emailForm/sendMailRe";
+  }
 
   @GetMapping("emailList")
   public String emailList(HttpServletRequest request, Model model) {

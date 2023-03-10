@@ -13,6 +13,10 @@
       <p class="ps-2">이메일</p>
     </div>
 
+    <div class = "Category-Btn mt-2">
+      <button id="newMail">메일 쓰기</button>
+    </div>
+
     <div class = Category-A>
       <a class="category"  th:href="@{/email/emailList(folderName='INBOX')}">받은메일함</a>
     </div>
@@ -35,8 +39,14 @@
 
    <!-- 드롭다운 기능 스크립트 입니다 -->
 	<script>
+
       $('.category').on("click", function() {
           $('#spinner').modal("show");
+      });
+
+      $('#newMail').on("click", function() {
+          $('#spinner').modal("show");
+          location.href="/email/sendForm";
       });
 
 	    $('.Item-Title').click(function(){		

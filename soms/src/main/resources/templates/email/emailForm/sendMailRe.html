@@ -35,7 +35,7 @@
 					<div style="width: 85%; height:auto;">
 						<div class="d-flex text-start" id="recipients1">
 							<div class="d-flex w-25 me-1" th:each="recipient : ${emailDto.getEmailRecipient()}">
-								<input id="recipient" type="text" class="text-start border-0 border-bottom" name="recipients" style="font-size:0.7rem; width:100%;" th:value="${recipient}" readonly>
+								<input id="recipient" type="text" class="text-start border-0 border-bottom" name="recipients" style="font-size:0.7rem; width:100%;" th:value="${recipient}">
 								<input type="button" id="btnRemove" class="btnRemove border-0 bg-transparent text-center" style="width:1rem; height:1rem; font-size:0.5rem;" value="X">
 							</div>
 						</div>

@@ -32,7 +32,7 @@
 				<div class="d-flex ms-5 mt-3" style="width:80%;">
 					<div style="width:5%;"></div>
 					<form style="width:5%;" method="get" th:action="@{/email/reply}">
-						<button class="text-center rounded-1 border-0 text-light" style="font-size:0.8rem; text-decoration:none; background-color: #D8542E;"
+						<button class="text-center rounded-1 border-0 text-light" style="font-size:0.8rem; background-color: #D8542E;"
 										th:value="${emailDetail.getEmailNo()}" name="emailNo" id="reply">답장</button>
 					</form>
 					<form style="width:5%;" method="get" th:action="@{/email/forward}">
@@ -43,7 +43,11 @@
 						<button type="submit" class="text-center rounded-1 border-0 text-light" style="font-size:0.8rem; background-color: #E86E1C;"
 										id="moveToTrash" name="emailNoList" th:value="${emailDetail.getEmailNo()}">삭제</button>
 					</form>
-					<div style="width:80%;"></div>
+					<form style="width:10%;" method="get" th:action="@{/email/retry(folderName=${folderName})}">
+						<button th:if="${folderName == 'Drafts'}" type="submit" class="text-center rounded-1 border-0 text-light" style="font-size:0.8rem; background-color: #D8542E;"
+										id="retry" name="emailNo" th:value="${emailDetail.getEmailNo()}">다시쓰기</button>
+					</form>
+					<div style="width:70%;"></div>
 				</div>
 
 				<div class="d-flex ms-5 mt-4" style="width:80%; height:1.7rem; max-height: 3rem;">
@@ -97,6 +101,9 @@
 					$('#spinner').modal("show");
 				});
 				$('#forward').on("click", function() {
+					$('#spinner').modal("show");
+				});
+				$('#retry').on("click", function() {
 					$('#spinner').modal("show");
 				});
 
