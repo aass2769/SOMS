@@ -43,6 +43,12 @@ public class EmailServiceImpl implements EmailService {
   }
 
   @Override
+  public void emailUpdateSeenMul(HttpServletRequest request, List<Long> emailNoList) {
+    String folderName = request.getParameter("folderName");
+    emailRepository.emailUpdateSeenMul(getEmployee(request).getEmployeeId(), emailPw, folderName, emailNoList);
+  }
+
+  @Override
   public void moveToTrashOrJunk(HttpServletRequest request, List<Long> emailNoList) {
 
     String folderName = request.getParameter("folderName");

@@ -127,15 +127,21 @@ public class EmailController {
   @PostMapping("moveToTrashOrJunk")
   public String moveToTrashOrJunk(HttpServletRequest request, @RequestParam List<Long> emailNoList) {
     emailNoList.removeIf(emailNo -> emailNo.equals(0L));
+
+    if (request.getParameter("moveFolder").equals("justSeen")) {
+      emailService.emailUpdateSeenMul(request, emailNoList);
+      return "redirect:/email/emailList?folderName=" + request.getParameter("folderName");
+    }
+
     if (emailNoList.size() <= 0) {
-      return "redirect:" + request.getHeader("Referer");
+      return "redirect:/email/emailList?folderName=" + request.getParameter("folderName");
     }
     if (request.getParameter("folderName").equals("Trash") || request.getParameter("folderName").equals("Junk E-mail")) {
       emailService.deleteMessage(request, emailNoList);
     } else {
       emailService.moveToTrashOrJunk(request, emailNoList);
     }
-    return "redirect:" + request.getHeader("Referer");
+    return "redirect:/email/emailList?folderName=" + request.getParameter("folderName");
   }
 
   @PostMapping("emailSend")

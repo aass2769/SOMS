@@ -18,6 +18,8 @@ public interface EmailService {
 
   void emailUpdateSeen(HttpServletRequest request, Long emailNo);
 
+  void emailUpdateSeenMul(HttpServletRequest request, List<Long> emailNoList);
+
   void moveToTrashOrJunk(HttpServletRequest request, List<Long> emailNoList);
 
   void emailSend(EmailDto emailDto, EmployeeDto employee) throws FileNotFoundException, MailSendException;

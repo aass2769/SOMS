@@ -23,6 +23,8 @@ public interface EmailRepository {
 
   void emailUpdateSeen(String employeeId, String employeePw, String folderName, Long emailNo);
 
+  void emailUpdateSeenMul(String employeeId, String employeePw, String folderName, List<Long> emailNoList);
+
   void moveToTrashOrJunk(String employeeId, String employeePw, String folderName, String moveFolder, List<Long> emailNoList);
 
   void emailSend(EmailDto emailDto, EmployeeDto employee, String employeePw) throws FileNotFoundException, MailSendException;

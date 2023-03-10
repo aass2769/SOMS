@@ -29,57 +29,101 @@
 		</div>
 		<!--네비바 부분-->
 
+		<div class="d-flex ms-5 mt-5 mb-4 text-start" style="width:80%;">
+			<div style="width:5%;"></div>
+			<div style="width:2%;">
+				<input type="checkbox" id="MailCheck" onclick="toggleAll(this)">
+			</div>
+			<div style="width:5%;" th:if="${folderName == 'INBOX'}">
+				<button class="text-center rounded-1 border-0 bg-transparent text-dark" style="font-size:0.8rem;" id="seen">읽음</button>
+			</div>
+			<div style="width:5%;" th:if="${folderName == 'INBOX'}">
+				<button class="text-center rounded-1 border-0 text-light" style="font-size:0.8rem; background-color: #D8542E;" id="junk">스팸</button>
+			</div>
+			<div style="width:5%;">
+				<button class="text-center rounded-1 border-0 text-light" style="font-size:0.8rem; background-color: #E86E1C;" id="trash">삭제</button>
+			</div>
+			<div style="width:78%;"></div>
+		</div>
 
-		<div class="GetMail">
-			<form class="GetMail_form" id="mailListForm" method="post" th:action="@{/email/moveToTrashOrJunk}">
-				<input type="hidden" name="emailNoList" value="0">
+		<div class="ms-5">
+			<div class="d-flex ms-5 my-2 pb-1 border-bottom" style="width:80%; height:1.5rem; font-size:0.9rem;">
+				<div style="width:2%" class="text-center">
+				</div>
+				<div style="width:6%" class="text-center">
+				</div>
+				<div style="width:27%" class="text-center"
+						 th:if="${folderName == 'INBOX' || folderName == 'Junk E-mail' || folderName == 'Trash'}">
+					<p>발신자</p>
+				</div>
+				<div style="width:27%" class="text-center"
+						 th:if="${folderName == 'Sent Items' || folderName == 'Drafts'}">
+					<p>수신자</p>
+				</div>
+				<div style="width:50%" class="text-center">
+					<p>제목</p>
+				</div>
+				<div style="width:15%" class="text-center">
+					<p>발신일</p>
+				</div>
+
+			</div>
+		</div>
+
+		<form id="mailListForm" method="post" th:action="@{/email/moveToTrashOrJunk}" class="ms-5">
+			<div style="display:none;" id="submitValue">
 				<input type="hidden" name="moveFolder" id="moveFolder" value="">
 				<input type="hidden" name="folderName" th:value="${folderName}">
-				<div class="GetMail_Nav">
-					<ul>
-						<li class="lis1"><input type="checkbox" id="MailCheck" onclick="toggleAll(this)"></li>
-						<li class="lis2">읽음</li>
-						<li class="lis3"><button id="trashbtn">삭제</button></li>
-						<li class="lis4" th:if="${folderName == 'INBOX'}"><button id="junkbtn">스팸</button></li>
-						<li class="lis5"><a onclick="spinerOn()" th:href="@{/email/sendForm}">보내기</a></li>
-						<li class="lis9" id="seenCount"></li>
-					</ul>
+				<input type="hidden" name="emailNoList" value="0">
+			</div>
+			<div th:each="email : ${emailList}" class="d-flex ms-5 my-1 border-bottom" style="width:80%; height:1.5rem; font-size:0.9rem;"
+					 th:classappend="${folderName != 'Sent Items' && email.emailSeen ? 'opacity-75' : 'opacity-100'}">
+				<div style="width:2%" class="text-center">
+					<input class="py-auto" type="checkbox" name="emailNoList" th:value="${email.emailNo}">
 				</div>
-				<!--테이블 부분-->
-				<div class="GetMail_Container">
-					<table>
-						<tr th:each="email : ${emailList}" th:id="${'email-' + email.emailNo}">
-							<td class="table1">
-								<input type="checkbox" name="emailNoList" th:value="${email.emailNo}"/>
-							</td>
-							<td class="table3" th:id="${'seen' + emailStat.index}" th:text="${email.emailSeen ? '읽음' : '안읽음'}">
-								읽음 안읽음 확인
-							</td>
-							<td th:if="${folderName == 'INBOX' || folderName == 'Junk E-mail'|| folderName == 'Trash'}" class="table4" th:text="${email.getEmailFrom()}">
-								발신자
-							</td>
-							<td th:if="${folderName == 'Sent Items' || folderName == 'Drafts'}" class="table4">
-								<small>
-									<span onclick="spinerOn()" th:if="${#lists.size(email.getEmailRecipient()) > 1}" th:text="${email.getEmailRecipient()[0]} + '외 ' + (${#lists.size(email.getEmailRecipient()) - 1})">수신자 배열</span>
-									<span onclick="spinerOn()" th:if="${#lists.size(email.getEmailRecipient()) == 1}" th:text="${email.getEmailRecipient()[0]}">수신자 배열</span>
-								</small>
-							</td>
-							<td class="table5">
-								<a class="detailLink" th:href="@{/email/emailDetail(emailNo=${email.getEmailNo()},folderName=${folderName})}" th:text="${email.getEmailSubject()}">제목</a>
-							</td>
-							<td class="table6" th:text="${email.getEmailSentDate()}">
-								발신일
-							</td>
-						</tr>
-					</table>
+				<div style="width:6%; font-size: 0.7rem;" class="text-center">
+					<p style="padding-top:0.2rem;" th:if="${folderName == 'INBOX'}" th:text="${email.emailSeen ? '읽음' : '안읽음'}"></p>
 				</div>
-		</div>
+				<div style="width:27%" class="text-start"
+						 th:if="${folderName == 'INBOX' || folderName == 'Junk E-mail' || folderName == 'Trash'}">
+					<p th:text="${email.getEmailFrom()}">발신자</p>
+				</div>
+				<div style="width:27%" class="text-start overflow-hidden px-1"
+						 th:if="${folderName == 'Sent Items' || folderName == 'Drafts'}">
+					<small>
+						<span th:if="${#lists.size(email.getEmailRecipient()) == 1}" th:text="${email.getEmailRecipient()[0]}">
+							수신자
+						</span>
+						<span th:if="${#lists.size(email.getEmailRecipient()) > 1}"
+									th:text="${email.getEmailRecipient()[0]} + ' 외 ' + (${#lists.size(email.getEmailRecipient()) - 1} + '명')">
+							수신자
+						</span>
+					</small>
+				</div>
+				<div style="width:50%" class="text-start px-1">
+					<a style="text-decoration: none; max-width: 95%;" class="overflow-hidden text-dark showDetail fw-normal"
+						 th:text="${email.getEmailSubject()}"
+						 th:href="@{/email/emailDetail(emailNo=${email.getEmailNo()},folderName=${folderName})}"
+						 th:styleappend="${folderName != 'Sent Items' && email.emailSeen ? 'opacity:0.75;' : 'opacity:1;'}">
+						제목
+					</a>
+					<svg style="width:5%;" th:if="${email.emailHasAttachment}" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files ms-1" viewBox="0 0 16 16">
+						<path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+					</svg>
+				</div>
+				<div style="width:15%" class="text-end pe-1">
+					<p class="py-auto" th:text="${email.getEmailSentDate()}">발신일</p>
+				</div>
+
+			</div>
 		</form>
+
+
 	</div>
 
 	<script th:inline="javascript">
 
-		$('#trashbtn').on("click", function() {
+		$('#trash').on("click", function() {
 			document.getElementById("moveFolder").value = "Trash";
 			if (deleteCheckedRows()) {
 				$('#spinner').modal("show");
@@ -89,8 +133,9 @@
 			}
 		});
 
-		$('#junkbtn').on("click", function() {
+		$('#junk').on("click", function() {
 			document.getElementById("moveFolder").value = "Junk E-mail";
+			$('#spinner').modal("show");
 			if (deleteCheckedRows()) {
 				$('#spinner').modal("show");
 				$('#mailListForm').submit();
@@ -99,18 +144,33 @@
 			}
 		});
 
+		$('#seen').on("click", function() {
+			document.getElementById("moveFolder").value = "justSeen";
+			$('#spinner').modal("show");
+			if (deleteCheckedRows()) {
+				$('#spinner').modal("show");
+				$('#mailListForm').submit();
+			} else {
+				alert("선택 된 메일이 없습니다.");
+			}
+		});
+
+		$('.showDetail').on("click", function() {
+			$('#spinner').modal("show");
+		})
+
 		// $('.detailLink').on("click", function(){
 		// 	$('#spinner').modal("show");
 		//  });
 
-		 let seenCount;
-		 let max = [[${emailList.size}]]
-		 for (let i = 0; i < max; i++) {
-		 	if ($('#seen' + i).text() == "안읽음") {
-		 		seenCount += 1;
-		    }
-		 }
-		 $('#seenCount').innerHTML = seenCount + "/" + max;
+		let seenCount;
+		let max = [[${emailList.size}]]
+		for (let i = 0; i < max; i++) {
+			if ($('#seen' + i).text() == "안읽음") {
+				seenCount += 1;
+			}
+		}
+		$('#seenCount').innerHTML = seenCount + "/" + max;
 
 
 
@@ -145,7 +205,7 @@
 				}
 			}
 		}
-		
+
 		//뒤로가기 시 spinner 무한로딩 방지
 		let folderName = [[${folderName}]];
 		window.onpageshow = function (event) {

@@ -243,6 +243,38 @@ public class EmailRepositoryImpl implements EmailRepository{
     }
   }
 
+  @Override
+  public void emailUpdateSeenMul(String employeeId, String employeePw, String folderName, List<Long> emailNoList) {
+
+    //설정 객체 생성 후 필요 값 할당
+    Properties properties = new Properties();
+    //메일 선언을 imap으로
+    properties.put("mail.store.protocol", "imaps");
+    //해당 설정을 이메일 세션에 저장
+    Session emailSession = Session.getInstance(properties);
+
+    try {
+      Store store = emailSession.getStore();
+      store.connect("imap.mail.us-east-1.awsapps.com", employeeId + "@somsolution.com", employeePw);
+
+      Folder emailFolder = store.getFolder(folderName);
+      emailFolder.open(Folder.READ_WRITE);
+      for (Long emailNo : emailNoList) {
+        Message message = emailFolder.getMessage(Math.toIntExact(emailNo));
+
+        Flags flags = message.getFlags();
+
+        flags.add(Flags.Flag.SEEN);
+
+        message.setFlags(flags, true);
+      }
+
+    } catch (MessagingException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+
   //이메일 삭제시 휴지통으로 이동
   @Override
   public void moveToTrashOrJunk(String employeeId, String employeePw, String folderName, String moveFolder, List<Long> emailNoList) {
