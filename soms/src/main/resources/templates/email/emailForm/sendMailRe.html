@@ -91,7 +91,7 @@
 					<div style="width:5%;"></div>
 					<form style="width:5%;" method="get" th:action="@{/email/reply}">
 						<button type="submit" class="text-center rounded-1 border-0 text-light"
-										style="font-size:0.8rem; text-decoration:none; background-color: #D8542E;">
+										style="font-size:0.8rem; text-decoration:none; background-color: #D8542E;" id="formSubmit">
 							전송
 						</button>
 					</form>
@@ -104,7 +104,6 @@
 		</div>
 
 			<script th:inline="javascript">
-				var filesArr = new Array();
 
 				//이메일 형식 체크
 				var mailJ = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
@@ -116,9 +115,78 @@
 					}
 				});
 
-				//제목 여부 확인하고 보내기
+				$('#addRecipient').click (function () {
+					var maxAppend1 = document.getElementById("recipients1").childElementCount;
+					var maxAppend2 = document.getElementById("recipients2").childElementCount;
+					if (maxAppend1 == 4 && maxAppend2 == 4) return;
+					if (maxAppend1 < 4) {
+						$('#recipients1').prepend (
+								'<div class="w-25 me-1 d-flex"><input type="text" id="recipient" name="recipients" ' +
+								'class="text-start border-0 border-bottom" style="font-size:0.7rem; width:100%;">' +
+								'<input type="button" class="btnRemove border-0 bg-transparent text-center" ' +
+								'style="width:1rem; height:1rem; font-size:0.5rem;" value="X"></div>'
+						); // end append
+						maxAppend1 = document.getElementById("recipients1").childElementCount;
+					} else {
+						$('#recipients2').prepend (
+								'<div class="w-25 me-1 d-flex"><input type="text" id="recipient" name="recipients" ' +
+								'class="text-start border-0 border-bottom" style="font-size:0.7rem; width:100%;">' +
+								'<input type="button" class="btnRemove border-0 bg-transparent text-center" ' +
+								'style="width:1rem; height:1rem; font-size:0.5rem;" value="X"></div>'
+						); // end append
+						maxAppend2 = document.getElementById("recipients2").childElementCount;
+					}
+					$('#btnRemove').on('click', function () {
+						$(this).prev().remove();
+						$(this).unwrap();
+						$(this).remove();
+						maxAppend1 = document.getElementById("recipients1").childElementCount;
+						maxAppend2 = document.getElementById("recipients2").childElementCount;
+					});
+				});
+
+				let fileNo = 0;
+				let filesArr2 = [];
+
 				$(document).ready(function() {
-					$('#emailSendForm').submit(function() {
+					// 첨부파일 추가
+					$('#addFile').on("change", function () {
+						const maxFileCnt = 10;   // 첨부파일 최대 개수
+						const attFileCnt = $('#filesWarp > .d-flex').length;
+						const remainFileCnt = maxFileCnt - attFileCnt;    // 추가로 첨부가능한 개수
+						const curFileCnt = this.files.length;  // 현재 선택된 첨부파일 개수
+
+						// 첨부파일 개수 확인
+						if (attFileCnt + curFileCnt > maxFileCnt) {
+							alert("첨부파일은 최대 " + maxFileCnt + "개 까지 첨부 가능합니다.");
+							return false;
+						}
+
+						for (let i = 0; i < curFileCnt; i++) {
+							const file = this.files[i];
+
+							// 목록 추가
+							let insert = '<div class="d-flex text-start" id="file' + fileNo + '" style="font-size:0.7rem; text-decoration: none;">' +
+									'<input type="text" class="border-0 w-auto text-end" style="height:1rem;" name="fileName" value="' + file.name + '" readonly>' +
+									'<input type="button" class="btnRemove border-0 bg-transparent text-start delBtn" ' +
+									'style="width:1rem; height:1rem; font-size:0.5rem;" id="fileRemove' + fileNo + '" value="X">' +
+									'</div>';
+
+							$('#filesWarp').prepend(insert);
+							fileNo++;
+							filesArr2.push(file);
+
+							// /* 첨부파일 삭제 */
+							$('.delBtn').off("click").on("click", function () {
+								const indexToRemove = $(this).parent().index();
+								filesArr2[indexToRemove].is_delete = true;
+								$(this).parent().remove();
+							});
+
+						}
+					});
+
+					$('#emailSendForm').submit(function(e) {
 						if ($('#recipients1').children().length <= 0 && $('#recipients2').children().length <= 0) {
 							alert("수신자를 입력하세요.");
 							return false;
@@ -136,85 +204,41 @@
 							alert("내용을 입력해주세요.");
 							return false;
 						} else {
-							for (let i = 0; i < filesArr.length; i++) {
-								if (!filesArr[i].is_delete) {
-									$('#addFile').attr("name", "fileName");
+							$('#spinner').modal("show");
+							const formData = new FormData();
+							for (let i = 0; i < filesArr2.length; i++) {
+								const inputedFile = filesArr2[i];
+								if (!filesArr2[i].is_delete) {
+									formData.append("fileName", inputedFile);
 								}
 							}
-							$('#spinner').modal("show");
-							return true;
-						}
-					});
-				});
+							const otherData = $('#emailSendForm').serializeArray();
+							$.each(otherData, function(key, input) {
+								formData.append(input.name, input.value);
+							});
 
+							e.preventDefault();
 
+							const data = new FormData();
+							data.append('data', JSON.stringify(otherData));
 
-
-				var maxAppend1 = document.getElementById("recipients1").childElementCount;
-				var maxAppend2 = document.getElementById("recipients2").childElementCount;
-				$('#addRecipient').click (function () {
-					if (maxAppend1 == 4 && maxAppend2 == 4) return;
-					if (maxAppend1 < 4) {
-						$('#recipients1').append (
-								'<div class="w-25 me-1 d-flex"><input type="text" id="recipient" name="recipients" class="text-start border-0 border-bottom" style="font-size:0.7rem; width:100%;"><input type="button" class="btnRemove border-0 bg-transparent text-center" style="width:1rem; height:1rem; font-size:0.5rem;" value="X"></div>'
-						); // end append
-						maxAppend1 = document.getElementById("recipients1").childElementCount;
-					} else {
-						$('#recipients2').append (
-								'<div class="w-25 me-1 d-flex"><input type="text" id="recipient" name="recipients" class="text-start border-0 border-bottom" style="font-size:0.7rem; width:100%;"><input type="button" class="btnRemove border-0 bg-transparent text-center" style="width:1rem; height:1rem; font-size:0.5rem;" value="X"></div>'
-						); // end append
-						maxAppend2 = document.getElementById("recipients2").childElementCount;
-					}
-					$('#btnRemove').on('click', function () {
-						$(this).prev().remove();
-						$(this).unwrap();
-						$(this).remove();
-						maxAppend1 = document.getElementById("recipients1").childElementCount;
-						maxAppend2 = document.getElementById("recipients2").childElementCount;
-					});
-				});
-
-				/* 첨부파일 추가 */
-				var fileNo = 0;
-
-				$('#addFile').on("change", function() {
-					var maxFileCnt = 10;   // 첨부파일 최대 개수
-					var attFileCnt = document.getElementById("filesWarp").childElementCount;
-					var remainFileCnt = maxFileCnt - attFileCnt;    // 추가로 첨부가능한 개수
-					var curFileCnt = this.files.length;  // 현재 선택된 첨부파일 개수
-
-					// 첨부파일 개수 확인
-					if (curFileCnt > remainFileCnt) {
-						alert("첨부파일은 최대 " + maxFileCnt + "개 까지 첨부 가능합니다.");
-					}
-
-					for (var i = 0; i < curFileCnt; i++) {
-						const file = this.files[i];
-
-						var reader = new FileReader();
-						reader.onload = function () {
-							filesArr.push(file);
-						};
-						reader.readAsDataURL(file)
-
-						// 목록 추가
-						let insert = '<div class="d-flex text-start" id="file' + fileNo + '" style="font-size:0.7rem; text-decoration: none;">' +
-								'<input type="text" class="border-0 w-auto text-end" style="height:1rem;" name="fileName" value="'+ file.name +'" readonly>' +
-								'<input type="button" class="btnRemove border-0 bg-transparent text-start" ' +
-								'style="width:1rem; height:1rem; font-size:0.5rem;" id="fileRemove' + fileNo + '" value="X">' +
-								'</div>'
-
-						$('#filesWarp').append(insert);
-						fileNo++;
-						/* 첨부파일 삭제 */
-						for (let i = 0; i < 10; i++) {
-							$('#fileRemove' + i).on("click", function() {
-								$('#file' + i).empty();
-								$('#file' + i).remove();
-								filesArr[i].is_delete = true;
+							fetch('/email/emailSend', {
+								method: 'POST',
+								body: formData
+							}).then(response => {
+								if (!response.ok) {
+									throw new Error('Network response was not ok');
+								}
+								return response.text();
+							}).then(data => {
+								console.log(data); // 서버로부터의 응답 내용 로그 출력
+								window.location.href="/email/emailList?folderName=Sent Items";
+							}).catch(error => {
+								console.error('Error:', error); // 에러 발생시 에러 로그 출력
+								// 에러 발생 시 처리할 코드 추가
 							});
 						}
-					}
+					});
 				});
 
 				$('#addedFileRemove').on("click", function() {
