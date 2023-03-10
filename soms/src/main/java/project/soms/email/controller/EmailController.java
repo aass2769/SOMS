@@ -112,7 +112,7 @@ public class EmailController {
     String folderName = request.getParameter("folderName");
     model.addAttribute("folderName", folderName);
 
-    return "email/mailFolder/getMailRepository";
+    return "email/mailFolder/getMailRepositoryRe";
   }
 
   @GetMapping("emailDetail")
