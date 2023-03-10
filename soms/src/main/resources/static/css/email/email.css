@@ -1,7 +1,5 @@
 *{
 	list-style: none;
-	text-decoration-line: none;
-	color: black;
 }
 .GetMail{
 	display: flex;
@@ -17,8 +15,8 @@
 	padding:0;
 }
 .GetMail_Nav ul li{
-	float: left;
 	font-weight: bold;
+	display: inline-block; 
 }
 /*---네비바 li당 간격---*/
 .lis1{
@@ -37,7 +35,9 @@
 }
 .lis5 > a{
 	padding-left: 3rem;
-	
+	text-decoration: none;
+	color: black;
+	font-weight: 500;
 }
 .lis6{
 	padding-left: 0.7rem;
@@ -56,48 +56,48 @@
 
 /*---받은 메일 테이블---*/
 .GetMail_Container{
-	width:80%;
+	width:87%;
+	margin-left:2.5%;
 }
-.GetMail_Container table{
-	width:90%;
-}
+
+
 /*---테이블 td당 간격---*/
 .GetMail_Container table tr{
 	border-bottom:0.1rem solid #f4f4f4;	
+	margin: auto;
 }
 .GetMail_Container table tr td{
 	padding-top: 1.3rem;
 	white-space: nowrap;
 }
 .table1{
-	padding-left: 2%;
-}
-.table2{
-	padding-left: 2%;
-}
-.table3{
-	padding-left: 2%;
-}
-.table4{
-	padding-left: 10%;
-}
-.table4 p{
-	margin:0;
-	width:5rem;
-    overflow: hidden; /*width 넓이를 넘는 내용에 대해 보이지 않게 처리*/
-    text-overflow: ellipsis;/*글자가 width 넓이를 넘는 경우 생략부호(..)표시*/
-    white-space: nowrap;/*공백 문자가 있을경우 줄바꿈 하지 않고 한 줄로 나오게 처리*/
+	box-sizing: content-box;
+	width: 2.5%;
 }
 
-.table5 p{
-	margin:0;
-	width:14rem;
-    overflow: hidden; /*width 넓이를 넘는 내용에 대해 보이지 않게 처리*/
-    text-overflow: ellipsis;/*글자가 width 넓이를 넘는 경우 생략부호(..)표시*/
-    white-space: nowrap;/*공백 문자가 있을경우 줄바꿈 하지 않고 한 줄로 나오게 처리*/
+.table3{
+	box-sizing: content-box;
+	width:5%;
+}
+.table4{
+	box-sizing: content-box;
+	width:20%;
+}
+
+.table5{
+	box-sizing: content-box;
+	width:40%;
+	text-overflow:ellipsis;
+	overflow:hidden;
+	white-space:nowrap;
+}
+.table5>a{
+	text-decoration: none;
+	color:black;
 }
 .table6{
-	position:fixed
+	box-sizing: content-box;
+	width:10%;
 }
 
 #trashbtn{
@@ -118,25 +118,7 @@
 	font-size: 0.97rem;
 }
 
-/*---페이지네이션---*/
-.Pagination_Mail{
-	margin-left:45%;
-	display: inline-block;
-	list-style: none;
-	padding: 2rem;
-	margin-top: 8rem;
-}
-.Pagination_Mail li{
-	display: inline;
-	text-align: center;
-}
-.Pagination_Mail li a{
-	float: left;
-	display: block;
-	text-decoration: none;
-	line-height: 1.5;
-	color:black;
-}
+
 
 /*---메일 보내기---*/
 .SendMail_Container{
