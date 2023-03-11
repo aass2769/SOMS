@@ -177,7 +177,7 @@ public class EmailController {
       }
 
     } catch (NullPointerException | IOException e) {
-      log.info("exception={}", e);
+      log.info("추가할 파일 없음");
     }
     emailDto.setEmailAttachment(fileNames);
     emailDto.setEmailAttachmentFileName(filePaths);
