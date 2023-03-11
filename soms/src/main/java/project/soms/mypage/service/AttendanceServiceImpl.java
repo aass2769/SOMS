@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import project.soms.mypage.dto.AttendanceDto;
+import project.soms.mypage.dto.OvertimeDto;
 import project.soms.mypage.repository.AttendanceRepository;
 import project.soms.mypage.repository.MypageRepository;
 
@@ -110,18 +111,23 @@ public class AttendanceServiceImpl implements AttendanceService{
 		int nowminute = Integer.parseInt(sdf.format(now).substring(14, 16));
 
 		// 당일 연장근무가 있을 경우 연장근무로 끝나는시간을 변경
-//		OvertimeDto overtime = mypageRepository.getEmployeeOvertime(employeeNo, today);
-//
-//		if(overtime.getSubmissionStatus() == 2 && overtime.getApproverEmployeeNo() == null &&
-//				overtime.getProposerEmployeeNo() != null && overtime != null) {
-//
-//				if(overtime.getOvertimeStartTime() < gotime) {
-//					gotime = overtime.getOvertimeStartTime();
-//				}else {
-//					leavetime = overtime.getOvertimeEndTime();
-//				}
-//		}
-		
+
+		try {
+			OvertimeDto overtime = mypageRepository.getEmployeeOvertime(employeeNo, today);
+
+			if(overtime.getSubmissionStatus() == 2 && overtime.getApproverEmployeeNo() == null &&
+					overtime.getProposerEmployeeNo() != null && overtime != null) {
+
+				if(overtime.getOvertimeStartTime() < gotime) {
+					gotime = overtime.getOvertimeStartTime();
+				}else {
+					leavetime = overtime.getOvertimeEndTime();
+				}
+			}
+		} catch (Exception e) {
+			log.info("연장근로 값 없음");
+		}
+
 		Integer attendance = 3;
 		
 		if((nowtime==(gotime-1))&&(nowminute>=50) || (nowtime>=gotime)) {
