@@ -25,6 +25,8 @@ import javax.mail.*;
 import javax.mail.internet.*;
 import javax.mail.search.MessageNumberTerm;
 import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
@@ -384,39 +386,39 @@ public class EmailRepositoryImpl implements EmailRepository{
 
       message.setContent(messageContent);
 
-//      for (String addressCheck : emailDto.getEmailRecipient()) {
-//        try {
-//          String apiKey = "J8LuKHT5XdFleKdy5HFFG";
-//
-//          String apiUrl = "https://apps.emaillistverify.com/api/verifyEmail?secret=" + apiKey + "&email=" + addressCheck;
-//
-//          URL url = new URL(apiUrl);
-//
-//          HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-//          conn.setRequestMethod("GET");
-//          conn.setDoOutput(true);
-//          BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-//
-//          String inputLine;
-//          StringBuffer response = new StringBuffer();
-//          while ((inputLine = in.readLine()) != null) {
-//            response.append(inputLine);
-//          }
-//          log.error(response.toString());
-//          if (!response.toString().equals("ok")) {
-//            saveDraftEmail(message, employee.getEmployeeId(), employeePw);
-//            throw new MailSendException("이메일 주소가 올바르지 않음");
-//          }
-//          in.close();
-//
-//
-//
-//        } catch (IOException e) {
-//          log.error("IOException");
-//          saveDraftEmail(message, employee.getEmployeeId(), employeePw);
-//          throw new MailSendException("apiKey가 올바르지 않음");
-//        }
-//      }
+      for (String addressCheck : emailDto.getEmailRecipient()) {
+        try {
+          String apiKey = "J8LuKHT5XdFleKdy5HFFG";
+
+          String apiUrl = "https://apps.emaillistverify.com/api/verifyEmail?secret=" + apiKey + "&email=" + addressCheck;
+
+          URL url = new URL(apiUrl);
+
+          HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+          conn.setRequestMethod("GET");
+          conn.setDoOutput(true);
+          BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+
+          String inputLine;
+          StringBuffer response = new StringBuffer();
+          while ((inputLine = in.readLine()) != null) {
+            response.append(inputLine);
+          }
+          log.error(response.toString());
+          if (!response.toString().equals("ok")) {
+            saveDraftEmail(message, employee.getEmployeeId(), employeePw);
+            throw new MailSendException("이메일 주소가 올바르지 않음");
+          }
+          in.close();
+
+
+
+        } catch (IOException e) {
+          log.error("IOException");
+          saveDraftEmail(message, employee.getEmployeeId(), employeePw);
+          throw new MailSendException("apiKey가 올바르지 않음");
+        }
+      }
       try {
         javaMailSender.send(message);
       } catch (MailSendException e) {

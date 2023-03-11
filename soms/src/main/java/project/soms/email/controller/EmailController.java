@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailSendException;
 import org.springframework.stereotype.Controller;
@@ -145,7 +146,7 @@ public class EmailController {
   }
 
   @PostMapping("emailSend")
-  public String emailSend(HttpServletRequest request, EmailDto emailDto, @RequestParam("recipients") List<String> recipients,
+  public ResponseEntity<String> emailSend(HttpServletRequest request, EmailDto emailDto, @RequestParam("recipients") List<String> recipients,
                           @RequestParam(value = "fileName", required = false) List<MultipartFile> fileName,
                           @RequestParam(value = "addedFileName", required = false) List<String> addedFileName,
                           @RequestParam(value = "addedFile", required = false) List<String> addedFile) {
@@ -165,8 +166,6 @@ public class EmailController {
           Path targetPath = fileAddress.resolve(randomParseFileName).normalize();
           fileList.get(i).transferTo(targetPath);
 
-          log.info("file={}", targetPath);
-
           fileNames.add(fileRealName);
           filePaths.add("src/main/resources/static/files/" + randomParseFileName);
         }
@@ -175,8 +174,6 @@ public class EmailController {
       for (int i = 0; i < addedFileName.size(); i++) {
         fileNames.add(addedFile.get(i));
         filePaths.add(addedFileName.get(i));
-
-        log.info("files={}", filePaths);
       }
 
     } catch (NullPointerException | IOException e) {
@@ -188,14 +185,27 @@ public class EmailController {
     try {
       emailService.emailSend(emailDto, getEmployee(request));
     } catch (MailSendException e) {
-      return "email/emailForm/errorMail_1";
+      return ResponseEntity
+          .status(HttpStatus.INTERNAL_SERVER_ERROR)
+          .body("Resource not found");
     } catch (FileNotFoundException e) {
-      return "email/emailForm/errorMail_2";
+      return ResponseEntity
+          .status(HttpStatus.NOT_FOUND)
+          .body("An Unexpected error occurred.");
     }
 
-    return "redirect:/email/emailList?folderName=Sent Items";
+    return ResponseEntity.ok("Success");
   }
 
+  @GetMapping("fileError")
+  public String locationFileError() {
+    return "email/emailForm/errorMail_2";
+  }
+
+  @GetMapping("sendError")
+  public String locationSendError() {
+    return "email/emailForm/errorMail_1";
+  }
   @GetMapping("downloadAttachment")
   public ResponseEntity<ByteArrayResource> downloadAttachment(@RequestParam("fileName") String fileName) {
     return emailService.downloadAttachment(fileName);

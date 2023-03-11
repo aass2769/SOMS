@@ -1,24 +1,17 @@
 package project.soms.mypage.service;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-
-import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 import project.soms.mypage.dto.AttendanceDto;
-import project.soms.mypage.dto.OvertimeDto;
 import project.soms.mypage.repository.AttendanceRepository;
 import project.soms.mypage.repository.MypageRepository;
+
+import javax.servlet.http.HttpServletResponse;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -117,17 +110,17 @@ public class AttendanceServiceImpl implements AttendanceService{
 		int nowminute = Integer.parseInt(sdf.format(now).substring(14, 16));
 
 		// 당일 연장근무가 있을 경우 연장근무로 끝나는시간을 변경
-		OvertimeDto overtime = mypageRepository.getEmployeeOvertime(employeeNo, today);
-		
-		if(overtime.getSubmissionStatus() == 2 && overtime.getApproverEmployeeNo() == null && 
-				overtime.getProposerEmployeeNo() != null && overtime != null) {
-			
-				if(overtime.getOvertimeStartTime()<gotime) {
-					gotime = overtime.getOvertimeStartTime();
-				}else {
-					leavetime = overtime.getOvertimeEndTime();
-				}
-		}
+//		OvertimeDto overtime = mypageRepository.getEmployeeOvertime(employeeNo, today);
+//
+//		if(overtime.getSubmissionStatus() == 2 && overtime.getApproverEmployeeNo() == null &&
+//				overtime.getProposerEmployeeNo() != null && overtime != null) {
+//
+//				if(overtime.getOvertimeStartTime() < gotime) {
+//					gotime = overtime.getOvertimeStartTime();
+//				}else {
+//					leavetime = overtime.getOvertimeEndTime();
+//				}
+//		}
 		
 		Integer attendance = 3;
 		

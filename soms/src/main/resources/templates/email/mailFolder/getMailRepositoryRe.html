@@ -34,11 +34,11 @@
 			<div style="width:1%;">
 				<input type="checkbox" id="MailCheck" onclick="toggleAll(this)">
 			</div>
-			<div style="width:3%;" th:if="${folderName == 'INBOX'}">
+			<div style="width:4%;" th:if="${folderName == 'INBOX'}">
 				<button class="text-center rounded-1 border-0 bg-transparent text-dark" style="font-size:0.8rem;" id="seen">읽음</button>
 			</div>
-			<div style="width:5%;" th:if="${folderName != 'Sent Items'}">
-				<p class="text-center border-0 text-dark" style="font-size:0.6rem;" id="seenCount"></p>
+			<div style="width:6%;" th:if="${folderName != 'Sent Items'}">
+				<p class="text-start border-0 text-dark" style="font-size:0.6rem;" id="seenCount"></p>
 			</div>
 			<div style="width:5%;" th:if="${folderName == 'INBOX'}">
 				<button class="text-center rounded-1 border-0 text-light" style="font-size:0.8rem; background-color: #D8542E;" id="junk">스팸</button>
