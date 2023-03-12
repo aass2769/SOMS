@@ -29,7 +29,7 @@ public class ApprovalListServiceImpl implements ApprovalListService{
     //approvalSection = 결재 구분 ... 'under', 'complete', 'reject'
     String approvalListSection = request.getParameter("approvalSection");
 
-    //검색 조건(서식 구분과 상신 일)이 있는지 확인 후 조건이 있으면 값을 할당 없으면 공백을 할당하여 전체 결과가 노오도록
+    //검색 조건(서식 구분과 상신 일)이 있는지 확인 후 조건이 있으면 값을 할당 없으면백을 할당하여 전체 결과가 노오도록
     String submissionSection = "";
     String submissionDatetime = "";
     if (request.getParameter("submissionSection") != null) {
