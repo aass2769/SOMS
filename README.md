@@ -33,7 +33,7 @@ soms 주소 : (http://somsolution.com)
 ### 🛠개발환경
 - <img src="https://img.shields.io/badge/windows 10-0078D6?style=flat&logo=Windows Chrome&logoColor=white"/> <img src="https://img.shields.io/badge/macOS-000000?style=flat&logo=macOS&logoColor=white"/>
 - <img src="https://img.shields.io/badge/Google Chrome-4285F4?style=flat&logo=Google Chrome&logoColor=white"/>
-- <img src="https://img.shields.io/badge/java11-222324?style=flat&logoColor=white"/>
+- <img src="https://img.shields.io/badge/java11-222324?style=flat&logoColor=white"/>, <img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white"> 
 - <img src="https://img.shields.io/badge/JDK 11-2C2255?style=flat&logoColor=white"/>
 - server: <img src="https://img.shields.io/badge/apache tomcat-9.0-2C2255?style=flat&logo=Apache Tomcat&logoColor=white"/> <img src="https://img.shields.io/badge/spring-2C2255?style=flat&logo=Spring boot 내장 서버&logoColor=white"/>
 - IDE: <img src="https://img.shields.io/badge/sts4-2C2255?style=flat&logo=sts4 IDE&logoColor=green"/> <img src="https://img.shields.io/badge/IntelliJ IDEA-000000?style=flat&logo=IntelliJ IDEA&logoColor=white"/>
